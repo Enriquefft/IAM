@@ -4,13 +4,15 @@ import Footer from "@/components/sections/Footer.astro";
 
 const error = Astro.url.searchParams.get("error");
 const already = Astro.url.searchParams.get("already");
+const sent = Astro.url.searchParams.get("sent");
 
-type PageState = "success" | "already" | "expired" | "invalid";
+type PageState = "success" | "pending" | "already" | "expired" | "invalid";
 
 function getState(): PageState {
   if (error === "expired") return "expired";
   if (error === "invalid") return "invalid";
   if (already === "1") return "already";
+  if (sent === "1") return "pending";
   return "success";
 }
 
@@ -20,6 +22,11 @@ const content = {
   success: {
     heading: "Lugar confirmado.",
     body: "Estás en la lista. Te avisamos cuando haya cupo — mantente atento a tu bandeja de entrada.",
+    cta: { href: "/", label: "Volver al inicio" },
+  },
+  pending: {
+    heading: "Revisá tu correo.",
+    body: "Te enviamos un enlace de confirmación. Hacé clic en el enlace para reservar tu lugar — vence en 7 días.",
     cta: { href: "/", label: "Volver al inicio" },
   },
   already: {

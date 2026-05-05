@@ -12,6 +12,7 @@ import {
   Text,
 } from "@react-email/components";
 import * as React from "react";
+import { palette } from "./palette";
 
 interface WaitlistConfirmProps {
   confirmUrl: string;
@@ -67,7 +68,7 @@ export default function WaitlistConfirm({ confirmUrl }: WaitlistConfirmProps) {
 }
 
 const main: React.CSSProperties = {
-  backgroundColor: "#FDFAF5",
+  backgroundColor: palette.pageBg,
   fontFamily:
     '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
 };
@@ -85,14 +86,14 @@ const logoSection: React.CSSProperties = {
 const logoText: React.CSSProperties = {
   fontSize: "18px",
   fontWeight: "700",
-  color: "#4E7A56",
+  color: palette.brand,
   margin: "0",
 };
 
 const heading: React.CSSProperties = {
   fontSize: "28px",
   fontWeight: "700",
-  color: "#1C1612",
+  color: palette.headingText,
   lineHeight: "1.2",
   margin: "0 0 16px",
 };
@@ -100,7 +101,7 @@ const heading: React.CSSProperties = {
 const paragraph: React.CSSProperties = {
   fontSize: "16px",
   lineHeight: "1.75",
-  color: "#3D3026",
+  color: palette.bodyText,
   margin: "0 0 16px",
 };
 
@@ -110,9 +111,9 @@ const buttonSection: React.CSSProperties = {
 };
 
 const button: React.CSSProperties = {
-  backgroundColor: "#6B9B73",
+  backgroundColor: palette.primary,
   borderRadius: "10px",
-  color: "#ffffff",
+  color: palette.buttonFg,
   fontSize: "15px",
   fontWeight: "600",
   textDecoration: "none",
@@ -121,19 +122,19 @@ const button: React.CSSProperties = {
 };
 
 const link: React.CSSProperties = {
-  color: "#6B9B73",
+  color: palette.primary,
   fontSize: "13px",
   wordBreak: "break-all",
 };
 
 const hr: React.CSSProperties = {
-  borderColor: "#EDE5D4",
+  borderColor: palette.border,
   margin: "32px 0 24px",
 };
 
 const footer: React.CSSProperties = {
   fontSize: "12px",
   lineHeight: "1.6",
-  color: "#6B5A4A",
+  color: palette.mutedText,
   margin: "0 0 8px",
 };

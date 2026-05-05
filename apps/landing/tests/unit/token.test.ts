@@ -4,11 +4,9 @@ import { generateRawToken, hashToken, tokenExpiresAt } from "../../src/lib/waitl
 const SECRET = "a".repeat(64);
 
 describe("token", () => {
-  it("generateRawToken returns a valid UUID string", () => {
+  it("generateRawToken returns a 64-char hex string (32 bytes)", () => {
     const token = generateRawToken();
-    expect(token).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
-    );
+    expect(token).toMatch(/^[0-9a-f]{64}$/);
   });
 
   it("generateRawToken is unique across calls", () => {

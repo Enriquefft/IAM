@@ -124,14 +124,14 @@ export default function WaitlistForm({ action }: { action: string }) {
       noValidate
       aria-label="Formulario de lista de espera"
     >
-      {/* honeypot */}
+      {/* honeypot — off-screen positioned to be invisible without detectable zero-size signals */}
       <input
         type="text"
         name="hp"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
-        className="absolute opacity-0 pointer-events-none h-0 w-0 overflow-hidden"
+        className="absolute -left-[9999px] top-auto w-px h-px overflow-hidden"
       />
 
       <div className="space-y-4">

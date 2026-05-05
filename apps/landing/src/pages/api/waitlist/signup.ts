@@ -6,7 +6,7 @@ import { parseSignup } from "../../../lib/waitlist/validate";
 import { hashToken, generateRawToken, tokenExpiresAt } from "../../../lib/waitlist/token";
 import { hashIp, extractIp } from "../../../lib/waitlist/ip";
 import { checkRateLimit } from "../../../lib/waitlist/rate-limit";
-import { upsertWaitlist, storeConfirmationToken } from "../../../lib/waitlist/repo";
+import { signupWithToken } from "../../../lib/waitlist/repo";
 import { sendConfirmEmail } from "../../../lib/waitlist/email";
 
 function sha256Hex(value: string): string {
@@ -51,18 +51,21 @@ export const POST: APIRoute = async ({ request }) => {
     });
   }
 
-  let id: string;
+  const rawToken = generateRawToken();
+  const tokenHash = hashToken(rawToken, env.WAITLIST_TOKEN_SECRET);
+  const expiresAt = tokenExpiresAt();
+
+  const payload = {
+    email,
+    role,
+    consentAt: new Date(),
+    ...(name !== undefined ? { name } : {}),
+  };
+
   let alreadyConfirmed: boolean;
 
   try {
-    const payload = {
-      email,
-      role,
-      consentAt: new Date(),
-      ...(name !== undefined ? { name } : {}),
-    };
-    const result = await upsertWaitlist(db, payload);
-    id = result.id;
+    const result = await signupWithToken(db, payload, tokenHash, expiresAt);
     alreadyConfirmed = result.alreadyConfirmed;
   } catch {
     return jsonOrHtml(wantsJson, { ok: false, error: "internal_error" }, 500);
@@ -70,16 +73,6 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (alreadyConfirmed) {
     return jsonOrHtml(wantsJson, { ok: true, alreadyConfirmed: true }, 200);
-  }
-
-  const rawToken = generateRawToken();
-  const tokenHash = hashToken(rawToken, env.WAITLIST_TOKEN_SECRET);
-  const expiresAt = tokenExpiresAt();
-
-  try {
-    await storeConfirmationToken(db, id, tokenHash, expiresAt);
-  } catch {
-    return jsonOrHtml(wantsJson, { ok: false, error: "internal_error" }, 500);
   }
 
   const confirmUrl = `${env.PUBLIC_SITE_URL}/api/waitlist/confirm?token=${rawToken}`;
@@ -117,7 +110,7 @@ function jsonOrHtml(
   const redirectPath = isOk
     ? body["alreadyConfirmed"] === true
       ? "/confirmado?already=1"
-      : "/"
+      : "/confirmado?sent=1"
     : "/";
 
   return new Response(null, {

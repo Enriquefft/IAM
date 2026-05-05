@@ -10,5 +10,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "astro.config.mjs"]
+  "include": ["src", "db", "scripts", "tests", "astro.config.mjs"]
 }

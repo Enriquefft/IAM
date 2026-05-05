@@ -49,4 +49,13 @@ describe("parseSignup", () => {
       expect(result.ok).toBe(true);
     }
   });
+
+  it("rejects email longer than 254 characters (RFC 5321)", () => {
+    const localPart = "a".repeat(243);
+    const longEmail = `${localPart}@example.com`; // 243 + 12 = 255 chars
+    const result = parseSignup({ ...valid, email: longEmail });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors.some((e) => e.field === "email")).toBe(true);
+  });
 });

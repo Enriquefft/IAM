@@ -1,7 +1,7 @@
-import { createHmac } from "node:crypto";
+import { createHmac, randomBytes } from "node:crypto";
 
 export function generateRawToken(): string {
-  return crypto.randomUUID();
+  return randomBytes(32).toString("hex");
 }
 
 export function hmacSha256(value: string, secret: string): Buffer {

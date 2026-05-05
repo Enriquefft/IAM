@@ -7,7 +7,9 @@ import {
   primaryKey,
   pgEnum,
   customType,
+  index,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const waitlistRoleEnum = pgEnum("waitlist_role", [
   "terapista",
@@ -40,25 +42,37 @@ function tstz(name: string) {
   return timestamp(name, { withTimezone: true, mode: "date" });
 }
 
-export const waitlist = pgTable("waitlist", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  email: citext("email").unique().notNull(),
-  name: text("name"),
-  role: waitlistRoleEnum("role").notNull(),
-  consentAt: tstz("consent_at").notNull(),
-  confirmedAt: tstz("confirmed_at"),
-  createdAt: tstz("created_at").notNull().defaultNow(),
-  updatedAt: tstz("updated_at").notNull().defaultNow(),
-});
+export const waitlist = pgTable(
+  "waitlist",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: citext("email").unique().notNull(),
+    name: text("name"),
+    role: waitlistRoleEnum("role").notNull(),
+    consentAt: tstz("consent_at").notNull(),
+    confirmedAt: tstz("confirmed_at"),
+    createdAt: tstz("created_at").notNull().defaultNow(),
+    updatedAt: tstz("updated_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("idx_waitlist_confirmed_at")
+      .on(t.confirmedAt)
+      .where(sql`${t.confirmedAt} IS NOT NULL`),
+  ],
+);
 
-export const confirmations = pgTable("confirmations", {
-  tokenHash: bytea("token_hash").primaryKey(),
-  waitlistId: uuid("waitlist_id")
-    .notNull()
-    .references(() => waitlist.id, { onDelete: "cascade" }),
-  expiresAt: tstz("expires_at").notNull(),
-  createdAt: tstz("created_at").notNull().defaultNow(),
-});
+export const confirmations = pgTable(
+  "confirmations",
+  {
+    tokenHash: bytea("token_hash").primaryKey(),
+    waitlistId: uuid("waitlist_id")
+      .notNull()
+      .references(() => waitlist.id, { onDelete: "cascade" }),
+    expiresAt: tstz("expires_at").notNull(),
+    createdAt: tstz("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("idx_confirmations_waitlist_id").on(t.waitlistId)],
+);
 
 export const rateLimit = pgTable(
   "rate_limit",

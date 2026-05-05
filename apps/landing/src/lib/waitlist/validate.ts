@@ -4,6 +4,7 @@ export const SignupSchema = z.object({
   email: z
     .string({ required_error: "El correo es requerido" })
     .email({ message: "Ingresá un correo válido" })
+    .max(254, { message: "El correo es demasiado largo" })
     .transform((v) => v.toLowerCase().trim()),
   name: z.string().max(120).optional(),
   role: z.enum(["terapista", "clinica", "familia", "otro"], {
