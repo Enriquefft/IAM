@@ -75,7 +75,6 @@ export default function NavMobile({
         id="nav-mobile-sheet"
         side="right"
         showCloseButton={false}
-        aria-label="Menú" // section-nav.jsx:74
         className="bg-page text-ink-900 p-6 flex flex-col gap-0 w-full sm:max-w-sm motion-reduce:transition-none motion-reduce:animate-none"
       >
         {/* Visually-hidden title for screen readers (Radix Dialog requires an accessible name). */}

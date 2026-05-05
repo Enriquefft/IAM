@@ -12,4 +12,5 @@ export const NAV_LINKS: readonly NavLink[] = [
 ] as const;
 
 export const WAITLIST_CTA = "Unirme a la lista de espera" as const; // section-nav.jsx:100
+// Bundle's section-nav.jsx:22 references Demo.html; Astro route lives at /demo.
 export const DEMO_HREF    = "/demo" as const;
