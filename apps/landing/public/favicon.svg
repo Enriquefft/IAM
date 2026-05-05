@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Brand mark: rounded square with leaf glyph and berry dot, mirroring Mark.astro -->
+  <!-- Rounded square background: brand.cream.100 (#F7F2E8) -->
+  <rect width="32" height="32" rx="7" fill="#F7F2E8"/>
+  <!-- Leaf glyph scaled to 32×32 viewport: brand.salvia.400 / primary (#6B9B73) -->
+  <path
+    d="M 7 22 Q 7 7 22 7 Q 22 18 15 21 Q 10.5 23 7 22 Z"
+    fill="#6B9B73"
+  />
+  <!-- Berry dot: brand.terra.300 / accent (#D99070) -->
+  <circle cx="19" cy="19" r="2.5" fill="#D99070"/>
+</svg>

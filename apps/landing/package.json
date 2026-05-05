@@ -12,7 +12,8 @@
     "lint": "echo skipped",
     "migrate": "tsx scripts/migrate.ts",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "gen:favicons": "tsx scripts/gen-favicons.ts"
   },
   "dependencies": {
     "@astrojs/react": "^3.6.3",
