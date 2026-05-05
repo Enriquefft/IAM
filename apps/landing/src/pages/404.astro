@@ -1,0 +1,63 @@
+---
+import Base from "@/layouts/Base.astro";
+import Footer from "@/components/sections/Footer.astro";
+import { pages } from "@/lib/seo";
+---
+
+<Base pageMeta={pages.notFound}>
+  <div class="min-h-[80vh] flex items-center justify-center px-8 py-24 bg-page">
+    <div class="mx-auto max-w-[480px] text-center">
+
+      <!-- Decorative mark -->
+      <div
+        class="inline-flex h-20 w-20 items-center justify-center rounded-full bg-brand-cream-100 border border-surface-border mb-8"
+        aria-hidden="true"
+      >
+        <span class="font-serif text-3xl font-bold text-brand-salvia-400 select-none">
+          404
+        </span>
+      </div>
+
+      <h1 class="font-sans text-h2 font-bold text-text-primary mb-4">
+        Página no encontrada
+      </h1>
+
+      <p class="font-serif text-body-lg text-text-secondary mb-10 leading-relaxed">
+        El enlace que seguiste no existe o fue movido.<br />
+        Puedes volver al inicio o unirte a la lista de espera.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 rounded-base h-11 px-6 text-small font-semibold bg-primary text-primary-fg hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-4 w-4"
+            aria-hidden="true"
+          >
+            <path d="M6 13L11 8 6 3" />
+          </svg>
+          Volver al inicio
+        </a>
+
+        <a
+          href="/#waitlist"
+          class="inline-flex items-center gap-2 rounded-base h-11 px-6 text-small font-semibold bg-surface text-text-primary border border-surface-border hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page transition-colors"
+        >
+          Unirme a la lista de espera
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</Base>
