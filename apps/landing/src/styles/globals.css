@@ -18,8 +18,8 @@
 @layer base {
   :root {
     /* Hero wash gradient — derived from brand.salvia.100 and brand.terra.100 */
-    --hero-wash-salvia: 214 229 216; /* #D6E5D8 in RGB */
-    --hero-wash-terra: 242 224 214;  /* #F2E0D6 in RGB */
+    --hero-wash-salvia: 214 229 216;
+    --hero-wash-terra: 242 224 214;
   }
 }
 
