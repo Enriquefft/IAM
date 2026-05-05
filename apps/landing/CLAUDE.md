@@ -30,4 +30,4 @@ Current policy base (defined in `astro.config.mjs` → `shield({ securityHeaders
 If you add a new third-party script (e.g., analytics SDK from `cdn.example.com`):
 1. Add the CDN origin to `script-src` in `astro.config.mjs`
 2. If the script makes XHR/fetch calls home, add that origin to `connect-src`
-3. Run `pnpm build && pnpm preview` and verify the CSP header with `curl -si http://localhost:4321/ | grep -i content-security-policy`
+3. Run `bun run build && bun run preview` and verify the CSP header with `curl -si http://localhost:4321/ | grep -i content-security-policy`

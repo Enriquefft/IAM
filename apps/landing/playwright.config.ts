@@ -23,7 +23,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "pnpm dev",
+    command: "bun run dev",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env["CI"],
     timeout: 60_000,

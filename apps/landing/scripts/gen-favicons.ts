@@ -4,7 +4,7 @@
  * Generates apple-touch-icon.png (180×180) and favicon.ico (32×32) from
  * public/favicon.svg using Playwright (already a devDep — no new dependencies).
  *
- * Run via: pnpm gen:favicons
+ * Run via: bun run gen:favicons
  *
  * Outputs:
  *   public/apple-touch-icon.png  — 180×180 PNG for iOS home screen
