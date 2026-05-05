@@ -98,6 +98,8 @@ In ~85–90% of cases the primary caregiver is the mother (consistent across LAT
 
 There is no single "autism professional". Six subtypes with different workflows, software stacks, and willingness to pay. LATAM-specific professional data is thin; most numbers below come from US/EU studies and are flagged.
 
+Day-in-life task maps and time-budget per non-clinical activity live in [`workflows.md`](./workflows.md).
+
 ## Subtypes
 
 ### 3a. SLP / Fonoaudiólogo (school- or clinic-based)

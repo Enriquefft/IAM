@@ -1,6 +1,8 @@
 ---
 slug: product-bets
-status: draft
+status: decided
+decision_date: 2026-05-02
+chosen_bet: A
 last_reviewed: 2026-05-02
 decision_owner: founder
 mode: bootstrap-profitable
@@ -8,7 +10,7 @@ mode: bootstrap-profitable
 
 # Product bets shortlist
 
-Candidate products for first build. Bootstrap-only frame: priority is profitable business, not venture-scale. Decision input — not a commitment. Final pick goes to `product/<chosen>/`.
+Candidate products evaluated for first build. Bootstrap-only frame: priority is profitable business, not venture-scale. **Decision: Bet A — Therapist-only SaaS.** Comparative analysis retained below for context; product spec lives in [`../product/therapist-saas/definition.md`](../product/therapist-saas/definition.md).
 
 ## Assets
 
@@ -27,7 +29,53 @@ Candidate products for first build. Bootstrap-only frame: priority is profitable
 
 ---
 
-# Bet C — Parent ↔ Therapist bridge **(recommended)**
+# Bet A — Therapist-only SaaS (workflow + parent comms) **(chosen 2026-05-02)**
+
+## Concept
+Practice management for solo LATAM therapists / small clinics serving TEA caseloads. Replaces Word/Excel/WhatsApp stack. Scheduling, session notes, parent-facing reports, billing.
+
+## Personas served
+- Professional 3a, 3b, 3c, 3f ([`personas.md §3`](../business/research/personas.md))
+
+## Problems hit
+- [`problems.md §7`](../business/research/problems.md) documentation burden (30-50% of work time)
+- E29 4hr/day Word/Excel; reagendar caos; no parent transparency
+
+## Pricing
+- $20-40/mo solo practitioner
+- $60-100/mo small clinic (≤5 seats)
+- Anchors: [`pricing.md` B2B per-seat LATAM](../business/research/pricing.md) — solo $12/mo floor, $8/seat clinic
+
+## Bootstrap math
+- 20 warm pros × $30 = $600 MRR direct from list
+- 200 paying solo = $6K MRR
+- Ceiling: ~500 paying LATAM solos = $15K MRR. US push needed for more.
+
+## AI role
+Feature leverage:
+- Auto-summarize session notes (voice/text → structured SOAP)
+- Auto-generate parent-facing weekly progress PDF (Spanish)
+- Schedule conflict + cancel-rebook routing
+
+## Risks
+- LATAM no per-seat SaaS culture; procurement cycles slow
+- US-crowded (CentralReach, Motivity, Catalyst, Theralytics, Rethink) — competing on Spanish + LATAM-priced
+- Low ACV × thin market = lifestyle ceiling; need clear path past $15K MRR (US Spanish-speaking SLP/BCBA market, or upsell parent-side later)
+
+## Kill criteria
+- Wk 4: <5 of 20 warm therapists install + use weekly → wrong product or wrong workflow assumption
+- Wk 8: <50% activated therapists convert at $20+/mo → kill or repivot
+- Mo 6: <$2K MRR → kill or pivot to Bet C parent-side
+
+## Why chosen over C
+- Single-actor UX; no two-sided coordination risk
+- Founder pick 2026-05-02: workflow lock-in is more defensible than network bridge given current execution capacity
+- Contains the therapist side cleanly; Bet C parent-app becomes natural expansion module once therapist base is stable
+- Warm therapist list (20) is ready-to-pilot without parent-side scheduling overhead
+
+---
+
+# Bet C — Parent ↔ Therapist bridge
 
 ## Concept
 Parent app + therapist dashboard. Therapist assigns daily home tasks per kid, parent logs execution + crisis events, AI generates Spanish prompts and weekly therapist-readable summary. Solves Implementation Gap (E24, E29) which is the #1 cited insight across both raw interviews and structured research.
@@ -69,37 +117,6 @@ Feature leverage:
 - Wk 2: <8 of 15 pre-pay pilots commit at $25 → wrong price or wrong product
 - Wk 6: <50% pilot parents convert to paying → kill or pivot to Bet B
 - Mo 6: <$3K MRR → kill
-
----
-
-# Bet A — Therapist-only SaaS (workflow + parent comms)
-
-## Concept
-Practice management for solo LATAM therapists / small clinics. Replaces Word/Excel/WhatsApp stack. Scheduling, session notes, parent-facing reports, billing.
-
-## Personas served
-- Professional 3a, 3b, 3c, 3f ([`personas.md §3`](../business/research/personas.md))
-
-## Problems hit
-- [`problems.md §7`](../business/research/problems.md) documentation burden (30-50% of work time)
-- E29 4hr/day Word/Excel; reagendar caos; no parent transparency
-
-## Pricing
-- $20-40/mo solo practitioner
-- $60-100/mo small clinic (≤5 seats)
-
-## Bootstrap math
-- 20 warm pros × $30 = $600 MRR direct from list
-- 200 paying solo = $6K MRR
-- Ceiling: ~500 paying LATAM solos = $15K MRR. US push needed for more.
-
-## Risks
-- LATAM no per-seat SaaS culture; procurement cycles slow
-- US-crowded (CentralReach, Motivity, Catalyst, Theralytics, Rethink)
-- Low ACV × thin market = lifestyle ceiling
-
-## Why not first
-Bet C contains Bet A's value as a side-effect (therapist gets dashboard for free) and adds parent-paid revenue on top. A is the consolation pivot if C fails on therapist-network side.
 
 ---
 
@@ -241,8 +258,8 @@ No warm list for this persona. Park as long-term expansion.
 
 | Bet | 12-mo MRR target | Warm list fit | Defensibility | Build cost | Pick order |
 |---|---|---|---|---|---|
-| C — Parent↔therapist bridge | $15-25K | High (both sides) | Network effects | Medium | **1** |
-| A — Therapist SaaS | $5-15K | Medium (one side) | Workflow lock-in | Medium | 2 (fallback from C) |
+| **A — Therapist SaaS** | **$5-15K** | **Medium (one side)** | **Workflow lock-in** | **Medium** | **1 (chosen)** |
+| C — Parent↔therapist bridge | $15-25K | High (both sides) | Network effects | Medium | 2 (expansion path) |
 | B — Post-diag subscription | $5-10K | Medium (parent only) | Weak | Low | 3 |
 | D — AAC-as-a-service | $3-8K | Low (subset only) | License risk | Medium | 4 |
 | E — School-home schedule | $2-5K | Low (no teachers) | Network effects | Medium | 5 (later) |
@@ -250,30 +267,30 @@ No warm list for this persona. Park as long-term expansion.
 
 # Decision
 
-**Build Bet C.** Reasons:
-- Only bet that uses both sides of warm list as zero-CAC channel
-- Strongest unit economics under bootstrap (no paid acquisition needed)
-- Contains Bet A as side-effect (therapist gets dashboard free)
-- Solves the most-cited problem across raw interviews and structured research
-- 12-mo MRR target compatible with profitable LATAM lifestyle business
-- Wedge + expand path: autism → ADHD → general pediatric therapy
+**Build Bet A** (founder pick, 2026-05-02). Reasons:
+- Single-actor UX; no two-sided coordination risk
+- Workflow lock-in defensibility outweighs C's network-effect ceiling under current execution capacity
+- 20 warm therapists ready to pilot without parallel parent-side scheduling
+- Contains a clean expansion path: parent-app module on top of installed therapist base = Bet C territory without rebuild
+- Profitable LATAM lifestyle business viable at $6-15K MRR target
 
-Fallback if C fails: pivot to A using same therapist warm list.
+Expansion sequencing: validate A through Mo 6 → ship parent-companion module Mo 7-12 (becomes Bet C without the cold-start problem).
 
 # Open questions
 
-- Of the 20 warm professionals, how many are private practice (will pay personally) vs employed at clinic (procurement gate)?
-- Of the 30 mothers, what's the kid-age distribution? Bet C needs ≥10 with kid 4-12 in active therapy.
-- Therapy-week volume per warm therapist (for daily prompt cadence design)
-- Whether warm therapists will let recordings be used for AI training (E29 type insights → training corpus moat)
+- Of the 20 warm professionals, how many are private practice (personal credit-card pay) vs employed at clinic (procurement gate)?
+- Current Word/Excel/WhatsApp stack per therapist — how much is genuinely replaceable vs habit-locked?
+- Spanish session-note voice transcription quality on PE/MX/AR/CL accents (AI feature dependency)
+- Billing/invoicing requirements per geo (PE SUNAT electronic invoicing, MX CFDI, AR AFIP) — depth of integration needed for v1
+- Whether session recordings can be used for AI training corpus (consent + LATAM data law)
 
 # Next steps
 
-1. Tag warm list by subtype (private-practice vs clinic-employed; kid age; current therapy frequency)
-2. Draft pilot pitch script (Spanish, voice + text) for 4-week paid pilot at $25/mo parent
-3. Run 5 therapist + 10 mother calls week 1
-4. Concierge MSP weeks 3-6 (WhatsApp Business + Notion, manual prompts)
-5. Software MSP weeks 7-10 if ≥3 paying pairs renew
+1. Tag warm therapist list by: private-practice vs clinic-employed, geo, current tooling, weekly session volume, willingness to pilot at $20-40/mo
+2. Run 10 therapist discovery calls Wk 1-2 — confirm documentation burden hours, current stack pain, billing-integration must-haves
+3. Concierge MSP Wk 3-6: shared Notion + Spanish session-note template + WhatsApp-to-PDF parent report, manual; charge $20/mo
+4. Software MSP Wk 7-12: scheduling + notes + parent-share link; ship to ≥5 paying therapists
+5. Decision gate Mo 6: ≥$2K MRR or kill; if pass, scope parent-companion module (Bet C expansion)
 
 # Sources
 

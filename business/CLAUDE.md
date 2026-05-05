@@ -19,6 +19,7 @@ Clinical/scientific evidence does **not** live here. It lives in `clinical/` (pa
 - Problem statement → `research/problems.md`.
 - Pricing model analysis → `research/pricing.md`.
 - Positioning → `research/positioning.md`.
+- Day-in-life task map / non-clinical workflow per persona → `research/workflows.md` (one file, sections per persona).
 - Extending an existing topic → edit the existing file. Do not spawn `-v2`.
 
 ## Competitor file schema
