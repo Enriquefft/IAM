@@ -1,0 +1,26 @@
+---
+import Hero from "@/components/sections/Hero.astro";
+import Backers from "@/components/sections/Backers.astro";
+import Features from "@/components/sections/Features.astro";
+import Pricing from "@/components/sections/Pricing.astro";
+import Equipo from "@/components/sections/Equipo.astro";
+import Faq from "@/components/sections/Faq.astro";
+import FinalCta from "@/components/sections/FinalCta.astro";
+import Waitlist from "@/components/sections/Waitlist.astro";
+import type { LocalePath } from "@/lib/i18n";
+
+interface Props {
+  readonly locale: LocalePath;
+}
+
+const { locale }: Props = Astro.props;
+---
+
+<Hero locale={locale} />
+<Backers />
+<Features locale={locale} />
+<Pricing locale={locale} />
+<Equipo locale={locale} />
+<Faq locale={locale} />
+<FinalCta locale={locale} />
+<Waitlist locale={locale} />

@@ -84,7 +84,7 @@ const subpathBeyondLocale = pathname.startsWith(localePrefix)
   ? pathname.slice(localePrefix.length)
   : "";
 
-// hreflang alternates: one per locale + x-default → DEFAULT_LOCALE.
+// hreflang alternates: one per locale.
 const hreflangAlternates = SUPPORTED_LOCALES.map((loc) => {
   const path = localeToPath(loc);
   return {
@@ -92,7 +92,14 @@ const hreflangAlternates = SUPPORTED_LOCALES.map((loc) => {
     href: `${siteMeta.siteUrl}${localizePath(path, subpathBeyondLocale)}`,
   };
 });
-const xDefaultHref = `${siteMeta.siteUrl}${localizePath(DEFAULT_LOCALE_PATH, subpathBeyondLocale)}`;
+// x-default: home-level pages have a locale-neutral root at "/" (the
+// international hub served to crawlers and direct domain shares). Sub-pages
+// have no locale-neutral variant, so x-default points to the default locale's
+// version of the same page.
+const xDefaultHref =
+  subpathBeyondLocale === ""
+    ? `${siteMeta.siteUrl}/`
+    : `${siteMeta.siteUrl}${localizePath(DEFAULT_LOCALE_PATH, subpathBeyondLocale)}`;
 
 // OG locale + alternates
 const ogLocale = localeToOgLocale(activeLocale);

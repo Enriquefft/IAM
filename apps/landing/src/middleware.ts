@@ -3,12 +3,15 @@
  *
  * Runs before page resolution. Responsibilities:
  *
- * 1. **Root `/`** → 302 to a detected locale (cookie → Vercel geo-IP →
- *    `accept-language` → fallback `pe`).
+ * 1. **Root `/`**:
+ *    - Crawler/social-card unfurler UA → pass through to `src/pages/index.astro`
+ *      (renders default-locale content as the international hub; canonical → `/`).
+ *    - Real user → 302 to detected locale (cookie → Vercel geo-IP →
+ *      `accept-language` → fallback `pe`).
  * 2. **Path with no locale prefix** (`/demo`, `/privacidad`, …) → 302 to the
  *    detected locale's prefixed path, preserving subpath, query and hash.
  * 3. **Locale-prefixed path** → set `iam:locale` cookie so subsequent visits
- *    skip detection.
+ *    skip detection (skipped for crawlers — they don't store cookies).
  *
  * Bypassed: `/api/*`, `/og.png`, `/favicon*`, `/apple-touch-icon*`, `/robots.txt`,
  * `/sitemap*`, `/_astro/*`, `/_image`, anything with a file extension.
@@ -26,6 +29,7 @@ import {
   localeToPath,
   type LocalePath,
 } from "@/lib/i18n";
+import { isCrawler } from "@/lib/crawler";
 
 const LOCALE_COOKIE = "iam:locale";
 
@@ -97,6 +101,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  const userAgent = request.headers.get("user-agent");
+  const isBot = isCrawler(userAgent);
+
+  // Crawlers hitting `/`: serve the international hub directly so link
+  // previews and search indexing see real content. No cookie writes — they
+  // don't store cookies, and varying Set-Cookie disturbs edge caching.
+  if (pathname === "/" && isBot) {
+    const response = await next();
+    response.headers.append("Vary", "User-Agent");
+    return response;
+  }
+
   const cookieLocale = context.cookies.get(LOCALE_COOKIE)?.value;
   const ipCountry = request.headers.get("x-vercel-ip-country");
   const acceptLanguage = request.headers.get("accept-language");
@@ -107,7 +123,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Path already starts with a supported locale: pass through, ensure cookie.
   if (segment !== null && isLocalePath(segment)) {
     const response = await next();
-    if (cookieLocale !== segment) {
+    if (!isBot && cookieLocale !== segment) {
       setLocaleCookie(response.headers, segment);
     }
     return response;

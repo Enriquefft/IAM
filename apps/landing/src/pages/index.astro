@@ -2,14 +2,14 @@
 import Base from "@/layouts/Base.astro";
 import HomePage from "@/components/pages/HomePage.astro";
 import Footer from "@/components/sections/Footer.astro";
-import { isLocalePath, type LocalePath } from "@/lib/i18n";
+import { DEFAULT_LOCALE_PATH } from "@/lib/i18n";
+import { siteMeta } from "@/lib/seo";
 
-const current = Astro.currentLocale;
-if (!isLocalePath(current)) return Astro.redirect("/", 302);
-const locale: LocalePath = current;
+const locale = DEFAULT_LOCALE_PATH;
+const canonicalUrl = `${siteMeta.siteUrl}/`;
 ---
 
-<Base pageKey="home" locale={locale}>
+<Base pageKey="home" locale={locale} canonicalUrl={canonicalUrl}>
   <HomePage locale={locale} />
   <Footer slot="footer" locale={locale} />
 </Base>
