@@ -15,8 +15,8 @@ export const palette = {
   /** brand.salvia.500 — logo / brand text */
   brand: "#4E7A56",
 
-  /** brand.salvia.400 — primary button background, link color */
-  primary: "#6B9B73",
+  /** brand.salvia.500 — primary button background, link color (4.95:1 contrast with white, WCAG AA) */
+  primary: "#4E7A56",
 
   /** ink.900 — heading text */
   headingText: "#1C1612",

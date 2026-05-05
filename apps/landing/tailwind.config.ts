@@ -58,9 +58,11 @@ const config: Config = {
           inverse: "#FFFFFF",
         },
         primary: {
-          DEFAULT: "#6B9B73",
-          hover: "#4E7A56",
-          active: "#38603E",
+          // salvia-500 (#4E7A56): 4.95:1 contrast with white — passes WCAG AA
+          // Previously salvia-400 (#6B9B73) which was 3.2:1 (failed AA)
+          DEFAULT: "#4E7A56",
+          hover: "#38603E",
+          active: "#2A4A2E",
           fg: "#FFFFFF",
         },
         secondary: {

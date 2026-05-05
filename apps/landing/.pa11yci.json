@@ -1,0 +1,17 @@
+{
+  "standard": "WCAG2AA",
+  "level": "error",
+  "timeout": 30000,
+  "chromeLaunchConfig": {
+    "args": ["--no-sandbox", "--disable-dev-shm-usage"],
+    "executablePath": "/run/current-system/sw/bin/google-chrome-stable"
+  },
+  "urls": [
+    "http://localhost:4321/",
+    "http://localhost:4321/demo",
+    "http://localhost:4321/confirmado?sent=1",
+    "http://localhost:4321/privacidad",
+    "http://localhost:4321/terminos",
+    "http://localhost:4321/404"
+  ]
+}

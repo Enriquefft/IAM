@@ -6,7 +6,7 @@ import Logo from "@/components/brand/Logo.astro";
 import { Button } from "@/components/ui/button";
 import NavLinks from "./NavLinks.astro";
 import NavMobile from "./NavMobile";
-import { NAV_LINKS, WAITLIST_CTA, DEMO_HREF } from "./links";
+import { NAV_LINKS, WAITLIST_CTA, DEMO_HREF, WAITLIST_HREF } from "./links";
 ---
 
 <!-- Sticky header shell — data-nav-shell is the scroll-shadow anchor read by NavMobile.tsx -->
@@ -32,7 +32,7 @@ import { NAV_LINKS, WAITLIST_CTA, DEMO_HREF } from "./links";
     <!-- Desktop CTA — section-nav.jsx:100 -->
     <div class="hidden md:flex items-center gap-3">
       <Button asChild>
-        <a href="#waitlist">{WAITLIST_CTA}</a>
+        <a href={WAITLIST_HREF}>{WAITLIST_CTA}</a>
       </Button>
     </div>
 

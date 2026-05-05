@@ -1,6 +1,10 @@
 // section-cta-footer.jsx:88-102
 // Demo.html → /demo and *.html → /* per Astro routing.
-// /privacidad and /terminos are Phase 7 routes — links will 404 in interim.
+//
+// Hash anchors use absolute paths (e.g. /#funciones) so footer links work
+// correctly when the footer is rendered on non-home pages (/privacidad, /terminos,
+// /confirmado, etc.). Plain #hash links break WCAG 2.1 SC 4.1.2 on pages that
+// don't contain the target anchor.
 
 export interface FooterLink {
   readonly label: string;
@@ -16,16 +20,16 @@ export const FOOTER_COLUMNS = [
   {
     title: "Producto",
     items: [
-      { label: "Funciones", href: "#funciones" },
-      { label: "Precios", href: "#precios" },
+      { label: "Funciones", href: "/#funciones" },
+      { label: "Precios", href: "/#precios" },
       { label: "Demo", href: "/demo" },
-      { label: "Preguntas", href: "#preguntas" },
+      { label: "Preguntas", href: "/#preguntas" },
     ],
   },
   {
     title: "Empresa",
     items: [
-      { label: "Quiénes somos", href: "#equipo" },
+      { label: "Quiénes somos", href: "/#equipo" },
       { label: "Contacto", href: "mailto:hola@i-am.clinic" },
     ],
   },

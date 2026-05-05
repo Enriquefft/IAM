@@ -150,7 +150,7 @@ export default function WaitlistForm({ action }: { action: string }) {
         <div>
           <Label htmlFor="wl-email">
             {WAITLIST_COPY.emailLabel}
-            <span className="text-status-error ml-0.5" aria-hidden="true">*</span>
+            <span className="text-status-errorText ml-0.5" aria-hidden="true">*</span>
           </Label>
           <Input
             id="wl-email"
@@ -177,7 +177,7 @@ export default function WaitlistForm({ action }: { action: string }) {
         <div>
           <Label htmlFor="wl-role">
             {WAITLIST_COPY.roleLabel}
-            <span className="text-status-error ml-0.5" aria-hidden="true">*</span>
+            <span className="text-status-errorText ml-0.5" aria-hidden="true">*</span>
           </Label>
           <Select value={role} onValueChange={setRole} required>
             <SelectTrigger
@@ -212,14 +212,15 @@ export default function WaitlistForm({ action }: { action: string }) {
             id="wl-consent"
             checked={consent}
             onCheckedChange={(v) => setConsent(v === true)}
+            aria-labelledby="wl-consent-label"
             aria-describedby={errors["consent"] ? "wl-consent-err" : undefined}
             aria-invalid={errors["consent"] ? true : undefined}
             className="mt-0.5 shrink-0"
           />
           <div>
-            <Label htmlFor="wl-consent" className="cursor-pointer leading-snug">
+            <Label id="wl-consent-label" htmlFor="wl-consent" className="cursor-pointer leading-snug">
               {WAITLIST_COPY.consentLabel}
-              <span className="text-status-error ml-0.5" aria-hidden="true">*</span>
+              <span className="text-status-errorText ml-0.5" aria-hidden="true">*</span>
             </Label>
             {errors["consent"] && (
               <p
