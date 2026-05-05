@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { neon } from "@neondatabase/serverless";
-import { nodeEnv } from "../src/lib/env";
+import { getEnv } from "../src/lib/env";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -12,7 +12,7 @@ if (existsSync(__envPath)) {
   process.loadEnvFile(__envPath);
 }
 
-const sql = neon(nodeEnv().DATABASE_URL);
+const sql = neon(getEnv().DATABASE_URL);
 
 // Ensure migration tracking table exists (idempotent).
 await sql`
