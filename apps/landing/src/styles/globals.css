@@ -16,15 +16,15 @@
 @tailwind utilities;
 
 /* Accessibility: honour reduced-motion preference.
-   !important is intentional here — these overrides must win over
-   any animation/transition set by components or utilities. */
+   animation-duration and transition-duration overrides use the override flag
+   so they win over any animation/transition set by components or utilities. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+    animation-iteration-count: 1;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    scroll-behavior: auto;
   }
 }
