@@ -1,0 +1,38 @@
+---
+// Mark.astro — just the mark glyph (56×56 viewBox).
+// Ported from assets/mark.svg (viewBox 0 0 56 56).
+import { cn } from "@/lib/cn";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className }: Props = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 56 56"
+  fill="currentColor"
+  aria-hidden="true"
+  class={cn(className)}
+>
+  <!-- rounded square background — surface-alt (cream-100) -->
+  <rect width="56" height="56" rx="12" class="text-surface-alt" fill="currentColor" />
+  <g transform="translate(12, 12)">
+    <!-- leaf glyph — salvia-400 / primary -->
+    <path
+      d="M 4 26 Q 4 4, 26 4 Q 26 22, 14 28 Q 8 30, 4 26 Z"
+      class="text-primary"
+      fill="currentColor"
+    />
+    <!-- berry dot — accent (terra-300) -->
+    <circle
+      cx="22"
+      cy="22"
+      r="3.6"
+      class="text-accent"
+      fill="currentColor"
+    />
+  </g>
+</svg>

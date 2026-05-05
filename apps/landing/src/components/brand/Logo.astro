@@ -1,0 +1,52 @@
+---
+// Logo.astro — full logo (mark + wordmark) inline SVG.
+// viewBox: 0 0 240 56 — ported from assets/logo.svg
+import { cn } from "@/lib/cn";
+
+interface Props {
+  class?: string;
+  "aria-label"?: string;
+}
+
+const {
+  class: className,
+  "aria-label": ariaLabel = "i-am.clinic",
+}: Props = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 240 56"
+  role="img"
+  aria-label={ariaLabel}
+  fill="currentColor"
+  class={cn(className)}
+>
+  <g transform="translate(8, 12)">
+    <!-- leaf glyph — salvia-400 -->
+    <path
+      d="M 4 26 Q 4 4, 26 4 Q 26 22, 14 28 Q 8 30, 4 26 Z"
+      class="text-primary"
+      fill="currentColor"
+    />
+    <!-- berry dot — accent (terra-300) -->
+    <circle
+      cx="22"
+      cy="22"
+      r="3.2"
+      class="text-accent"
+      fill="currentColor"
+    />
+  </g>
+  <!-- wordmark: "i-am" in ink-900, "." in salvia-400, "clinic" in ink-900 -->
+  <text
+    x="48"
+    y="36"
+    font-family="Plus Jakarta Sans, system-ui, sans-serif"
+    font-weight="700"
+    font-size="22"
+    letter-spacing="-0.01em"
+    class="text-text-primary"
+    fill="currentColor"
+  >i-am<tspan class="text-primary" fill="currentColor">.</tspan>clinic</text>
+</svg>

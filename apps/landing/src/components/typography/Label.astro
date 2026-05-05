@@ -1,0 +1,19 @@
+---
+// Label.astro — form label-style small caps text.
+import { cn } from "@/lib/cn";
+
+type AllowedTag = "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+
+interface Props {
+  as?: AllowedTag;
+  class?: string;
+}
+
+const { as: Tag = "span", class: className }: Props = Astro.props;
+---
+
+<Tag
+  class={cn("font-sans text-label text-text-secondary", className)}
+>
+  <slot />
+</Tag>

@@ -1,0 +1,74 @@
+---
+// Footer.astro — site footer rendered outside <main> via slot="footer" in Base.astro.
+// section-cta-footer.jsx:67-119.
+// Renders via <Footer slot="footer" /> in index.astro → Base.astro <slot name="footer" />.
+import Mark from "@/components/brand/Mark.astro";
+import {
+  FOOTER_COLUMNS,
+  FOOTER_TAGLINE,
+  FOOTER_COPYRIGHT,
+  FOOTER_DOUBT_PREFIX,
+  FOOTER_DOUBT_EMAIL,
+} from "./footer/links";
+---
+
+{/* section-cta-footer.jsx:68 */}
+<footer role="contentinfo" class="bg-ink-900 text-ink-100 pt-16 pb-8">
+  <div class="mx-auto max-w-page px-8">
+    {/* section-cta-footer.jsx:74 — footer grid: brand + 3 columns */}
+    {/*
+      md:[grid-template-columns:1.5fr_1fr_1fr_1fr] — asymmetric brand column. section-cta-footer.jsx:74.
+      layout.css:93-97. No exact token for non-uniform fr columns.
+    */}
+    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 md:[grid-template-columns:1.5fr_1fr_1fr_1fr] md:gap-12"> {/* layout.css:93-97 */}
+      {/* section-cta-footer.jsx:75-87 — brand block */}
+      <div>
+        <div class="flex items-center gap-2.5 mb-4">
+          {/* section-cta-footer.jsx:77 — logomark substituted with <Mark /> brand atom */}
+          <Mark class="h-7 w-7" />
+          {/* section-cta-footer.jsx:79-82 */}
+          <span class="font-sans font-bold text-h5 text-brand-cream-50">i-am.clinic</span>
+        </div>
+        {/* section-cta-footer.jsx:83-86 */}
+        <p class="font-sans text-small text-ink-300 max-w-[280px] leading-relaxed"> {/* max-w-[280px] section-cta-footer.jsx:83, no exact token */}
+          {FOOTER_TAGLINE}
+        </p>
+      </div>
+
+      {/* section-cta-footer.jsx:88-102 — link columns */}
+      {FOOTER_COLUMNS.map((col) => (
+        <div>
+          {/* section-cta-footer.jsx:121 — h6 microheadings for footer columns */}
+          <h6 class="font-sans font-semibold text-label tracking-wide uppercase text-brand-cream-50 mb-4">
+            {col.title}
+          </h6>
+          <ul role="list" class="flex flex-col gap-2.5" style="list-style:none;padding:0;margin:0;">
+            {col.items.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="font-sans text-small text-ink-300 hover:text-brand-cream-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 rounded-sm transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    {/* section-cta-footer.jsx:104-116 — bottom bar */}
+    <div class="mt-12 pt-6 border-t border-text-inverse/10 flex flex-wrap items-center justify-between gap-4 text-small text-ink-300">
+      {/* section-cta-footer.jsx:111 */}
+      <p class="font-sans text-small text-ink-300">{FOOTER_COPYRIGHT}</p>
+      {/* section-cta-footer.jsx:113-115 */}
+      <p class="font-sans text-small text-ink-300">
+        {FOOTER_DOUBT_PREFIX}<a
+          href="mailto:hola@i-am.clinic"
+          class="text-brand-cream-100 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900 rounded-sm"
+        >{FOOTER_DOUBT_EMAIL}</a>
+      </p>
+    </div>
+  </div>
+</footer>

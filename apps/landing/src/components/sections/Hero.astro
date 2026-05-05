@@ -1,0 +1,122 @@
+---
+// Hero.astro — Phase-4.3 hero with live 12-second loop.
+// No props — all copy is hard-coded inline.
+import Lede from "@/components/typography/Lede.astro";
+import Icon from "@/components/icons/Icon.astro";
+import { Button } from "@/components/ui/button";
+import HeroLoop from "@/components/hero/HeroLoop";
+---
+
+{/* section-hero.jsx:1 */}
+<section
+  id="hero"
+  aria-labelledby="hero-title"
+  class="relative overflow-hidden bg-page pt-18 pb-24 lg:pt-[72px] lg:pb-24"
+>
+  {/* Decorative radial wash — no semantic content */}
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 bg-hero-wash"></div>
+
+  {/* Two-column grid: copy left, preview right */}
+  <div class="mx-auto max-w-page px-8 grid items-center gap-16 lg:grid-cols-[1.05fr_0.95fr] grid-cols-1 relative">
+
+    {/* ── LEFT COLUMN: copy ─────────────────────────────────── */}
+    <div>
+      {/* Eyebrow badge */}
+      {/* section-hero.jsx:19 */}
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-surface-alt text-text-secondary text-label font-medium px-3 py-1 border border-surface-border">
+        {/* section-hero.jsx:19 */}Hecho por gente que también ve pacientes
+      </span>
+
+      {/* Main headline */}
+      {/* section-hero.jsx:20 */}
+      <h1
+        id="hero-title"
+        class="text-hero-fluid font-sans font-bold tracking-tight leading-tight mt-5 mb-6"
+      >
+        {/* section-hero.jsx:21 */}La consulta privada,{" "}
+        <span class="text-brand-salvia-500 italic font-serif font-medium">{/* section-hero.jsx:22 */}sin papeleo.</span>
+      </h1>
+
+      {/* Lede paragraph */}
+      {/* section-hero.jsx:26-29 */}
+      <Lede class="text-text-secondary max-w-[540px] mb-8">
+        {/* section-hero.jsx:27 */}Agenda, notas y cobros en un mismo lugar. Para psicólogos y psiquiatras que quieren cerrar el día con sus pacientes, no con una hoja de cálculo.
+      </Lede>
+
+      {/* CTA group */}
+      <div class="flex flex-wrap gap-3 mb-5">
+        {/* Primary CTA — links to #waitlist (Phase-6 will mount the WaitlistDialog there) */}
+        {/* section-hero.jsx:32 */}
+        <Button asChild size="lg">
+          <a href="#waitlist">
+            {/* section-hero.jsx:33 */}Unirme a la lista de espera
+            <Icon name="arrowRight" class="ml-1 h-[18px] w-[18px]" aria-hidden="true" />
+          </a>
+        </Button>
+
+        {/* Secondary CTA */}
+        {/* section-hero.jsx:36 */}
+        <Button asChild variant="outline" size="lg">
+          <a href="/demo">
+            {/* section-hero.jsx:37 */}Ver el demo
+          </a>
+        </Button>
+      </div>
+
+      {/* Trust line */}
+      {/* section-hero.jsx:40 */}
+      <p class="text-small text-text-muted mt-3 inline-flex items-center gap-2">
+        <Icon name="lock" class="h-[14px] w-[14px]" aria-hidden="true" />
+        {/* section-hero.jsx:42 */}Tus expedientes están cifrados. Solo tú los lees.
+      </p>
+    </div>
+
+    {/* ── RIGHT COLUMN: preview chrome ──────────────────────── */}
+    <div class="relative">
+      {/* Tilt-target interactive button — click navigates to /demo with tilt handoff */}
+      {/* section-hero.jsx:76 */}
+      <button
+        data-tilt-target
+        type="button"
+        aria-label="Abrir el demo interactivo"
+        class="group relative block w-full aspect-[1.05/1] rounded-hero overflow-visible bg-transparent border-0 p-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-salvia-400 focus-visible:ring-offset-[6px] focus-visible:ring-offset-page transition-transform duration-300 ease-spring motion-reduce:transition-none [transform-style:preserve-3d] [perspective:1200px]"
+      >
+        <HeroLoop client:visible />
+
+        {/* Mini chip overlay — visible on hover/focus */}
+        {/* section-hero.jsx:137 */}
+        <span
+          aria-hidden="true"
+          class="absolute left-1/2 -translate-x-1/2 -bottom-4 inline-flex items-center gap-1.5 rounded-full bg-surface text-text-primary text-micro font-medium px-2.5 py-1 border border-surface-border opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity motion-reduce:transition-none"
+        >
+          {/* section-hero.jsx:149 */}Abrir demo interactivo
+          <Icon name="arrowRight" class="h-[14px] w-[14px]" aria-hidden="true" />
+        </span>
+
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<script type="module" is:inline>
+const target = document.querySelector('[data-tilt-target]');
+if (target) {
+  const writeHandoff = (x, y) => {
+    sessionStorage.setItem('iam:tilt:handoff', JSON.stringify({ x, y, t: Date.now() }));
+  };
+  target.addEventListener('click', (e) => {
+    const r = target.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    writeHandoff(py * -3, px * 3);
+    requestAnimationFrame(() => { window.location.href = '/demo'; });
+  });
+  target.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    writeHandoff(0, 0);
+    requestAnimationFrame(() => { window.location.href = '/demo'; });
+  });
+}
+</script>

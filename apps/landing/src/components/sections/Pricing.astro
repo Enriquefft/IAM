@@ -1,0 +1,58 @@
+---
+// Pricing.astro — three-tier pricing section.
+// section-pricing.jsx:3-128.
+import Lede from "@/components/typography/Lede.astro";
+import Small from "@/components/typography/Small.astro";
+import PricingTier from "./pricing/PricingTier.astro";
+import { PRICING_TIERS } from "./pricing/data";
+---
+
+{/* section-pricing.jsx:6 — default bg-page */}
+<section id="precios" aria-labelledby="pricing-title" class="py-24 tablet:py-16">
+  <div class="mx-auto max-w-page px-8">
+    {/* section-pricing.jsx:7 — max-w-[640px] bundle maxWidth:640, no exact token */}
+    <div class="mx-auto max-w-[640px] text-center mb-14"> {/* section-pricing.jsx:7 */}
+      {/* section-pricing.jsx:8 — eyebrow */}
+      <span class="inline-flex items-center rounded-sm bg-status-successSurface text-primary-active px-2.5 py-0.5 text-label font-medium">
+        {/* section-pricing.jsx:8 */}
+        Precios honestos
+      </span>
+
+      {/* section-pricing.jsx:10-11 */}
+      <h2 id="pricing-title" class="font-sans text-h2 text-text-primary mt-4 mb-4">
+        Un precio.<br />
+        Sin sorpresas.
+      </h2>
+
+      {/* section-pricing.jsx:13-14 */}
+      <Lede>
+        Una mensualidad por todo. Cancelas cuando quieras y te llevas tus datos.
+      </Lede>
+    </div>
+
+    {/* section-pricing.jsx:19-62 — three tiers */}
+    {/* md:[grid-template-columns:1fr_1.05fr_1fr] — asymmetric middle column, no token */}
+    <div class="mx-auto grid max-w-section gap-6 grid-cols-1 md:[grid-template-columns:1fr_1.05fr_1fr] items-stretch"> {/* section-pricing.jsx:19 */}
+      {PRICING_TIERS.map((tier) => (
+        <PricingTier
+          id={tier.id}
+          name={tier.name}
+          price={tier.price}
+          period={tier.period}
+          desc={tier.desc}
+          features={tier.features}
+          cta={tier.cta}
+          highlighted={tier.highlighted}
+        />
+      ))}
+    </div>
+
+    {/* section-pricing.jsx:67-68 — trailing note */}
+    <p class="mt-10 text-center">
+      <Small class="text-text-muted">
+        {/* section-pricing.jsx:67-68 */}
+        Precios en USD. Aceptamos tarjeta internacional, transferencia, Yape y PLIN.
+      </Small>
+    </p>
+  </div>
+</section>

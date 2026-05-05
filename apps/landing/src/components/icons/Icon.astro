@@ -1,0 +1,25 @@
+---
+// Icon.astro — static SSR wrapper for Lucide icons.
+// Renders the React Lucide component at build time (no client:* directive),
+// shipping zero JS. Default strokeWidth=1.75 matches the bundle's Icon primitive.
+import type { IconName } from "./index";
+import { iconMap } from "./index";
+import { cn } from "@/lib/cn";
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className }: Props = Astro.props;
+
+const LucideIcon = iconMap[name];
+---
+
+<LucideIcon
+  size={size}
+  strokeWidth={1.75}
+  className={cn(className)}
+  aria-hidden={true}
+/>

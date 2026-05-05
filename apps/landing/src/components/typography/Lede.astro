@@ -1,0 +1,21 @@
+---
+// Lede.astro — large body intro paragraph.
+// Bundle: h headings use font-heading (Plus Jakarta Sans / sans), body uses Lora (serif).
+// Lede follows body convention: font-serif (Lora).
+import { cn } from "@/lib/cn";
+
+type AllowedTag = "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+
+interface Props {
+  as?: AllowedTag;
+  class?: string;
+}
+
+const { as: Tag = "p", class: className }: Props = Astro.props;
+---
+
+<Tag
+  class={cn("font-serif text-body-lg text-text-secondary", className)}
+>
+  <slot />
+</Tag>

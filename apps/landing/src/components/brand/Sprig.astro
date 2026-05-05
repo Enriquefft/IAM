@@ -1,0 +1,36 @@
+---
+// Sprig.astro — the leaf/sprig brand motif used as a section accent.
+// Path data derived from the mark glyph in assets/mark.svg (same leaf + berry).
+// NAMED MISS: img-13-sprig.png is a raster file with no matching inline SVG
+// definition in the bundle. This SVG reuses the canonical mark path data verbatim.
+import { cn } from "@/lib/cn";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className }: Props = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 32 32"
+  fill="currentColor"
+  aria-hidden="true"
+  class={cn(className)}
+>
+  <!-- leaf glyph — scaled to 32×32 viewport (original in 32-unit space at origin) -->
+  <path
+    d="M 4 26 Q 4 4, 26 4 Q 26 22, 14 28 Q 8 30, 4 26 Z"
+    class="text-primary"
+    fill="currentColor"
+  />
+  <!-- berry dot -->
+  <circle
+    cx="22"
+    cy="22"
+    r="3.6"
+    class="text-accent"
+    fill="currentColor"
+  />
+</svg>

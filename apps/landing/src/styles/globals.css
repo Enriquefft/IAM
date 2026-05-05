@@ -1,0 +1,38 @@
+/* Plus Jakarta Sans — weights 400/500/600/700 */
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+
+/* Lora — weights 400/500/600 upright + 400/500 italic */
+@import "@fontsource/lora/400.css";
+@import "@fontsource/lora/500.css";
+@import "@fontsource/lora/600.css";
+@import "@fontsource/lora/400-italic.css";
+@import "@fontsource/lora/500-italic.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Hero wash gradient — derived from brand.salvia.100 and brand.terra.100 */
+    --hero-wash-salvia: 214 229 216; /* #D6E5D8 in RGB */
+    --hero-wash-terra: 242 224 214;  /* #F2E0D6 in RGB */
+  }
+}
+
+/* Accessibility: honour reduced-motion preference.
+   animation-duration and transition-duration overrides use the override flag
+   so they win over any animation/transition set by components or utilities. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto;
+  }
+}

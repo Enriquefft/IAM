@@ -1,0 +1,46 @@
+---
+// Faq.astro — FAQ section with sticky aside and Radix accordion island.
+// section-faq.jsx:3-68.
+import Lede from "@/components/typography/Lede.astro";
+import { FaqList } from "./faq/FaqList";
+import { FAQ_ITEMS } from "./faq/data";
+---
+
+{/* section-faq.jsx:31 — <Section id="preguntas" alt> */}
+<section id="preguntas" aria-labelledby="faq-title" class="bg-surface-alt py-24 tablet:py-16">
+  <div class="mx-auto max-w-page px-8">
+    {/* section-faq.jsx:32 — two-col layout */}
+    <div class="grid items-start gap-12 lg:gap-20 lg:[grid-template-columns:0.9fr_1.1fr] grid-cols-1"> {/* layout.css:62-66 */}
+      {/* section-faq.jsx:33 — sticky aside */}
+      <div class="lg:sticky lg:top-24">
+        {/* section-faq.jsx:34 — eyebrow tone="green" */}
+        <span class="inline-flex items-center rounded-sm bg-status-successSurface text-primary-active px-2.5 py-0.5 text-label font-medium">
+          {/* section-faq.jsx:34 */}
+          Preguntas frecuentes
+        </span>
+
+        {/* section-faq.jsx:35-36 */}
+        <h2 id="faq-title" class="font-sans text-h2 text-text-primary mt-4 mb-4">
+          Lo que nos<br />preguntan más.
+        </h2>
+
+        {/* section-faq.jsx:38-43 — lede with email link */}
+        <Lede>
+          Si la tuya no está aquí, escríbenos a{" "}
+          <a
+            href="mailto:hola@i-am.clinic"
+            class="text-primary-active font-medium underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-alt rounded-sm"
+          >
+            {/* section-faq.jsx:41 */}
+            hola@i-am.clinic
+          </a>. Contestamos el mismo día.
+        </Lede>
+      </div>
+
+      {/* section-faq.jsx:45-47 — accordion island */}
+      <div>
+        <FaqList client:visible items={FAQ_ITEMS} />
+      </div>
+    </div>
+  </div>
+</section>
