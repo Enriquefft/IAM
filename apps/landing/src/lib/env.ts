@@ -3,18 +3,16 @@ import { z } from "zod";
 const Env = z.object({
   DATABASE_URL: z.string().url(),
   RESEND_API_KEY: z.string().min(1),
-  RESEND_FROM: z.string().email().default("hola@i-am.clinic"),
-  SITE_URL: z.string().url().default("https://i-am.clinic"),
+  WAITLIST_FROM: z.string().min(1).default("i-am.clinic <hola@i-am.clinic>"),
+  PUBLIC_SITE_URL: z.string().url().default("https://i-am.clinic"),
+  WAITLIST_TOKEN_SECRET: z.string().length(64),
+  WAITLIST_IP_SALT: z.string().length(64),
 });
 
 export type EnvShape = z.infer<typeof Env>;
 
 let _parsed: EnvShape | undefined;
 
-/**
- * Lazily parses and validates env vars on first access.
- * Throws a descriptive error at runtime if required vars are missing.
- */
 export function getEnv(): EnvShape {
   if (_parsed !== undefined) {
     return _parsed;
@@ -31,10 +29,6 @@ export function getEnv(): EnvShape {
   return _parsed;
 }
 
-/**
- * Convenience re-export. Calling env.X lazily validates the full schema
- * the first time any key is read, then caches the result.
- */
 export const env = {
   get DATABASE_URL() {
     return getEnv().DATABASE_URL;
@@ -42,10 +36,16 @@ export const env = {
   get RESEND_API_KEY() {
     return getEnv().RESEND_API_KEY;
   },
-  get RESEND_FROM() {
-    return getEnv().RESEND_FROM;
+  get WAITLIST_FROM() {
+    return getEnv().WAITLIST_FROM;
   },
-  get SITE_URL() {
-    return getEnv().SITE_URL;
+  get PUBLIC_SITE_URL() {
+    return getEnv().PUBLIC_SITE_URL;
+  },
+  get WAITLIST_TOKEN_SECRET() {
+    return getEnv().WAITLIST_TOKEN_SECRET;
+  },
+  get WAITLIST_IP_SALT() {
+    return getEnv().WAITLIST_IP_SALT;
   },
 } satisfies Record<keyof EnvShape, string>;
