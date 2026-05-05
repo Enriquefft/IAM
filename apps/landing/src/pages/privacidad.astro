@@ -1,7 +1,101 @@
 ---
 import Base from "@/layouts/Base.astro";
+import Footer from "@/components/sections/Footer.astro";
 ---
 
-<Base title="Privacidad">
-  <h1>Privacidad</h1>
+<Base title="Aviso de privacidad — i-am.clinic">
+  <article class="mx-auto max-w-[720px] px-8 pt-16 pb-24">
+
+    {/* Back link — mirrors topbar in canonical bundle */}
+    <a
+      href="/"
+      class="inline-flex items-center gap-2 text-small font-sans text-ink-500 hover:text-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page rounded-sm transition-colors mb-8"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="h-4 w-4"
+        aria-hidden="true"
+      >
+        <path d="M10 3L5 8l5 5" />
+      </svg>
+      Volver a i-am.clinic
+    </a>
+
+    <h1 class="font-sans text-h1 font-bold text-text-primary mb-2">Aviso de privacidad</h1>
+    <p class="font-sans text-small text-ink-500 mb-8">Última actualización: 2026-05-05</p>
+
+    {/* Preliminary-version notice */}
+    <div class="bg-brand-terra-100 text-brand-terra-600 px-4 py-3 rounded-base text-small font-sans mb-8">
+      <strong>Versión preliminar.</strong> Este aviso es una versión base mientras finalizamos el documento legal definitivo. Si tienes preguntas, escríbenos a{" "}
+      <a
+        href="mailto:hola@i-am.clinic"
+        class="underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+      >hola@i-am.clinic</a>.
+    </div>
+
+    <section aria-labelledby="quienes-somos">
+      <h2 id="quienes-somos" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Quiénes somos</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        i-am.clinic es un servicio operado desde Lima, Perú, que ofrece herramientas de agenda, notas clínicas y cobranza para psicólogos, psiquiatras y otros profesionales de salud mental en práctica privada.
+      </p>
+    </section>
+
+    <section aria-labelledby="que-recolectamos">
+      <h2 id="que-recolectamos" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Qué información recolectamos</h2>
+      <ul class="font-sans text-body text-ink-700 leading-[1.7] list-disc pl-[22px] mb-4 space-y-1.5">
+        <li>Datos de tu cuenta: nombre, correo, teléfono, especialidad, país.</li>
+        <li>Datos clínicos que tú ingresas: notas de sesión, expedientes, recetas, calendarios.</li>
+        <li>Datos de cobranza: facturación, recibos, transacciones de pago.</li>
+        <li>Datos de uso: estadísticas anonimizadas para mejorar el producto.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="como-protegemos">
+      <h2 id="como-protegemos" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Cómo protegemos tu información</h2>
+      <ul class="font-sans text-body text-ink-700 leading-[1.7] list-disc pl-[22px] mb-4 space-y-1.5">
+        <li>Cifrado AES-256 en tránsito y en reposo.</li>
+        <li>Las notas clínicas se cifran con tu llave personal. Nuestro equipo no puede leerlas sin tu permiso explícito.</li>
+        <li>Respaldos diarios cifrados.</li>
+        <li>Acceso interno restringido y auditado.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="tus-derechos">
+      <h2 id="tus-derechos" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Tus derechos</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        Bajo la Ley 29733 de Protección de Datos Personales del Perú y la legislación equivalente en otros países de LATAM, tienes derecho a acceder, rectificar, cancelar y oponerte al uso de tus datos. Para ejercer estos derechos, escríbenos a{" "}
+        <a
+          href="mailto:hola@i-am.clinic"
+          class="text-brand-salvia-600 underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+        >hola@i-am.clinic</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="si-cancelas">
+      <h2 id="si-cancelas" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Si cancelas tu cuenta</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        Exportas todos tus datos en PDF y CSV antes de irte. Eliminamos tu información de nuestros sistemas activos en un máximo de 30 días, con la excepción de respaldos legales que se conservan según lo exija la ley aplicable.
+      </p>
+    </section>
+
+    <section aria-labelledby="contacto">
+      <h2 id="contacto" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Contacto</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        i-am.clinic · Lima, Perú ·{" "}
+        <a
+          href="mailto:hola@i-am.clinic"
+          class="text-brand-salvia-600 underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+        >hola@i-am.clinic</a>
+      </p>
+    </section>
+
+  </article>
+
+  <Footer slot="footer" />
 </Base>

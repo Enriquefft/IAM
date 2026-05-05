@@ -1,7 +1,118 @@
 ---
 import Base from "@/layouts/Base.astro";
+import Footer from "@/components/sections/Footer.astro";
 ---
 
-<Base title="Términos">
-  <h1>Términos</h1>
+<Base title="Términos de servicio — i-am.clinic">
+  <article class="mx-auto max-w-[720px] px-8 pt-16 pb-24">
+
+    {/* Back link — mirrors topbar in canonical bundle */}
+    <a
+      href="/"
+      class="inline-flex items-center gap-2 text-small font-sans text-ink-500 hover:text-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page rounded-sm transition-colors mb-8"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="h-4 w-4"
+        aria-hidden="true"
+      >
+        <path d="M10 3L5 8l5 5" />
+      </svg>
+      Volver a i-am.clinic
+    </a>
+
+    <h1 class="font-sans text-h1 font-bold text-text-primary mb-2">Términos de servicio</h1>
+    <p class="font-sans text-small text-ink-500 mb-8">Última actualización: 2026-05-05</p>
+
+    {/* Preliminary-version notice */}
+    <div class="bg-brand-terra-100 text-brand-terra-600 px-4 py-3 rounded-base text-small font-sans mb-8">
+      <strong>Versión preliminar.</strong> Este documento es una versión base mientras finalizamos los términos legales definitivos. Si tienes preguntas, escríbenos a{" "}
+      <a
+        href="mailto:hola@i-am.clinic"
+        class="underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+      >hola@i-am.clinic</a>.
+    </div>
+
+    <section aria-labelledby="servicio">
+      <h2 id="servicio" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">1. Servicio</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        i-am.clinic ("el servicio") es una plataforma operada desde Lima, Perú, que provee herramientas de agenda, notas clínicas y cobranza para profesionales de salud mental en práctica privada.
+      </p>
+    </section>
+
+    <section aria-labelledby="tu-cuenta">
+      <h2 id="tu-cuenta" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">2. Tu cuenta</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        Eres responsable de mantener la confidencialidad de tu contraseña y de toda actividad realizada bajo tu cuenta. Si detectas un acceso no autorizado, escríbenos de inmediato a{" "}
+        <a
+          href="mailto:hola@i-am.clinic"
+          class="text-brand-salvia-600 underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+        >hola@i-am.clinic</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="uso-aceptable">
+      <h2 id="uso-aceptable" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">3. Uso aceptable</h2>
+      <ul class="font-sans text-body text-ink-700 leading-[1.7] list-disc pl-[22px] mb-4 space-y-1.5">
+        <li>Eres el titular del expediente clínico de tus pacientes y el responsable del cumplimiento de la regulación profesional aplicable.</li>
+        <li>No puedes usar el servicio para actividades ilegales, fraudulentas o que vulneren la confidencialidad de tus pacientes.</li>
+        <li>No puedes intentar acceder a datos de otros usuarios ni romper las medidas de seguridad del servicio.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="pagos-cancelacion">
+      <h2 id="pagos-cancelacion" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">4. Pagos y cancelación</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        Los planes pagos se cobran por mes adelantado. Cancelas cuando quieras desde tu cuenta y conservas el acceso hasta el fin del periodo facturado. No hay contratos anuales ni penalizaciones por salida.
+      </p>
+    </section>
+
+    <section aria-labelledby="propiedad-datos">
+      <h2 id="propiedad-datos" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">5. Propiedad de los datos</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        Los datos clínicos que ingresas son tuyos. Si cancelas, exportas todo en PDF y CSV. No vendemos ni compartimos tus datos con terceros para fines comerciales.
+      </p>
+    </section>
+
+    <section aria-labelledby="limitacion-responsabilidad">
+      <h2 id="limitacion-responsabilidad" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">6. Limitación de responsabilidad</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        El servicio se ofrece "tal cual". Hacemos nuestro mejor esfuerzo por mantenerlo disponible y seguro, pero no garantizamos disponibilidad ininterrumpida. La responsabilidad clínica y profesional sobre tus pacientes es exclusivamente tuya.
+      </p>
+    </section>
+
+    <section aria-labelledby="cambios">
+      <h2 id="cambios" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">7. Cambios</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        Podemos actualizar estos términos. Te avisaremos por correo con al menos 30 días de anticipación si los cambios afectan tus derechos o el costo del servicio.
+      </p>
+    </section>
+
+    <section aria-labelledby="ley-aplicable">
+      <h2 id="ley-aplicable" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">8. Ley aplicable</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        Estos términos se rigen por las leyes del Perú. Cualquier disputa se resolverá en los tribunales de Lima, salvo que la ley aplicable disponga otra cosa.
+      </p>
+    </section>
+
+    <section aria-labelledby="contacto">
+      <h2 id="contacto" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Contacto</h2>
+      <p class="font-sans text-body text-ink-700 leading-[1.7]">
+        i-am.clinic · Lima, Perú ·{" "}
+        <a
+          href="mailto:hola@i-am.clinic"
+          class="text-brand-salvia-600 underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+        >hola@i-am.clinic</a>
+      </p>
+    </section>
+
+  </article>
+
+  <Footer slot="footer" />
 </Base>
