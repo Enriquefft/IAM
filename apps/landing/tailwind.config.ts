@@ -280,6 +280,25 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)", opacity: "1" },
           to: { height: "0", opacity: "0" },
         },
+        // Demo.html:252-255 — agenda target row pulse
+        rowPulse: {
+          "0%, 100%": { boxShadow: "inset 0 0 0 0 rgba(107,155,115,0)" },
+          "50%": { boxShadow: "inset 0 0 0 2px rgba(107,155,115,0.35)" },
+        },
+        // Demo.html:441-443 — Resumen button halo
+        btnHalo: {
+          "0%, 100%": { boxShadow: "0 0 0 3px rgba(107,155,115,0.18)" },
+          "50%": { boxShadow: "0 0 0 6px rgba(107,155,115,0.35)" },
+        },
+        // Demo.html:350-353 — mic bars animation
+        micPulse: {
+          "0%, 100%": { transform: "scaleY(0.45)", opacity: "0.7" },
+          "50%": { transform: "scaleY(1.1)", opacity: "1" },
+        },
+        // Demo.html:405 — text cursor blink
+        caretBlink: {
+          "50%": { opacity: "0" },
+        },
       },
       animation: {
         floatIn: "floatIn 0.5s cubic-bezier(0.32,0.72,0,1) both",
@@ -288,6 +307,11 @@ const config: Config = {
         // accordion.tsx:66
         "accordion-down": "accordion-down 200ms cubic-bezier(0,0,0.2,1)",
         "accordion-up": "accordion-up 200ms cubic-bezier(0,0,0.2,1)",
+        // Demo.html keyframes
+        rowPulse: "rowPulse 1800ms infinite cubic-bezier(0.4,0,0.2,1)",
+        btnHalo: "btnHalo 1800ms infinite cubic-bezier(0.4,0,0.2,1)",
+        micPulse: "micPulse 900ms infinite cubic-bezier(0.4,0,0.2,1)",
+        caretBlink: "caretBlink 800ms infinite step-end",
       },
     },
   },
