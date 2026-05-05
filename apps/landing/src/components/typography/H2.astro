@@ -1,0 +1,22 @@
+---
+// H2.astro — h2 visual weight, configurable semantic tag via `as` prop.
+import { cn } from "@/lib/cn";
+
+type AllowedTag = "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+
+interface Props {
+  as?: AllowedTag;
+  class?: string;
+}
+
+const { as: Tag = "h2", class: className } = Astro.props;
+---
+
+<Tag
+  class:list={[
+    "font-sans text-h2 text-text-primary",
+    className,
+  ]}
+>
+  <slot />
+</Tag>

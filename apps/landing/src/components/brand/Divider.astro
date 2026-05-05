@@ -1,0 +1,26 @@
+---
+// Divider.astro — horizontal rule with centered Sprig motif.
+// Uses <div role="separator"> to allow the non-<hr> Sprig-on-rule pattern.
+// NAMED MISS: img-12-divider.png is a raster file with no matching inline SVG
+// definition in the bundle. This implementation follows the Sprig-centered-on-rule
+// pattern common in the brand (mark + horizontal rule) using border-surface-border.
+import { cn } from "@/lib/cn";
+import Sprig from "./Sprig.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div
+  role="separator"
+  aria-hidden="true"
+  class:list={["relative flex items-center justify-center py-6", className]}
+>
+  <span class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-surface-border" />
+  <span class="relative flex items-center justify-center w-8 h-8 bg-surface rounded-full border border-surface-border">
+    <Sprig class="w-5 h-5" />
+  </span>
+</div>

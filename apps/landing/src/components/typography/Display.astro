@@ -1,0 +1,22 @@
+---
+// Display.astro — largest display heading (visual h1-size hero text).
+import { cn } from "@/lib/cn";
+
+type AllowedTag = "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+
+interface Props {
+  as?: AllowedTag;
+  class?: string;
+}
+
+const { as: Tag = "h1", class: className } = Astro.props;
+---
+
+<Tag
+  class:list={[
+    "font-sans text-display text-text-primary",
+    className,
+  ]}
+>
+  <slot />
+</Tag>

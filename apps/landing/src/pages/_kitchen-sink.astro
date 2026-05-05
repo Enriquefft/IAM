@@ -1,0 +1,381 @@
+---
+if (import.meta.env.PROD) return Astro.redirect('/', 301);
+
+import Base from "@/layouts/Base.astro";
+
+// Brand atoms
+import Logo from "@/components/brand/Logo.astro";
+import Mark from "@/components/brand/Mark.astro";
+import Wordmark from "@/components/brand/Wordmark.astro";
+import Sprig from "@/components/brand/Sprig.astro";
+import Divider from "@/components/brand/Divider.astro";
+
+// Typography
+import Display from "@/components/typography/Display.astro";
+import H1 from "@/components/typography/H1.astro";
+import H2 from "@/components/typography/H2.astro";
+import H3 from "@/components/typography/H3.astro";
+import Lede from "@/components/typography/Lede.astro";
+import Body from "@/components/typography/Body.astro";
+import Small from "@/components/typography/Small.astro";
+import Label from "@/components/typography/Label.astro";
+
+// Icons
+import Icon from "@/components/icons/Icon.astro";
+
+// shadcn UI
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label as UiLabel } from "@/components/ui/label";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+---
+
+<Base title="Kitchen sink — apps/landing">
+  <div class="min-h-screen bg-surface p-8 space-y-16">
+
+    <!-- ── Section: Brand Atoms ─────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Brand Atoms</H2>
+      <div class="border-t border-surface-border" />
+
+      <div class="space-y-4">
+        <H3>Logo — small / medium / large</H3>
+        <div class="flex flex-wrap items-center gap-8">
+          <Logo class="h-6" />
+          <Logo class="h-10" />
+          <Logo class="h-14" />
+        </div>
+      </div>
+
+      <Divider />
+
+      <div class="space-y-4">
+        <H3>Mark — small / medium / large</H3>
+        <div class="flex flex-wrap items-center gap-8">
+          <Mark class="h-8 w-8" />
+          <Mark class="h-12 w-12" />
+          <Mark class="h-16 w-16" />
+        </div>
+      </div>
+
+      <Divider />
+
+      <div class="space-y-4">
+        <H3>Wordmark — small / medium / large</H3>
+        <div class="flex flex-wrap items-center gap-8">
+          <Wordmark class="h-5" />
+          <Wordmark class="h-8" />
+          <Wordmark class="h-10" />
+        </div>
+      </div>
+
+      <Divider />
+
+      <div class="space-y-4">
+        <H3>Sprig — small / medium / large</H3>
+        <div class="flex flex-wrap items-center gap-8">
+          <Sprig class="h-6 w-6" />
+          <Sprig class="h-10 w-10" />
+          <Sprig class="h-14 w-14" />
+        </div>
+      </div>
+
+      <Divider />
+
+      <div class="space-y-4">
+        <H3>Divider</H3>
+        <div class="max-w-2xl">
+          <Divider />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section: Typography ──────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Typography</H2>
+      <div class="border-t border-surface-border" />
+
+      <div class="space-y-4 max-w-2xl">
+        <Display>Display: La consulta privada, sin papeleo</Display>
+        <H1>H1: Agenda, notas y cobros en un solo lugar</H1>
+        <H2>H2: Recupera una tarde esta semana</H2>
+        <H3>H3: Creado por y para profesionales de la salud mental</H3>
+        <Lede>Lede: Más de 200 psicólogos en LATAM ya reservaron su lugar. Sin compromiso, sin tarjeta.</Lede>
+        <Body>Body: La práctica privada termina usando herramientas que no son para esto. WhatsApp para confirmar, Excel para cobrar, una libreta para las notas.</Body>
+        <Small>Small: © 2026 i-am.clinic · Lima, Perú</Small>
+        <Label>Label: Correo electrónico</Label>
+      </div>
+
+      <Divider />
+
+      <div class="space-y-4 max-w-2xl">
+        <H3>as prop demo — H1 visual weight in semantic h2</H3>
+        <H1 as="h2">H1 visual, h2 semantic — Agenda</H1>
+        <H2 as="p">H2 visual, paragraph semantic — Funciones</H2>
+      </div>
+    </section>
+
+    <!-- ── Section: Icons ───────────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Icons</H2>
+      <div class="border-t border-surface-border" />
+
+      <div class="flex flex-wrap gap-6 items-center">
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="calendar" size={24} />
+          <Small as="span">calendar</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="fileText" size={24} />
+          <Small as="span">fileText</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="message" size={24} />
+          <Small as="span">message</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="clock" size={24} />
+          <Small as="span">clock</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="check" size={24} />
+          <Small as="span">check</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="chevronDown" size={24} />
+          <Small as="span">chevronDown</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="chevronUp" size={24} />
+          <Small as="span">chevronUp</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="arrowRight" size={24} />
+          <Small as="span">arrowRight</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="menu" size={24} />
+          <Small as="span">menu</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="close" size={24} />
+          <Small as="span">close</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="lock" size={24} />
+          <Small as="span">lock</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="shield" size={24} />
+          <Small as="span">shield</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="download" size={24} />
+          <Small as="span">download</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="eye" size={24} />
+          <Small as="span">eye</Small>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="sparkle" size={24} />
+          <Small as="span">sparkle</Small>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section: Button variants × sizes ─────────────────────── -->
+    <section class="space-y-6">
+      <H2>Buttons — variants × sizes</H2>
+      <div class="border-t border-surface-border" />
+
+      <div class="space-y-4">
+        <H3>Variants (default size)</H3>
+        <div class="flex flex-wrap gap-4 items-center">
+          <Button variant="default">Default</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="link">Link</Button>
+          <Button variant="destructive">Destructive</Button>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <H3>Sizes (default variant)</H3>
+        <div class="flex flex-wrap gap-4 items-center">
+          <Button size="xs">xs</Button>
+          <Button size="sm">sm</Button>
+          <Button size="default">default</Button>
+          <Button size="lg">lg</Button>
+          <Button size="icon"><Icon name="check" /></Button>
+          <Button size="icon-sm"><Icon name="check" /></Button>
+          <Button size="icon-lg"><Icon name="check" /></Button>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <H3>States</H3>
+        <div class="flex flex-wrap gap-4 items-center">
+          <Button disabled>Disabled</Button>
+          <Button variant="secondary" disabled>Disabled secondary</Button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section: Badge variants ──────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Badges</H2>
+      <div class="border-t border-surface-border" />
+
+      <div class="flex flex-wrap gap-4 items-center">
+        <Badge variant="default">Default</Badge>
+        <Badge variant="secondary">Secondary</Badge>
+        <Badge variant="outline">Outline</Badge>
+        <Badge variant="destructive">Destructive</Badge>
+      </div>
+    </section>
+
+    <!-- ── Section: Input + Label ────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Input &amp; Label</H2>
+      <div class="border-t border-surface-border" />
+
+      <div class="max-w-sm space-y-4">
+        <div class="space-y-2">
+          <UiLabel htmlFor="email-demo">Correo electrónico</UiLabel>
+          <Input id="email-demo" type="email" placeholder="nombre@correo.com" />
+        </div>
+        <div class="space-y-2">
+          <UiLabel htmlFor="text-demo">Nombre completo</UiLabel>
+          <Input id="text-demo" type="text" placeholder="Dr. García López" />
+        </div>
+        <div class="space-y-2">
+          <UiLabel htmlFor="disabled-demo">Campo deshabilitado</UiLabel>
+          <Input id="disabled-demo" type="text" placeholder="No disponible" disabled />
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section: Card ─────────────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Card</H2>
+      <div class="border-t border-surface-border" />
+
+      <div class="grid grid-cols-1 gap-6 max-w-2xl md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Agenda inteligente</CardTitle>
+            <CardDescription>Confirmaciones automáticas por WhatsApp y correo.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Body>Reduce las ausencias hasta un 40% sin hacer ninguna llamada adicional.</Body>
+          </CardContent>
+          <CardFooter>
+            <Button size="sm" variant="outline">Ver demo</Button>
+          </CardFooter>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Notas clínicas</CardTitle>
+            <CardDescription>Plantillas SOAP y DSM para cada sesión.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Body>Escribe menos, documenta más. Cada nota queda vinculada al expediente del paciente.</Body>
+          </CardContent>
+          <CardFooter>
+            <Button size="sm">Comenzar</Button>
+          </CardFooter>
+        </Card>
+      </div>
+    </section>
+
+    <!-- ── Section: Dialog ───────────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Dialog</H2>
+      <div class="border-t border-surface-border" />
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Abrir Dialog</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Únete a la lista de espera</DialogTitle>
+            <DialogDescription>
+              Te avisamos en cuanto haya cupo. Sin compromiso, sin tarjeta.
+            </DialogDescription>
+          </DialogHeader>
+          <div class="space-y-4 py-4">
+            <div class="space-y-2">
+              <UiLabel htmlFor="dialog-email">Correo electrónico</UiLabel>
+              <Input id="dialog-email" type="email" placeholder="nombre@correo.com" />
+            </div>
+            <Button className="w-full">Reservar mi lugar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </section>
+
+    <!-- ── Section: Accordion ────────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Accordion</H2>
+      <div class="border-t border-surface-border" />
+
+      <Accordion type="single" collapsible className="max-w-2xl">
+        <AccordionItem value="q1">
+          <AccordionTrigger>¿Cuánto cuesta i-am.clinic?</AccordionTrigger>
+          <AccordionContent>
+            El plan base cuesta USD 29/mes. Incluye hasta 80 pacientes activos, agenda, notas y cobros.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="q2">
+          <AccordionTrigger>¿Necesito tarjeta para el período de prueba?</AccordionTrigger>
+          <AccordionContent>
+            No. Los primeros 30 días son completamente gratis, sin tarjeta ni contrato.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="q3">
+          <AccordionTrigger>¿Mis datos están seguros?</AccordionTrigger>
+          <AccordionContent>
+            Sí. Todos los datos se encriptan en tránsito y en reposo. Cumplimos con las regulaciones de salud digital en Perú, México y Colombia.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </section>
+
+    <!-- ── Section: Sheet ────────────────────────────────────────── -->
+    <section class="space-y-6">
+      <H2>Sheet</H2>
+      <div class="border-t border-surface-border" />
+
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline">Abrir Sheet</Button>
+        </SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Menú de navegación</SheetTitle>
+            <SheetDescription>
+              Accede rápidamente a todas las secciones.
+            </SheetDescription>
+          </SheetHeader>
+          <div class="mt-6 space-y-4">
+            <Button variant="ghost" className="w-full justify-start">Funciones</Button>
+            <Button variant="ghost" className="w-full justify-start">Precios</Button>
+            <Button variant="ghost" className="w-full justify-start">Equipo</Button>
+            <Button variant="ghost" className="w-full justify-start">Preguntas</Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </section>
+
+    <Divider />
+    <Small class="text-center block pb-8">Kitchen sink — apps/landing · dev only</Small>
+
+  </div>
+</Base>
