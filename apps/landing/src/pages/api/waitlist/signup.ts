@@ -69,7 +69,11 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const result = await signupWithToken(db, payload, tokenHash, expiresAt);
     alreadyConfirmed = result.alreadyConfirmed;
-  } catch {
+  } catch (err) {
+    const emailHash = sha256Hex(email);
+    process.stderr.write(
+      `[waitlist] signup failed for sha256=${emailHash}: ${String(err)}\n`,
+    );
     return jsonOrHtml(wantsJson, locale, { ok: false, error: "internal_error" }, 500);
   }
 
