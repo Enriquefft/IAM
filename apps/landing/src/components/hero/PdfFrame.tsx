@@ -7,7 +7,7 @@ interface Props {
   readonly slideIn: boolean;
 }
 
-export function PdfFrame({ slideIn }: Props): JSX.Element {
+export function PdfFrame({ slideIn }: Props) {
   return (
     <div
       className="bg-surface border border-surface-border rounded-2xl overflow-hidden shadow-md"

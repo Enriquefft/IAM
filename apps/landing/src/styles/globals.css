@@ -11,9 +11,304 @@
 @import "@fontsource/lora/400-italic.css";
 @import "@fontsource/lora/500-italic.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v3 had border default = gray-200; v4 changed to currentColor.
+   Project always pairs `border` with an explicit color class, so this is safe;
+   left as a guardrail for any future bare `border` slip. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-surface-border, currentColor);
+  }
+}
+
+/* Class-based dark mode (matches v3 darkMode: ["class"]) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Inverted breakpoints — v4 doesn't support max-width via --breakpoint-* */
+@custom-variant mobile (@media (max-width: 560px));
+@custom-variant tablet (@media (max-width: 960px));
+
+@theme {
+  /* Brand cream */
+  --color-brand-cream-50: #fdfaf5;
+  --color-brand-cream-100: #f7f2e8;
+  --color-brand-cream-200: #ede5d4;
+
+  /* Brand wood */
+  --color-brand-wood-300: #c9aa84;
+  --color-brand-wood-400: #a8845a;
+  --color-brand-wood-500: #7d5e3c;
+
+  /* Brand salvia */
+  --color-brand-salvia-100: #d6e5d8;
+  --color-brand-salvia-200: #aecdb3;
+  --color-brand-salvia-400: #6b9b73;
+  --color-brand-salvia-500: #4e7a56;
+  --color-brand-salvia-600: #38603e;
+
+  /* Brand terra */
+  --color-brand-terra-100: #f2e0d6;
+  --color-brand-terra-300: #d99070;
+  --color-brand-terra-500: #b5613c;
+  --color-brand-terra-600: #8c4528;
+
+  /* Ink */
+  --color-ink-100: #d6cbc2;
+  --color-ink-300: #a89585;
+  --color-ink-500: #6b5a4a;
+  --color-ink-700: #3d3026;
+  --color-ink-900: #1c1612;
+
+  /* Surfaces */
+  --color-page: #fdfaf5;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f7f2e8;
+  --color-surface-border: #ede5d4;
+  --color-surface-borderStrong: #a8845a;
+
+  /* Text */
+  --color-text-primary: #1c1612;
+  --color-text-secondary: #3d3026;
+  --color-text-muted: #6b5a4a;
+  --color-text-disabled: #a89585;
+  --color-text-inverse: #ffffff;
+
+  /* Primary — salvia-500 (4.95:1 on white, WCAG AA) */
+  --color-primary: #4e7a56;
+  --color-primary-hover: #38603e;
+  --color-primary-active: #2a4a2e;
+  --color-primary-fg: #ffffff;
+
+  /* Secondary */
+  --color-secondary: #f7f2e8;
+  --color-secondary-fg: #38603e;
+  --color-secondary-hover: #ede5d4;
+
+  /* Accent */
+  --color-accent: #d99070;
+  --color-accent-deep: #b5613c;
+  --color-accent-fg: #1c1612;
+
+  /* Status */
+  --color-status-success: #6b9b73;
+  --color-status-successSurface: #d6e5d8;
+  --color-status-warning: #d99070;
+  --color-status-warningSurface: #f2e0d6;
+  --color-status-error: #b5613c;
+  --color-status-errorSurface: #f2e0d6;
+  --color-status-errorText: #8c4528;
+
+  /* Fonts */
+  --font-sans:
+    "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif: Lora, Georgia, serif;
+
+  /* Display + heading scale */
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.015em;
+  --text-display--font-weight: 700;
+
+  --text-hero-fluid: clamp(2.5rem, 5vw, 3.75rem);
+  --text-hero-fluid--line-height: 1.1;
+  --text-hero-fluid--letter-spacing: -0.015em;
+  --text-hero-fluid--font-weight: 700;
+
+  --text-h1: 2.75rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--letter-spacing: -0.01em;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 2rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.005em;
+  --text-h2--font-weight: 700;
+
+  --text-h3: 1.5rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--font-weight: 600;
+
+  --text-h4: 1.25rem;
+  --text-h4--line-height: 1.35;
+  --text-h4--font-weight: 600;
+
+  --text-h5: 1.125rem;
+  --text-h5--line-height: 1.4;
+  --text-h5--font-weight: 500;
+
+  --text-h6: 1rem;
+  --text-h6--line-height: 1.45;
+  --text-h6--font-weight: 500;
+
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.7;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.75;
+
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.7;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.6;
+
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.5;
+  --text-label--letter-spacing: 0.01em;
+  --text-label--font-weight: 500;
+
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.5;
+  --text-micro--font-weight: 500;
+
+  /* Custom spacing keys (numeric ones map automatically via --spacing scale) */
+  --spacing-gutter: 20px;
+  --spacing-gutter-lg: 32px;
+
+  /* Layout caps */
+  --container-page: 1200px;
+  --container-section: 1040px;
+  --container-copy: 480px;
+
+  /* Radius */
+  --radius-xs: 8px;
+  --radius-sm: 6px;
+  --radius-base: 10px;
+  --radius-lg: 16px;
+  --radius-hero: 22px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 3px rgba(92, 60, 30, 0.08), 0 1px 2px rgba(92, 60, 30, 0.04);
+  --shadow-base: 0 4px 12px rgba(92, 60, 30, 0.1), 0 2px 4px rgba(92, 60, 30, 0.06);
+  --shadow-md: 0 8px 24px rgba(92, 60, 30, 0.12), 0 4px 8px rgba(92, 60, 30, 0.06);
+  --shadow-lg: 0 16px 40px rgba(92, 60, 30, 0.14), 0 6px 12px rgba(92, 60, 30, 0.07);
+  --shadow-focus: 0 0 0 3px rgba(107, 155, 115, 0.35), 0 0 0 1px #6b9b73;
+
+  /* Breakpoints (min-width); inverted ones live in @custom-variant above */
+  --breakpoint-sm: 561px;
+  --breakpoint-md: 961px;
+
+  /* Easing */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Transition durations */
+  --transition-duration-fast: 100ms;
+  --transition-duration-base: 150ms;
+  --transition-duration-medium: 200ms;
+  --transition-duration-slow: 250ms;
+  --transition-duration-reveal: 400ms;
+
+  /* Animations */
+  --animate-floatIn: floatIn 0.5s cubic-bezier(0.32, 0.72, 0, 1) both;
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-accordion-down: accordion-down 200ms cubic-bezier(0, 0, 0.2, 1);
+  --animate-accordion-up: accordion-up 200ms cubic-bezier(0, 0, 0.2, 1);
+  --animate-rowPulse: rowPulse 1800ms infinite cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-btnHalo: btnHalo 1800ms infinite cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-micPulse: micPulse 900ms infinite cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-caretBlink: caretBlink 800ms infinite step-end;
+}
+
+/* Keyframes for the @theme animation tokens */
+@keyframes floatIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+@keyframes rowPulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 0 rgba(107, 155, 115, 0);
+  }
+  50% {
+    box-shadow: inset 0 0 0 2px rgba(107, 155, 115, 0.35);
+  }
+}
+@keyframes btnHalo {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(107, 155, 115, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(107, 155, 115, 0.35);
+  }
+}
+@keyframes micPulse {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scaleY(1.1);
+    opacity: 1;
+  }
+}
+@keyframes caretBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Hero radial wash (was background-image: hero-wash). Channels mirror brand.salvia.100 / brand.terra.100. */
+@utility bg-hero-wash {
+  background-image:
+    radial-gradient(
+      ellipse at top left,
+      rgb(var(--hero-wash-salvia) / 0.35) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgb(var(--hero-wash-terra) / 0.3) 0%,
+      transparent 60%
+    );
+}
+
+/* Source paths for content scanning. v4 default scans gitignored-aware tree, but
+   explicit @source future-proofs against renames and excludes node_modules cruft. */
+@source "./src/**/*.{astro,tsx,ts,jsx,js,md,mdx}";
 
 @layer base {
   :root {

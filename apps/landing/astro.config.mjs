@@ -1,8 +1,8 @@
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
 
 // CSP is shipped statically via vercel.json (edge-applied). See apps/landing/CLAUDE.md.
 
@@ -29,15 +29,12 @@ export default defineConfig({
   i18n: {
     locales: ["pe", "mx", "ar", "co", "cl"],
     defaultLocale: "pe",
-    routing: {
-      prefixDefaultLocale: true,
-      redirectToDefaultLocale: false,
-    },
+    routing: "manual",
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
     react(),
     sitemap({
       // SSR + dynamic [locale] routes aren't auto-enumerable — feed the

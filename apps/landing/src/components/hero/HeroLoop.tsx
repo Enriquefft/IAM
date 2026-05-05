@@ -10,7 +10,7 @@ import { PdfFrame } from "./PdfFrame";
 import { HERO_FRAMES } from "./frames";
 import type { HeroFrameId } from "./frames";
 
-export default function HeroLoop(): JSX.Element {
+export default function HeroLoop() {
   const [frameId, setFrameId] = useState<HeroFrameId>("agenda-idle");
   const [frameStartMs, setFrameStartMs] = useState<number>(0);
   const [soapProgress, setSoapProgress] = useState<number>(0);

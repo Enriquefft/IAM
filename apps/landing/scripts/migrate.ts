@@ -94,7 +94,7 @@ for (const filename of migrations) {
   process.stdout.write(`  apply ${filename} (${String(statements.length)} statements)...\n`);
 
   for (const stmt of statements) {
-    await sql(stmt);
+    await sql.query(stmt);
   }
 
   await sql`INSERT INTO _migrations (filename) VALUES (${filename})`;

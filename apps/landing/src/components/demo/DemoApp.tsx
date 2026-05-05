@@ -53,7 +53,7 @@ function useTimerMap() {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function DemoApp(): JSX.Element {
+export default function DemoApp() {
   const [appState, dispatch] = useReducer(demoReducer, INITIAL_STATE);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [restartKey, setRestartKey] = useState(0);

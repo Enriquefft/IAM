@@ -25,7 +25,7 @@ const SESSIONS: readonly SessionRow[] = [
   { time: "Lun 8:00", name: "Diego R.",  meta: "Sesión 4 · próximo lunes",  tagKind: "confirmed", tag: "Confirmada" },
 ] as const satisfies readonly SessionRow[];
 
-export function AgendaFrame(): JSX.Element {
+export function AgendaFrame() {
   return (
     <div className="bg-surface border border-surface-border rounded-2xl overflow-hidden shadow-md">
 
@@ -119,7 +119,7 @@ export function AgendaFrame(): JSX.Element {
   );
 }
 
-function SessionRowItem({ row }: { readonly row: SessionRow }): JSX.Element {
+function SessionRowItem({ row }: { readonly row: SessionRow }) {
   const tagClass =
     row.tagKind === "listo"
       ? "bg-brand-salvia-100 text-brand-salvia-600"

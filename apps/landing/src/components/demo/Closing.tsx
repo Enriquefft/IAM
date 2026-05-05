@@ -5,7 +5,7 @@ interface Props {
   readonly visible: boolean;
 }
 
-export function Closing({ visible }: Props): JSX.Element {
+export function Closing({ visible }: Props) {
   return (
     <div
       aria-hidden={!visible}

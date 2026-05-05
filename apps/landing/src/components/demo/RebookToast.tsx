@@ -15,7 +15,7 @@ export function RebookToast({
   pickedSlot,
   waConfirm,
   onPickSlot,
-}: Props): JSX.Element {
+}: Props) {
   return (
     <div
       aria-live="polite"
@@ -89,7 +89,7 @@ export function RebookToast({
   );
 }
 
-function WhatsAppIcon(): JSX.Element {
+function WhatsAppIcon() {
   return (
     <svg
       viewBox="0 0 24 24"

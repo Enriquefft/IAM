@@ -9,7 +9,7 @@ interface Props {
   readonly onCopyLink: () => void;
 }
 
-export function PostDemo({ visible, onCopyLink }: Props): JSX.Element {
+export function PostDemo({ visible, onCopyLink }: Props) {
   const shareWhatsApp = () => {
     const href =
       "https://wa.me/?text=" + encodeURIComponent(POST_DEMO.waShareText);
@@ -89,7 +89,7 @@ export function PostDemo({ visible, onCopyLink }: Props): JSX.Element {
   );
 }
 
-function WhatsAppIcon(): JSX.Element {
+function WhatsAppIcon() {
   return (
     <svg
       width="16"
@@ -103,7 +103,7 @@ function WhatsAppIcon(): JSX.Element {
   );
 }
 
-function LinkIcon(): JSX.Element {
+function LinkIcon() {
   return (
     <svg
       width="16"

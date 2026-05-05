@@ -2,10 +2,10 @@ import { z } from "zod";
 
 // Single canonical schema — both Vite runtime and Node script loaders derive from here.
 export const EnvSchema = z.object({
-  DATABASE_URL: z.string().url(),
+  DATABASE_URL: z.url(),
   RESEND_API_KEY: z.string().min(1),
   WAITLIST_FROM: z.string().min(1).default("i-am.clinic <hola@i-am.clinic>"),
-  PUBLIC_SITE_URL: z.string().url().default("https://i-am.clinic"),
+  PUBLIC_SITE_URL: z.url().default("https://i-am.clinic"),
   WAITLIST_TOKEN_SECRET: z.string().regex(/^[0-9a-f]{64}$/i),
   WAITLIST_IP_SALT: z.string().regex(/^[0-9a-f]{64}$/i),
 });

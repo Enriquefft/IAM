@@ -14,7 +14,7 @@ const NAV_ITEMS = [
   { id: "familia" as const, label: "Familias", Icon: MessageSquareIcon },
 ] as const;
 
-export function Sidebar({ section }: Props): JSX.Element {
+export function Sidebar({ section }: Props) {
   return (
     <aside className="bg-surface-alt border-r border-surface-border px-3.5 py-4 flex flex-col gap-1">
       {/* Brand */}

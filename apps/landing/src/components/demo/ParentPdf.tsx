@@ -7,7 +7,7 @@ interface Props {
   readonly anaText: string;
 }
 
-export function ParentPdf({ visible, side, anaText }: Props): JSX.Element {
+export function ParentPdf({ visible, side, anaText }: Props) {
   const usedAna = anaText.trim().length > 8;
 
   return (
@@ -22,7 +22,7 @@ export function ParentPdf({ visible, side, anaText }: Props): JSX.Element {
       ].join(" ")}
     >
       {/* Scrollable paper area */}
-      <div className="flex-1 overflow-y-auto px-8 py-6 bg-gradient-to-b from-surface to-brand-cream-50">
+      <div className="flex-1 overflow-y-auto px-8 py-6 bg-linear-to-b from-surface to-brand-cream-50">
         {/* Header */}
         <div className="border-b border-surface-border pb-3 mb-3.5">
           <p className="font-sans text-[10.5px] font-semibold text-brand-salvia-500 tracking-[0.08em] uppercase">

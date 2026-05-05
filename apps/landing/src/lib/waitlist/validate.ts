@@ -3,22 +3,22 @@ import { SUPPORTED_LOCALES } from "@/lib/i18n/locales";
 
 export const SignupSchema = z.object({
   email: z
-    .string({ required_error: "El correo es requerido" })
-    .email({ message: "Ingresá un correo válido" })
-    .max(254, { message: "El correo es demasiado largo" })
+    .email({
+      error: (issue) =>
+        issue.input === undefined ? "El correo es requerido" : "Ingresá un correo válido",
+    })
+    .max(254, { error: "El correo es demasiado largo" })
     .transform((v) => v.toLowerCase().trim()),
   name: z.string().max(120).optional(),
   role: z.enum(["terapista", "clinica", "familia", "otro"], {
-    required_error: "Seleccioná tu perfil",
-    invalid_type_error: "Perfil inválido",
+    error: (issue) =>
+      issue.input === undefined ? "Seleccioná tu perfil" : "Perfil inválido",
   }),
   locale: z.enum(SUPPORTED_LOCALES, {
-    required_error: "Locale requerido",
-    invalid_type_error: "Locale inválido",
+    error: (issue) =>
+      issue.input === undefined ? "Locale requerido" : "Locale inválido",
   }),
-  consent: z.literal(true, {
-    errorMap: () => ({ message: "Debés aceptar las condiciones" }),
-  }),
+  consent: z.literal(true, { error: "Debés aceptar las condiciones" }),
   hp: z.string().optional(),
 });
 

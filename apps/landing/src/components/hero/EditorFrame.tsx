@@ -19,7 +19,7 @@ function sliceProgress(text: string, progress: number): string {
   return text.slice(0, Math.floor(text.length * progress));
 }
 
-export function EditorFrame({ progress }: Props): JSX.Element {
+export function EditorFrame({ progress }: Props) {
   return (
     <div className="bg-surface border border-surface-border rounded-2xl overflow-hidden shadow-md">
 
@@ -127,7 +127,7 @@ function SoapRow({
   readonly fieldKey: string;
   readonly text: string;
   readonly label: string;
-}): JSX.Element {
+}) {
   return (
     <>
       <div

@@ -15,7 +15,7 @@ interface Props {
   readonly mateoClosed: boolean;
   readonly sofiaMoved: boolean;
   readonly onClickMateo?: () => void;
-  readonly mateoRowRef?: React.RefObject<HTMLDivElement>;
+  readonly mateoRowRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 type TagKind = "ok" | "note" | "moved";
@@ -36,7 +36,7 @@ export function Agenda({
   sofiaMoved,
   onClickMateo,
   mateoRowRef,
-}: Props): JSX.Element {
+}: Props) {
   const mateoRow: SessionRow = mateoClosed ? MATEO_CLOSED : { ...MATEO_PENDING, target: true };
   const sofiaRow: SessionRow = sofiaMoved ? { ...SOFIA_MOVED, muted: true } : AGENDA_SESSIONS_BASE[2];
 
@@ -83,9 +83,9 @@ function AgendaRow({
 }: {
   readonly row: SessionRow;
   readonly pulse: boolean;
-  readonly mateoRowRef: React.RefObject<HTMLDivElement> | undefined;
+  readonly mateoRowRef: React.RefObject<HTMLDivElement | null> | undefined;
   readonly onClick: (() => void) | undefined;
-}): JSX.Element {
+}) {
   const isTarget = row.target === true;
 
   return (
@@ -126,7 +126,7 @@ function AgendaRow({
   );
 }
 
-function AgendaTag({ tagKind, tag }: { readonly tagKind: TagKind; readonly tag: string }): JSX.Element {
+function AgendaTag({ tagKind, tag }: { readonly tagKind: TagKind; readonly tag: string }) {
   if (tagKind === "note") {
     return (
       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-sans text-[10.5px] font-semibold bg-brand-terra-100 text-brand-terra-600 tracking-wide uppercase whitespace-nowrap">

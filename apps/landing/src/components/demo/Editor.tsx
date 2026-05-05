@@ -3,6 +3,7 @@
 // ContentEditable risk: treated as uncontrolled. Initial value set via dangerouslySetInnerHTML
 // keyed on state transition. onInput syncs view-model only.
 
+import type { InputEvent } from "react";
 import { useCallback } from "react";
 import { MicIcon } from "lucide-react";
 import {
@@ -23,9 +24,9 @@ interface Props {
   readonly onTypeSubjetivo: (text: string) => void;
   readonly onClickMic: () => void;
   readonly onClickResumen: () => void;
-  readonly micRef: React.RefObject<HTMLButtonElement>;
-  readonly resumenBtnRef: React.RefObject<HTMLButtonElement>;
-  readonly subjetivoRef: React.RefObject<HTMLDivElement>;
+  readonly micRef: React.RefObject<HTMLButtonElement | null>;
+  readonly resumenBtnRef: React.RefObject<HTMLButtonElement | null>;
+  readonly subjetivoRef: React.RefObject<HTMLDivElement | null>;
 }
 
 function valueFor(
@@ -57,11 +58,11 @@ export function Editor({
   micRef,
   resumenBtnRef,
   subjetivoRef,
-}: Props): JSX.Element {
+}: Props) {
   const isEditorFull = stateId === "editor-full";
 
   const handleSubjetivoInput = useCallback(
-    (e: React.FormEvent<HTMLDivElement>) => {
+    (e: InputEvent<HTMLDivElement>) => {
       onTypeSubjetivo(e.currentTarget.innerText);
     },
     [onTypeSubjetivo],
@@ -169,7 +170,7 @@ export function Editor({
   );
 }
 
-function MicBars({ reducedMotion }: { readonly reducedMotion: boolean }): JSX.Element {
+function MicBars({ reducedMotion }: { readonly reducedMotion: boolean }) {
   const bars = [
     { h: "h-[6px]", delay: "" },
     { h: "h-[10px]", delay: "[animation-delay:120ms]" },
@@ -219,9 +220,9 @@ function SoapRow({
   readonly isEditable: boolean;
   readonly showAutoText: boolean;
   readonly reducedMotion: boolean;
-  readonly subjetivoRef: React.RefObject<HTMLDivElement> | undefined;
-  readonly onInput: ((e: React.FormEvent<HTMLDivElement>) => void) | undefined;
-}): JSX.Element {
+  readonly subjetivoRef: React.RefObject<HTMLDivElement | null> | undefined;
+  readonly onInput: ((e: InputEvent<HTMLDivElement>) => void) | undefined;
+}) {
   const isActive = isTyping && !reducedMotion;
 
   const textBoxClass = [

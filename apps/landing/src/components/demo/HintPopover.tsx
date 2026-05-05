@@ -18,20 +18,20 @@ interface Props {
   readonly text: string;
   readonly stateId: DemoStateId;
   readonly reducedMotion: boolean;
-  readonly stageBodyRef: React.RefObject<HTMLDivElement>;
-  readonly mateoRowRef: React.RefObject<HTMLDivElement>;
-  readonly subjetivoRef: React.RefObject<HTMLDivElement>;
-  readonly resumenBtnRef: React.RefObject<HTMLButtonElement>;
-  readonly toastRef: React.RefObject<HTMLDivElement>;
+  readonly stageBodyRef: React.RefObject<HTMLDivElement | null>;
+  readonly mateoRowRef: React.RefObject<HTMLDivElement | null>;
+  readonly subjetivoRef: React.RefObject<HTMLDivElement | null>;
+  readonly resumenBtnRef: React.RefObject<HTMLButtonElement | null>;
+  readonly toastRef: React.RefObject<HTMLDivElement | null>;
 }
 
 function computePosition(
   stateId: DemoStateId,
-  stageBodyRef: React.RefObject<HTMLDivElement>,
-  mateoRowRef: React.RefObject<HTMLDivElement>,
-  subjetivoRef: React.RefObject<HTMLDivElement>,
-  resumenBtnRef: React.RefObject<HTMLButtonElement>,
-  toastRef: React.RefObject<HTMLDivElement>,
+  stageBodyRef: React.RefObject<HTMLDivElement | null>,
+  mateoRowRef: React.RefObject<HTMLDivElement | null>,
+  subjetivoRef: React.RefObject<HTMLDivElement | null>,
+  resumenBtnRef: React.RefObject<HTMLButtonElement | null>,
+  toastRef: React.RefObject<HTMLDivElement | null>,
 ): { pos: HintPosition; arrow: ArrowDir } | null {
   const stage = stageBodyRef.current;
   if (!stage) return null;
@@ -93,7 +93,7 @@ export function HintPopover({
   subjetivoRef,
   resumenBtnRef,
   toastRef,
-}: Props): JSX.Element | null {
+}: Props): React.JSX.Element | null {
   const [pos, setPos] = useState<HintPosition>({ x: 0, y: 0, placement: "below" });
   const [arrow, setArrow] = useState<ArrowDir>("up");
 

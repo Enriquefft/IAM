@@ -36,11 +36,11 @@ export type { Locale } from "@/lib/i18n";
 
 const SiteMetaSchema = z.object({
   siteName: z.string(),
-  siteUrl: z.string().url(),
-  email: z.string().email(),
+  siteUrl: z.url(),
+  email: z.email(),
   /** brand.cream.50 — SSOT exception: static HTML meta cannot import tailwind.config.ts */
   themeColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
-  defaultOgImage: z.string().url(),
+  defaultOgImage: z.url(),
   twitterCard: z.literal("summary_large_image"),
 });
 

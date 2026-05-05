@@ -18,7 +18,7 @@ export function ChapterStrip({
   onJumpTo,
   onRestart,
   onAdvance,
-}: Props): JSX.Element {
+}: Props) {
   // STATES is `as const satisfies` so element types preserve literal id union.
   const currentState = STATES[stateIdx];
   if (!currentState) return <div />;
