@@ -2,26 +2,27 @@
 // All state IDs and timing verbatim from Demo.html:983-990.
 
 import { SOAP_DEFAULTS, SOAP_FIELDS } from "./demo-content";
-import type { SoapKey } from "./demo-content";
+import type { SoapKey, DemoStateId } from "./demo-content";
+
+// Re-export so consumers can import DemoStateId from demo-machine if convenient.
+export type { DemoStateId } from "./demo-content";
 
 // ── State definitions ─────────────────────────────────────────────────────────
 
-export const STATES = [
-  { id: "agenda",       hintMs: 3000  as const, autoMs: 8000  as const },
-  { id: "editor-empty", hintMs: 3000  as const, autoMs: 8000  as const },
-  { id: "editor-full",  hintMs: 3000  as const, autoMs: 8000  as const },
-  { id: "pdf-held",     hintMs: 4000  as const, autoMs: 10000 as const },
-  { id: "rebook",       hintMs: 3000  as const, autoMs: 8000  as const },
-  { id: "closing",      hintMs: null  as null,  autoMs: 3000  as const },
-] as const satisfies readonly DemoState[];
-
-export type DemoStateId = (typeof STATES)[number]["id"];
-
 export interface DemoState {
-  readonly id: string;
+  readonly id: DemoStateId;
   readonly hintMs: number | null;
   readonly autoMs: number;
 }
+
+export const STATES = [
+  { id: "agenda",       hintMs: 3000, autoMs: 8000  },
+  { id: "editor-empty", hintMs: 3000, autoMs: 8000  },
+  { id: "editor-full",  hintMs: 3000, autoMs: 8000  },
+  { id: "pdf-held",     hintMs: 4000, autoMs: 10000 },
+  { id: "rebook",       hintMs: 3000, autoMs: 8000  },
+  { id: "closing",      hintMs: null, autoMs: 3000  },
+] as const satisfies readonly DemoState[];
 
 // ── Auto-fill fields ──────────────────────────────────────────────────────────
 
@@ -55,7 +56,6 @@ export type DemoEvent =
   | { type: "jumpTo"; idx: number }
   | { type: "restart" }
   | { type: "clickMateo" }
-  | { type: "toggleMic" }
   | { type: "setMic"; on: boolean }
   | { type: "typeSubjetivo"; text: string }
   | { type: "clickResumen" }
@@ -170,11 +170,6 @@ export function demoReducer(state: DemoAppState, event: DemoEvent): DemoAppState
         stateIdx: state.stateIdx + 1,
         hintVisible: false,
       };
-    }
-
-    case "toggleMic": {
-      if (currentStateId !== "editor-empty") return state;
-      return { ...state, micOn: !state.micOn };
     }
 
     case "setMic": {

@@ -37,7 +37,11 @@ function valueFor(
     if (anaText) return anaText;
     return autoFields?.S ?? "";
   }
-  return (autoFields as Record<string, string> | null)?.[field] ?? "";
+  if (autoFields === null) return "";
+  // Direct property access — AutoFields keys are exactly SoapKey.
+  if (field === "O") return autoFields.O ?? "";
+  if (field === "A") return autoFields.A ?? "";
+  return autoFields.P ?? "";
 }
 
 export function Editor({

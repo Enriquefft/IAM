@@ -2,7 +2,6 @@
 // Demo.html:1868-1928.
 
 import { STATES } from "./demo-machine";
-import type { DemoStateId } from "./demo-machine";
 import { CHAPTER_LABELS, CHAPTER_TIPS, CHAPTER_SUBTITLES } from "./demo-content";
 
 interface Props {
@@ -20,8 +19,10 @@ export function ChapterStrip({
   onRestart,
   onAdvance,
 }: Props): JSX.Element {
+  // STATES is `as const satisfies` so element types preserve literal id union.
   const currentState = STATES[stateIdx];
-  const currentId: DemoStateId = currentState?.id ?? "agenda";
+  if (!currentState) return <div />;
+  const currentId = currentState.id;
 
   return (
     <div className="mt-3.5 flex justify-between items-start gap-4">
@@ -34,8 +35,8 @@ export function ChapterStrip({
           {STATES.map((s, i) => {
             const isDone = i < stateIdx;
             const isActive = i === stateIdx;
-            const label = CHAPTER_LABELS[s.id as DemoStateId];
-            const tip = CHAPTER_TIPS[s.id as DemoStateId];
+            const label = CHAPTER_LABELS[s.id];
+            const tip = CHAPTER_TIPS[s.id];
 
             return (
               <span key={s.id} className="inline-flex items-center">
@@ -96,11 +97,8 @@ export function ChapterStrip({
           })}
         </nav>
 
-        {/* Subtitle */}
-        <p
-          aria-live="polite"
-          className="font-sans text-[12.5px] text-text-muted leading-[1.45] tracking-[-0.005em] min-h-[18px]"
-        >
+        {/* Subtitle (decorative — DemoApp owns the single aria-live announcer) */}
+        <p className="font-sans text-[12.5px] text-text-muted leading-[1.45] tracking-[-0.005em] min-h-[18px]">
           {CHAPTER_SUBTITLES[currentId]}
         </p>
 

@@ -3,9 +3,9 @@
 
 import { useEffect, useReducer, useRef, useState, useCallback } from "react";
 import { demoReducer, INITIAL_STATE, STATES } from "./demo-machine";
-import type { AutoFields } from "./demo-machine";
+import type { AutoFields, DemoStateId } from "./demo-machine";
 import type { SoapKey } from "./demo-content";
-import { SOAP_DEFAULTS, SOAP_FIELDS, HINTS, POST_DEMO } from "./demo-content";
+import { SOAP_DEFAULTS, SOAP_FIELDS, HINTS, POST_DEMO, CHAPTER_LABELS } from "./demo-content";
 import { readTiltHandoff, clearTiltHandoff } from "@/lib/tilt-handoff";
 
 import { Sidebar } from "./Sidebar";
@@ -147,9 +147,12 @@ export default function DemoApp(): JSX.Element {
 
   const simulateFillSOAP = useCallback(
     (includeS: boolean, currentAnaText: string) => {
+      // SOAP_FIELDS is `readonly ["S","O","A","P"]`; `.filter` with a typed
+      // predicate preserves the SoapKey element type without any cast.
+      const isNonS = (k: SoapKey): k is Exclude<SoapKey, "S"> => k !== "S";
       const order: readonly SoapKey[] = includeS
         ? SOAP_FIELDS
-        : (SOAP_FIELDS.filter((f) => f !== "S") as SoapKey[]);
+        : SOAP_FIELDS.filter(isNonS);
 
       const accumulated: Partial<Record<SoapKey, string>> = {};
       const done = new Set<SoapKey>();
@@ -252,9 +255,9 @@ export default function DemoApp(): JSX.Element {
     schedule("autoType", () => {
       const sFields: AutoFields = {
         S: appState.anaText,
-        O: undefined as undefined,
-        A: undefined as undefined,
-        P: undefined as undefined,
+        O: undefined,
+        A: undefined,
+        P: undefined,
         typingField: null,
         doneFields: new Set<SoapKey>(["S"]),
       };
@@ -272,26 +275,33 @@ export default function DemoApp(): JSX.Element {
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") {
         if (e.key === " " || e.key === "Enter") {
-          const target = e.target as HTMLElement;
-          if (
-            target.tagName === "BUTTON" ||
-            target.tagName === "A" ||
-            target.getAttribute("contenteditable") === "true"
-          ) {
-            return;
+          // Don't hijack Space/Enter when focus is on an interactive element.
+          // instanceof narrows e.target to HTMLElement without a cast.
+          const target = e.target;
+          if (target instanceof HTMLElement) {
+            if (
+              target.tagName === "BUTTON" ||
+              target.tagName === "A" ||
+              target.getAttribute("contenteditable") === "true"
+            ) {
+              return;
+            }
           }
         }
         e.preventDefault();
+        cancelAll();
         dispatch({ type: "advance" });
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
+        cancelAll();
         dispatch({ type: "jumpTo", idx: stateIdx - 1 });
       } else if (e.key === "Escape") {
         e.preventDefault();
+        cancelAll();
         dispatch({ type: "jumpTo", idx: STATES.length - 1 });
       }
     },
-    [stateIdx],
+    [stateIdx, cancelAll],
   );
 
   // ── Action handlers ───────────────────────────────────────────────────────
@@ -364,16 +374,20 @@ export default function DemoApp(): JSX.Element {
 
   // ── Phase derivations ─────────────────────────────────────────────────────
 
-  const id = currentState?.id ?? "agenda";
+  // currentState comes from STATES which is `as const satisfies readonly DemoState[]`.
+  // Optional chain + nullish-coalesce yields DemoStateId without any cast.
+  const id: DemoStateId = currentState?.id ?? "agenda";
   const showAgenda1 = id === "agenda";
-  const showEditor = id === "editor-empty" || id === "editor-full";
+  const isEditorEmpty = id === "editor-empty";
+  const isEditorFull = id === "editor-full";
+  const showEditor = isEditorEmpty || isEditorFull;
   const showAgenda2 = id === "rebook" || id === "closing";
   const pdfVisible = id === "pdf-held" || id === "rebook";
   const pdfSide = id === "rebook";
   const closingVisible = id === "closing";
   const section: "agenda" | "notas" = showEditor ? "notas" : "agenda";
   const stepNum = Math.min(stateIdx + 1, STATES.length);
-  const hintText = HINTS[id as keyof typeof HINTS] ?? null;
+  const hintText = HINTS[id];
   const showHint = appState.hintVisible && hintText !== null && id !== "pdf-held";
   const toastVisible = id === "rebook" || id === "closing";
 
@@ -443,9 +457,27 @@ export default function DemoApp(): JSX.Element {
                 />
               )}
 
-              {showEditor && (
+              {isEditorEmpty && (
                 <Editor
-                  stateId={id as "editor-empty" | "editor-full"}
+                  key={`editor-empty:${restartKey}`}
+                  stateId="editor-empty"
+                  anaText={appState.anaText}
+                  autoFields={appState.autoFields}
+                  micOn={appState.micOn}
+                  resumenPressed={appState.resumenPressed}
+                  reducedMotion={reducedMotion}
+                  onTypeSubjetivo={(text) => dispatch({ type: "typeSubjetivo", text })}
+                  onClickMic={handleClickMic}
+                  onClickResumen={handleClickResumen}
+                  micRef={micRef}
+                  resumenBtnRef={resumenBtnRef}
+                  subjetivoRef={subjetivoRef}
+                />
+              )}
+              {isEditorFull && (
+                <Editor
+                  key={`editor-full:${restartKey}`}
+                  stateId="editor-full"
                   anaText={appState.anaText}
                   autoFields={appState.autoFields}
                   micOn={appState.micOn}
@@ -477,7 +509,7 @@ export default function DemoApp(): JSX.Element {
             />
 
             {/* Rebook toast */}
-            <div ref={toastRef as React.RefObject<HTMLDivElement>}>
+            <div ref={toastRef}>
               <RebookToast
                 visible={toastVisible}
                 pickedSlot={appState.pickedSlot}
@@ -494,23 +526,23 @@ export default function DemoApp(): JSX.Element {
               <HintPopover
                 visible={appState.hintVisible}
                 text={hintText}
-                stateId={id as import("./demo-machine").DemoStateId}
+                stateId={id}
                 reducedMotion={reducedMotion}
                 stageBodyRef={stageBodyRef}
                 mateoRowRef={mateoRowRef}
                 subjetivoRef={subjetivoRef}
                 resumenBtnRef={resumenBtnRef}
-                toastRef={toastRef as React.RefObject<HTMLDivElement>}
+                toastRef={toastRef}
               />
             )}
 
-            {/* Aria live announcer for state changes */}
+            {/* Aria live announcer for state changes — single site, human label */}
             <div
               aria-live="polite"
               aria-atomic="true"
               className="sr-only"
             >
-              {id}
+              {CHAPTER_LABELS[id]}
             </div>
           </div>
         </div>

@@ -1,6 +1,18 @@
 // demo-content.ts — SSOT for all copy, strings, and static data used in the Demo.
-// Derives SoapKey from SOAP_FIELDS; no duplicated literals.
+// Derives SoapKey from SOAP_FIELDS, DemoStateId from STATE_IDS; no duplicated literals.
 // demo-machine.ts and all demo components import from here.
+
+// ── State IDs ────────────────────────────────────────────────────────────────
+
+export const STATE_IDS = [
+  "agenda",
+  "editor-empty",
+  "editor-full",
+  "pdf-held",
+  "rebook",
+  "closing",
+] as const;
+export type DemoStateId = (typeof STATE_IDS)[number];
 
 // ── SOAP ──────────────────────────────────────────────────────────────────────
 
@@ -37,7 +49,7 @@ export const HINTS = {
   "pdf-held": "Tú lo revisas. Tú lo apruebas. Tú lo envías.",
   rebook: "Aceptá el slot sugerido. La familia recibe la confirmación por WhatsApp.",
   closing: null,
-} as const satisfies Record<string, string | null>;
+} as const satisfies Record<DemoStateId, string | null>;
 
 // ── Chapter nav labels / tooltips / subtitles (Demo.html:1872-1923) ──────────
 
@@ -48,7 +60,7 @@ export const CHAPTER_LABELS = {
   "pdf-held": "Borrador",
   rebook: "Reagendar",
   closing: "Cierre",
-} as const satisfies Record<string, string>;
+} as const satisfies Record<DemoStateId, string>;
 
 export const CHAPTER_TIPS = {
   agenda: "Una sesión cerrada con la nota pendiente. Click para abrirla.",
@@ -57,7 +69,7 @@ export const CHAPTER_TIPS = {
   "pdf-held": "Borrador del resumen — revisas tú antes de enviar.",
   rebook: "Una cancelación de último momento. Aceptá un slot.",
   closing: "Cierre del día. Mateo es Mateo.",
-} as const satisfies Record<string, string>;
+} as const satisfies Record<DemoStateId, string>;
 
 export const CHAPTER_SUBTITLES = {
   agenda: "Viernes 17:02. Mateo cerró sesión hace una hora; falta la nota.",
@@ -66,7 +78,7 @@ export const CHAPTER_SUBTITLES = {
   "pdf-held": "El borrador. Lo revisas tú, lo apruebas tú, lo envías tú.",
   rebook: "Sofía canceló. El sistema sugiere slots. Aceptá uno.",
   closing: "La tarde de Ana. Una hora ganada al viernes.",
-} as const satisfies Record<string, string>;
+} as const satisfies Record<DemoStateId, string>;
 
 // ── Rebook slots (Demo.html:1824-1834) ───────────────────────────────────────
 
