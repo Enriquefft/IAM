@@ -1,6 +1,4 @@
 ---
-if (import.meta.env.PROD) return Astro.redirect('/', 301);
-
 import Base from "@/layouts/Base.astro";
 
 // Brand atoms
@@ -32,10 +30,15 @@ import { Label as UiLabel } from "@/components/ui/label";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+
+// Dev-only guard: redirect to root in production builds.
+// Guard is placed after imports so esbuild can parse the module correctly (esbuild 0.21.x
+// mis-parses a `return` that precedes static import declarations in the frontmatter).
+if (import.meta.env.PROD) return Astro.redirect('/', 301);
 ---
 
 <Base title="Kitchen sink — apps/landing">
-  <div class="min-h-screen bg-surface p-8 space-y-16">
+  <div class="min-h-screen bg-page p-8 space-y-16">
 
     <!-- ── Section: Brand Atoms ─────────────────────────────────── -->
     <section class="space-y-6">

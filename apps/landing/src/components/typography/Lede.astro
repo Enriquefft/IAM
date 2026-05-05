@@ -11,14 +11,11 @@ interface Props {
   class?: string;
 }
 
-const { as: Tag = "p", class: className } = Astro.props;
+const { as: Tag = "p", class: className }: Props = Astro.props;
 ---
 
 <Tag
-  class:list={[
-    "font-serif text-body-lg text-text-secondary",
-    className,
-  ]}
+  class={cn("font-serif text-body-lg text-text-secondary", className)}
 >
   <slot />
 </Tag>

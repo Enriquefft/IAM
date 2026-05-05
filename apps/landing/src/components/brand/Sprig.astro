@@ -9,7 +9,7 @@ interface Props {
   class?: string;
 }
 
-const { class: className } = Astro.props;
+const { class: className }: Props = Astro.props;
 ---
 
 <svg
@@ -17,7 +17,7 @@ const { class: className } = Astro.props;
   viewBox="0 0 32 32"
   fill="currentColor"
   aria-hidden="true"
-  class:list={[className]}
+  class={cn(className)}
 >
   <!-- leaf glyph — scaled to 32×32 viewport (original in 32-unit space at origin) -->
   <path

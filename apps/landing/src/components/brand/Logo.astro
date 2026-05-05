@@ -11,7 +11,7 @@ interface Props {
 const {
   class: className,
   "aria-label": ariaLabel = "i-am.clinic",
-} = Astro.props;
+}: Props = Astro.props;
 ---
 
 <svg
@@ -20,7 +20,7 @@ const {
   role="img"
   aria-label={ariaLabel}
   fill="currentColor"
-  class:list={[className]}
+  class={cn(className)}
 >
   <g transform="translate(8, 12)">
     <!-- leaf glyph — salvia-400 -->

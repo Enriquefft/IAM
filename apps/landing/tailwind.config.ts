@@ -41,11 +41,12 @@ const config: Config = {
           "700": "#3D3026",
           "900": "#1C1612",
         },
-        surface: {
+        page: {
           DEFAULT: "#FDFAF5",
+        },
+        surface: {
+          DEFAULT: "#FFFFFF",
           alt: "#F7F2E8",
-          raised: "#FFFFFF",
-          white: "#FFFFFF",
           border: "#EDE5D4",
           borderStrong: "#A8845A",
         },
