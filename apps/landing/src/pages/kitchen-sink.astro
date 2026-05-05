@@ -31,6 +31,9 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
+// Sections
+import Hero from "@/components/sections/Hero.astro";
+
 // Dev-only guard: redirect to root in production builds.
 // Guard is placed after imports so esbuild can parse the module correctly (esbuild 0.21.x
 // mis-parses a `return` that precedes static import declarations in the frontmatter).
@@ -38,6 +41,13 @@ if (import.meta.env.PROD) return Astro.redirect('/', 301);
 ---
 
 <Base title="Kitchen sink — apps/landing">
+  <!-- ── Section: Hero ─────────────────────────────────────── -->
+  <section class="space-y-6 pt-0">
+    <H2 class="px-8 pt-8">Hero — Phase-4.2</H2>
+    <div class="border-t border-surface-border" />
+  </section>
+  <Hero />
+
   <div class="min-h-screen bg-page p-8 space-y-16">
 
     <!-- ── Section: Brand Atoms ─────────────────────────────────── -->

@@ -190,13 +190,26 @@ const config: Config = {
       },
       spacing: {
         "1": "4px",
+        "1.5": "6px",
         "2": "8px",
+        "2.5": "10px",
         "3": "12px",
+        "3.5": "14px",
         "4": "16px",
+        "4.5": "18px",
+        "5": "20px",
+        "5.5": "22px",
         "6": "24px",
+        "7": "28px",
         "8": "32px",
+        "9": "36px",
+        "10": "40px",
+        "11": "44px",
         "12": "48px",
+        "14": "56px",
         "16": "64px",
+        "18": "72px",
+        "20": "80px",
         "24": "96px",
         "32": "128px",
         gutter: "20px",
@@ -241,6 +254,21 @@ const config: Config = {
         medium: "200ms",
         slow: "250ms",
         reveal: "400ms",
+      },
+      backgroundImage: {
+        // Hero radial wash — uses CSS vars declared in @layer base of globals.css
+        // (rgb channels of brand.salvia.100 and brand.terra.100).
+        "hero-wash":
+          "radial-gradient(ellipse at top left, rgb(var(--hero-wash-salvia) / 0.35) 0%, transparent 60%), radial-gradient(ellipse at bottom right, rgb(var(--hero-wash-terra) / 0.30) 0%, transparent 60%)",
+      },
+      keyframes: {
+        floatIn: {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        floatIn: "floatIn 0.5s cubic-bezier(0.32,0.72,0,1) both",
       },
     },
   },

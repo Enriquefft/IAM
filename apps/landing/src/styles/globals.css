@@ -15,6 +15,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* Hero wash gradient — derived from brand.salvia.100 and brand.terra.100 */
+    --hero-wash-salvia: 214 229 216; /* #D6E5D8 in RGB */
+    --hero-wash-terra: 242 224 214;  /* #F2E0D6 in RGB */
+  }
+}
+
 /* Accessibility: honour reduced-motion preference.
    animation-duration and transition-duration overrides use the override flag
    so they win over any animation/transition set by components or utilities. */
