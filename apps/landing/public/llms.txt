@@ -1,0 +1,25 @@
+# i-am.clinic
+
+> Software de gestión clínica para terapeutas de autismo en LatAm.
+
+i-am.clinic es una plataforma SaaS diseñada para psicólogos, psiquiatras y
+terapeutas en práctica privada. Automatiza la agenda, las notas SOAP y la
+cobranza para que los profesionales de salud mental puedan enfocarse en sus
+pacientes.
+
+## Key facts
+
+- Location: Lima, Perú. Orientado a LatAm (inglés y español)
+- Contact: hola@i-am.clinic
+- Target users: Psicólogos, psiquiatras y otros profesionales de salud mental en práctica privada
+- Core features: Agenda de citas, notas clínicas (formato SOAP), cobros y facturación, expediente digital cifrado
+- Data security: Cifrado AES-256 en tránsito y en reposo; notas cifradas con llave personal del usuario
+- Pricing: Planes en USD; facturación mensual sin contratos anuales
+- Legal: Ley 29733 de Protección de Datos Personales del Perú
+
+## Links
+
+- Demo: https://i-am.clinic/demo
+- Privacidad: https://i-am.clinic/privacidad
+- Términos: https://i-am.clinic/terminos
+- Lista de espera: https://i-am.clinic/#waitlist
