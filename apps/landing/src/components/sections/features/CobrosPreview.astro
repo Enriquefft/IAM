@@ -1,16 +1,45 @@
 ---
 // CobrosPreview.astro — schematic revenue preview for Cobros feature card.
 // section-features.jsx:203-228. Static, zero JS.
+// Locale-aware: total currency + payment-row labels read from `@/lib/i18n`.
+//
+// Mock totals are illustrative round numbers per country (chosen so the card
+// reads "credible" — they don't affect any business logic). Update in lockstep
+// with `PRICING_BY_LOCALE` if the price story shifts.
+import { COUNTRIES, formatPrice, pathToLocale, type LocalePath } from "@/lib/i18n";
+
+interface Props { readonly locale?: LocalePath }
+const { locale = "pe" }: Props = Astro.props;
+
+const bcp47 = pathToLocale(locale);
+const country = COUNTRIES[bcp47];
+
+// Mock monthly revenue split across the country's top three payment methods,
+// rendered into a stacked bar + three rows. Amounts are display-only.
+const MOCK_BY_LOCALE: Record<typeof country.locale, { total: number; rows: readonly number[] }> = {
+  "es-PE": { total: 18250, rows: [11320, 4380, 2550] },
+  "es-MX": { total: 92400, rows: [57290, 22180, 12930] },
+  "es-AR": { total: 5_950_000, rows: [3_690_000, 1_430_000, 830_000] },
+  "es-CO": { total: 19_900_000, rows: [12_330_000, 4_780_000, 2_790_000] },
+  "es-CL": { total: 4_870_000, rows: [3_020_000, 1_170_000, 680_000] },
+};
+
+const mock = MOCK_BY_LOCALE[bcp47];
+const totalText = formatPrice(country, { amount: mock.total, periodLabel: "", isFree: false });
+const payments = country.payments.slice(0, 3);
+const monthLabel = "Mayo · cobrado";
+const rowAmount = (i: number): string =>
+  formatPrice(country, { amount: mock.rows[i] ?? 0, periodLabel: "", isFree: false });
 ---
 
 <div class="absolute inset-0 p-3.5 flex flex-col gap-2">
   {/* section-features.jsx:205 */}
-  <div class="font-sans text-[11px] font-semibold text-text-primary">Mayo · cobrado</div>
+  <div class="font-sans text-[11px] font-semibold text-text-primary">{monthLabel}</div>
 
   {/* section-features.jsx:206-208 — total amount */}
   <div class="font-sans text-[22px] font-bold text-text-primary tracking-tight leading-none">
-    $4,820
-    <span class="text-[11px] font-medium text-text-muted ml-1">USD</span>
+    {totalText}
+    <span class="text-[11px] font-medium text-text-muted ml-1">{country.currency.code}</span>
   </div>
 
   {/* section-features.jsx:209-213 — segmented bar */}
@@ -22,20 +51,26 @@
 
   {/* section-features.jsx:214-225 — payment rows */}
   <div class="flex flex-col gap-1 mt-1">
-    <div class="flex items-center gap-2">
-      <span class="w-1.5 h-1.5 rounded-full bg-primary-hover shrink-0"></span>
-      <span class="flex-1 font-sans text-[10px] text-text-secondary">Tarjeta</span>
-      <span class="font-sans text-[10px] font-semibold text-text-primary">$2,990</span>
-    </div>
-    <div class="flex items-center gap-2">
-      <span class="w-1.5 h-1.5 rounded-full bg-brand-salvia-200 shrink-0"></span>
-      <span class="flex-1 font-sans text-[10px] text-text-secondary">Transferencia</span>
-      <span class="font-sans text-[10px] font-semibold text-text-primary">$1,160</span>
-    </div>
-    <div class="flex items-center gap-2">
-      <span class="w-1.5 h-1.5 rounded-full bg-brand-terra-300 shrink-0"></span>
-      <span class="flex-1 font-sans text-[10px] text-text-secondary">Yape / PLIN</span>
-      <span class="font-sans text-[10px] font-semibold text-text-primary">$670</span>
-    </div>
+    {payments.length > 0 && (
+      <div class="flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary-hover shrink-0"></span>
+        <span class="flex-1 font-sans text-[10px] text-text-secondary capitalize">{payments[0]?.label}</span>
+        <span class="font-sans text-[10px] font-semibold text-text-primary">{rowAmount(0)}</span>
+      </div>
+    )}
+    {payments.length > 1 && (
+      <div class="flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-salvia-200 shrink-0"></span>
+        <span class="flex-1 font-sans text-[10px] text-text-secondary capitalize">{payments[1]?.label}</span>
+        <span class="font-sans text-[10px] font-semibold text-text-primary">{rowAmount(1)}</span>
+      </div>
+    )}
+    {payments.length > 2 && (
+      <div class="flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-terra-300 shrink-0"></span>
+        <span class="flex-1 font-sans text-[10px] text-text-secondary capitalize">{payments[2]?.label}</span>
+        <span class="font-sans text-[10px] font-semibold text-text-primary">{rowAmount(2)}</span>
+      </div>
+    )}
   </div>
 </div>

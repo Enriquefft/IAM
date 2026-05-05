@@ -1,0 +1,16 @@
+---
+// demo.astro — /<locale>/demo page shell. Mounts the DemoApp React island.
+// Tilt handoff is read by DemoApp on mount (sessionStorage key iam:tilt:handoff).
+// Hero WRITER: apps/landing/src/components/sections/Hero.astro lines 102-122.
+import Base from "@/layouts/Base.astro";
+import DemoApp from "@/components/demo/DemoApp";
+import { isLocalePath, type LocalePath } from "@/lib/i18n";
+
+const param = Astro.params.locale;
+if (!isLocalePath(param)) return Astro.redirect("/", 302);
+const locale: LocalePath = param;
+---
+
+<Base pageKey="demo" locale={locale}>
+  <DemoApp client:visible />
+</Base>

@@ -3,53 +3,59 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import vercel from "@astrojs/vercel/serverless";
 import sitemap from "@astrojs/sitemap";
-import { shield } from "@kindspells/astro-shield";
+
+// CSP is shipped statically via vercel.json (edge-applied). See apps/landing/CLAUDE.md.
+
+// SSR (output: "server") + dynamic [locale] routes are not statically
+// enumerable, so the sitemap integration can't auto-discover them. Provide
+// the canonical URL set explicitly. Locales must match astro.i18n.locales
+// below and src/lib/i18n/locales.ts (LOCALE_TO_PATH).
+const SITE = "https://i-am.clinic";
+const SITEMAP_LOCALES = ["pe", "mx", "ar", "co", "cl"];
+const SITEMAP_ROUTES = ["", "/demo", "/privacidad", "/terminos"];
+const SITEMAP_CUSTOM_PAGES = SITEMAP_LOCALES.flatMap((loc) =>
+  SITEMAP_ROUTES.map((route) => `${SITE}/${loc}${route}`),
+);
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://i-am.clinic",
+  site: SITE,
   output: "server",
   adapter: vercel({
     webAnalytics: { enabled: false },
   }),
+  // Locale segment SSOT: src/lib/i18n/locales.ts (LOCALE_TO_PATH).
+  // BCP 47 mapping for sitemap hreflang lives below in `sitemap()`.
+  i18n: {
+    locales: ["pe", "mx", "ar", "co", "cl"],
+    defaultLocale: "pe",
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: false,
+    },
+  },
   integrations: [
     tailwind({
       applyBaseStyles: false,
     }),
     react(),
     sitemap({
+      // SSR + dynamic [locale] routes aren't auto-enumerable — feed the
+      // canonical URL set explicitly.
+      customPages: SITEMAP_CUSTOM_PAGES,
       // /confirmado is transactional; /kitchen-sink is a dev-only preview
       filter: (page) =>
         !page.includes("/confirmado") && !page.includes("/kitchen-sink"),
-    }),
-    shield({
-      sri: {
-        // SSR mode: astro-shield middleware computes per-request hashes and
-        // injects them into the Content-Security-Policy response header.
-        enableMiddleware: true,
-        // enableStatic: false because we use serverless SSR (no static HTML files to scan)
-        enableStatic: false,
-      },
-      securityHeaders: {
-        contentSecurityPolicy: {
-          cspDirectives: {
-            "default-src": "'self'",
-            // script-src: 'self' + 'wasm-unsafe-eval'; inline script hashes injected by shield
-            "script-src": "'self' 'wasm-unsafe-eval'",
-            // style-src: 'unsafe-inline' required — Tailwind JIT inlines critical styles
-            "style-src": "'self' 'unsafe-inline'",
-            // img-src: 'self' + data: (inline SVGs/sprites) + https: (OG images, remote assets)
-            "img-src": "'self' data: https:",
-            // font-src: 'self' — @fontsource fonts are bundled locally
-            "font-src": "'self'",
-            // connect-src: 'self' — API routes are same-origin; extend here for any new third-party XHR
-            "connect-src": "'self'",
-            "form-action": "'self'",
-            "frame-ancestors": "'self'",
-            "base-uri": "'self'",
-            "object-src": "'none'",
-            "upgrade-insecure-requests": "",
-          },
+      // Emit hreflang alternates for every locale, mapped from URL path
+      // segments (pe/mx/…) to BCP 47 tags (es-PE/es-MX/…).
+      i18n: {
+        defaultLocale: "pe",
+        locales: {
+          pe: "es-PE",
+          mx: "es-MX",
+          ar: "es-AR",
+          co: "es-CO",
+          cl: "es-CL",
         },
       },
     }),

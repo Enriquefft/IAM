@@ -1,42 +1,118 @@
 ---
 import "@/styles/globals.css";
 import Nav from "@/components/nav/Nav.astro";
-import { siteMeta, DEFAULT_LOCALE, localeToOgLocale } from "@/lib/seo";
-import type { PageMeta } from "@/lib/seo";
+import {
+  siteMeta,
+  siteAddress,
+  buildPageMeta,
+  type PageMeta,
+  type PageKey,
+} from "@/lib/seo";
+import {
+  COUNTRIES,
+  PRICING_BY_LOCALE,
+  SUPPORTED_LOCALES,
+  DEFAULT_LOCALE_PATH,
+  PATH_TO_LOCALE,
+  parseLocaleFromPath,
+  pathToLocale,
+  localeToPath,
+  localeToOgLocale,
+  localizePath,
+  type Locale,
+  type LocalePath,
+} from "@/lib/i18n";
 
 interface Props {
-  /** Legacy title-only shorthand — prefer pageMeta for full SEO control */
-  title?: string;
+  /**
+   * Page-key + locale shortcut: composes the PageMeta via {@link buildPageMeta}.
+   * Preferred form for routed pages. If you pass `pageMeta` directly, it wins.
+   */
+  pageKey?: PageKey;
+  /** Locale of the current page (path segment, e.g. "pe"). */
+  locale?: LocalePath;
+  /** Pre-composed PageMeta — use when `pageKey` doesn't fit (e.g., kitchen-sink). */
   pageMeta?: PageMeta;
-  /** Absolute canonical URL override — if omitted, derived from Astro.url */
+  /** Title-only shorthand for dev/utility pages. */
+  title?: string;
+  /** Absolute canonical URL override; if omitted, derived from Astro.url. */
   canonicalUrl?: string;
 }
 
-const { title, pageMeta, canonicalUrl: canonicalOverride } = Astro.props;
+const {
+  pageKey,
+  locale: localeProp,
+  pageMeta: pageMetaProp,
+  title,
+  canonicalUrl: canonicalOverride,
+} = Astro.props;
 
-// Resolve effective metadata: pageMeta takes priority; title-only is the fallback
-const effectiveTitle = pageMeta?.title ?? title ?? siteMeta.siteName;
-const effectiveDescription = pageMeta?.description;
-const effectiveNoindex = pageMeta?.noindex ?? false;
-const effectiveOgType = pageMeta?.ogType ?? "website";
+// Locale derivation order:
+// 1. Explicit `locale` prop from the page (always set on routed pages).
+// 2. Parsed from URL pathname (covers /og.png, 404s, dev preview).
+// 3. Default locale (utility/static surfaces).
+const localePathFromUrl = ((): LocalePath | null => {
+  const parsed = parseLocaleFromPath(Astro.url.pathname);
+  return parsed === null ? null : localeToPath(parsed);
+})();
+const activeLocalePath: LocalePath =
+  localeProp ?? localePathFromUrl ?? DEFAULT_LOCALE_PATH;
+const activeLocale: Locale = pathToLocale(activeLocalePath);
+
+// PageMeta resolution: prop > pageKey factory > title-only fallback.
+const resolvedPageMeta: PageMeta | undefined =
+  pageMetaProp ?? (pageKey !== undefined ? buildPageMeta(pageKey, activeLocale) : undefined);
+
+const effectiveTitle = resolvedPageMeta?.title ?? title ?? siteMeta.siteName;
+const effectiveDescription = resolvedPageMeta?.description;
+const effectiveNoindex = resolvedPageMeta?.noindex ?? false;
+const effectiveOgType = resolvedPageMeta?.ogType ?? "website";
+
+// Canonical: prefer override → pageMeta.canonicalPath → current pathname.
+// Strip trailing slash for consistency (Astro renders /pe and /pe/demo without trailing).
+const pathname = Astro.url.pathname.replace(/\/$/, "") || `/${activeLocalePath}`;
 const canonical =
   canonicalOverride ??
-  (pageMeta?.canonicalPath
-    ? `${siteMeta.siteUrl}${pageMeta.canonicalPath}`
-    : Astro.url.href.replace(/\/$/, "") || siteMeta.siteUrl);
+  (resolvedPageMeta?.canonicalPath
+    ? `${siteMeta.siteUrl}${resolvedPageMeta.canonicalPath}`
+    : `${siteMeta.siteUrl}${pathname}`);
 
-const ogImage = siteMeta.defaultOgImage;
-// i18n seam: today uses DEFAULT_LOCALE. The i18n agent will derive this from routing.
-const activeLocale = DEFAULT_LOCALE;
+// Subpath under the locale prefix — used to compose hreflang alternates.
+// "/pe/demo" → "/demo", "/pe" → "" (root of that locale).
+const localePrefix = `/${activeLocalePath}`;
+const subpathBeyondLocale = pathname.startsWith(localePrefix)
+  ? pathname.slice(localePrefix.length)
+  : "";
+
+// hreflang alternates: one per locale + x-default → DEFAULT_LOCALE.
+const hreflangAlternates = SUPPORTED_LOCALES.map((loc) => {
+  const path = localeToPath(loc);
+  return {
+    hreflang: loc, // BCP 47 (es-PE, es-MX, …)
+    href: `${siteMeta.siteUrl}${localizePath(path, subpathBeyondLocale)}`,
+  };
+});
+const xDefaultHref = `${siteMeta.siteUrl}${localizePath(DEFAULT_LOCALE_PATH, subpathBeyondLocale)}`;
+
+// OG locale + alternates
 const ogLocale = localeToOgLocale(activeLocale);
-// html lang uses BCP 47 subtag (es-PE → es). The i18n agent will make this locale-aware.
-const htmlLang = activeLocale.split("-")[0] ?? "es";
+const ogLocaleAlternates = SUPPORTED_LOCALES
+  .filter((loc) => loc !== activeLocale)
+  .map((loc) => localeToOgLocale(loc));
 
-// ---------------------------------------------------------------------------
-// JSON-LD structured data
-// ---------------------------------------------------------------------------
-const isRoot = new URL(Astro.url.href).pathname === "/";
-const pathSegments = new URL(Astro.url.href).pathname
+// OG image — append locale so the image varies per country.
+const ogImage = `${siteMeta.siteUrl}/og.png?locale=${activeLocalePath}`;
+
+// HTML lang — use full BCP 47 (es-PE, es-MX, …) for richer signals.
+const htmlLang = activeLocale;
+
+// JSON-LD: organization, website, software-app — locale-aware
+const country = COUNTRIES[activeLocale];
+const address = siteAddress(activeLocale);
+const tierPricing = PRICING_BY_LOCALE[activeLocale].consultorio;
+
+const isLocaleRoot = pathname === localePrefix;
+const pathSegmentsBeyondLocale = subpathBeyondLocale
   .split("/")
   .filter(Boolean);
 
@@ -47,16 +123,15 @@ const organizationLd = {
   email: siteMeta.email,
   address: {
     "@type": "PostalAddress",
-    addressLocality: siteMeta.address.locality,
-    addressCountry: siteMeta.address.country,
+    addressLocality: address.locality,
+    addressCountry: address.country,
   },
 };
 
 const websiteLd = {
   "@type": "WebSite",
-  url: siteMeta.siteUrl,
+  url: `${siteMeta.siteUrl}${localePrefix}`,
   name: siteMeta.siteName,
-  // i18n seam: the i18n agent will make this locale-aware per-page
   inLanguage: activeLocale,
 };
 
@@ -67,13 +142,13 @@ const softwareAppLd = {
   operatingSystem: "Web",
   offers: {
     "@type": "Offer",
-    priceCurrency: "USD",
+    price: tierPricing.amount,
+    priceCurrency: country.currency.code,
   },
 };
 
-// BreadcrumbList for non-root pages
 const breadcrumbLd =
-  !isRoot && pathSegments.length > 0
+  !isLocaleRoot && pathSegmentsBeyondLocale.length > 0
     ? {
         "@type": "BreadcrumbList",
         itemListElement: [
@@ -81,7 +156,7 @@ const breadcrumbLd =
             "@type": "ListItem",
             position: 1,
             name: "Inicio",
-            item: siteMeta.siteUrl,
+            item: `${siteMeta.siteUrl}${localePrefix}`,
           },
           {
             "@type": "ListItem",
@@ -102,6 +177,12 @@ const jsonLd = {
     ...(breadcrumbLd ? [breadcrumbLd] : []),
   ],
 };
+
+// Sanity: validate localeProp against PATH_TO_LOCALE if provided. Fail loud in
+// dev; in prod the page route should never call us with a bad path.
+if (localeProp !== undefined && PATH_TO_LOCALE[localeProp] === undefined) {
+  throw new Error(`Base.astro: unsupported locale prop "${localeProp}"`);
+}
 ---
 
 <!doctype html>
@@ -119,12 +200,21 @@ const jsonLd = {
     }
     <link rel="canonical" href={canonical} />
 
+    <!-- hreflang alternates: one per supported locale + x-default → /pe -->
+    {hreflangAlternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
+
     <!-- Theme color: brand.cream.50 — SSOT exception documented in CLAUDE.md -->
     <meta name="theme-color" content={siteMeta.themeColor} />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content={siteMeta.siteName} />
     <meta property="og:locale" content={ogLocale} />
+    {ogLocaleAlternates.map((loc) => (
+      <meta property="og:locale:alternate" content={loc} />
+    ))}
     <meta property="og:type" content={effectiveOgType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={effectiveTitle} />
@@ -142,13 +232,11 @@ const jsonLd = {
     <link rel="alternate icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <!-- Fonts: @fontsource — self-hosted, no preconnect needed -->
-
     <!-- JSON-LD structured data — is:inline required: set:html attribute disables Astro script processing, which is correct here -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
-    <!-- Skip link — first focusable in <body>, targets #main. Landing Page.html:54 -->
+    <!-- Skip link — first focusable in <body>, targets #main. -->
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-base focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-fg focus:ring-2 focus:ring-primary focus:outline-none"
@@ -156,7 +244,7 @@ const jsonLd = {
       Saltar al contenido principal
     </a>
 
-    <Nav />
+    <Nav locale={activeLocalePath} />
 
     <main id="main">
       <slot />

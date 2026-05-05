@@ -1,15 +1,32 @@
 ---
 import Base from "@/layouts/Base.astro";
 import Footer from "@/components/sections/Footer.astro";
-import { pages } from "@/lib/seo";
+import {
+  isLocalePath,
+  pathToLocale,
+  localeRoot,
+  privacyAboutParagraph,
+  privacyRightsLawClause,
+  legalContactLine,
+  type LocalePath,
+} from "@/lib/i18n";
+
+const param = Astro.params.locale;
+if (!isLocalePath(param)) return Astro.redirect("/", 302);
+const locale: LocalePath = param;
+const bcp47 = pathToLocale(locale);
+const homeUrl = localeRoot(locale);
+const aboutCopy = privacyAboutParagraph(bcp47);
+const rightsClause = privacyRightsLawClause(bcp47);
+const contactLine = legalContactLine(bcp47);
 ---
 
-<Base pageMeta={pages.privacidad}>
+<Base pageKey="privacidad" locale={locale}>
   <article class="mx-auto max-w-[720px] px-8 pt-16 pb-24">
 
-    {/* Back link — mirrors topbar in canonical bundle */}
+    {/* Back link — locale-aware home */}
     <a
-      href="/"
+      href={homeUrl}
       class="inline-flex items-center gap-2 text-small font-sans text-ink-500 hover:text-ink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page rounded-sm transition-colors mb-8"
     >
       <svg
@@ -43,7 +60,7 @@ import { pages } from "@/lib/seo";
     <section aria-labelledby="quienes-somos">
       <h2 id="quienes-somos" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Quiénes somos</h2>
       <p class="font-sans text-body text-ink-700 leading-[1.7]">
-        i-am.clinic es un servicio operado desde Lima, Perú, que ofrece herramientas de agenda, notas clínicas y cobranza para psicólogos, psiquiatras y otros profesionales de salud mental en práctica privada.
+        {aboutCopy}
       </p>
     </section>
 
@@ -70,8 +87,7 @@ import { pages } from "@/lib/seo";
     <section aria-labelledby="tus-derechos">
       <h2 id="tus-derechos" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Tus derechos</h2>
       <p class="font-sans text-body text-ink-700 leading-[1.7]">
-        Bajo la Ley 29733 de Protección de Datos Personales del Perú y la legislación equivalente en otros países de LATAM, tienes derecho a acceder, rectificar, cancelar y oponerte al uso de tus datos. Para ejercer estos derechos, escríbenos a{" "}
-        <a
+        {rightsClause}<a
           href="mailto:hola@i-am.clinic"
           class="text-brand-salvia-600 underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
         >hola@i-am.clinic</a>.
@@ -88,8 +104,7 @@ import { pages } from "@/lib/seo";
     <section aria-labelledby="contacto">
       <h2 id="contacto" class="font-sans text-h4 font-semibold text-text-primary mt-9 mb-3">Contacto</h2>
       <p class="font-sans text-body text-ink-700 leading-[1.7]">
-        i-am.clinic · Lima, Perú ·{" "}
-        <a
+        {contactLine}<a
           href="mailto:hola@i-am.clinic"
           class="text-brand-salvia-600 underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
         >hola@i-am.clinic</a>
@@ -98,5 +113,5 @@ import { pages } from "@/lib/seo";
 
   </article>
 
-  <Footer slot="footer" />
+  <Footer slot="footer" locale={locale} />
 </Base>

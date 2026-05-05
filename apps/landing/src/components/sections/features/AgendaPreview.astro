@@ -1,6 +1,11 @@
 ---
 // AgendaPreview.astro — schematic calendar preview for Agenda feature card.
 // section-features.jsx:130-164. Static, zero JS.
+// Accepts (and ignores) `locale` so FeatureCard can pass props uniformly to
+// all three preview slots.
+import type { LocalePath } from "@/lib/i18n";
+interface Props { readonly locale?: LocalePath }
+const { locale: _locale }: Props = Astro.props;
 ---
 
 <div class="absolute inset-0 p-3.5 flex flex-col gap-1.5">

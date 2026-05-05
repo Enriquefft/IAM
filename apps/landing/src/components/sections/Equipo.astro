@@ -2,9 +2,17 @@
 // Equipo.astro — team section with placeholder figure.
 // section-equipo.jsx:3-53.
 // Bundle ships a placeholder figure; replace asset under public/equipo/ before launch.
+// Locale-aware: locality phrase reads from `@/lib/i18n`.
 import Lede from "@/components/typography/Lede.astro";
 import Body from "@/components/typography/Body.astro";
 import Small from "@/components/typography/Small.astro";
+import { equipoLocalityPhrase, pathToLocale, type LocalePath } from "@/lib/i18n";
+
+interface Props {
+  readonly locale: LocalePath;
+}
+const { locale }: Props = Astro.props;
+const localityPhrase = equipoLocalityPhrase(pathToLocale(locale));
 ---
 
 {/* section-equipo.jsx:4 — id="equipo" default bg-page */}
@@ -25,9 +33,9 @@ import Small from "@/components/typography/Small.astro";
           en consulta y en código.
         </h2>
 
-        {/* section-equipo.jsx:12-16 */}
+        {/* section-equipo.jsx:12-16 — locality varies per locale (i18n SSOT) */}
         <Lede class="mb-4">
-          Somos psicólogos, ingenieros y diseñadores en Lima. Algunos del equipo atendemos pacientes los miércoles, así que sabemos qué se siente cerrar el último expediente del día.
+          {localityPhrase}
         </Lede>
 
         {/* section-equipo.jsx:17-19 */}

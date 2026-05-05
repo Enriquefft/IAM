@@ -1,4 +1,12 @@
 // section-faq.jsx:5-29
+// Locale-aware: psychiatry-specific and data-protection answers cite the
+// country's own colegio/ley via `@/lib/i18n/copy`.
+
+import {
+  faqPsychiatryAnswer,
+  faqDataProtectionAnswer,
+  type Locale,
+} from "@/lib/i18n";
 
 export interface FaqItemData {
   readonly id: string;
@@ -6,35 +14,37 @@ export interface FaqItemData {
   readonly a: string;
 }
 
-export const FAQ_ITEMS = [
-  {
-    id: "faq-0",
-    q: "¿Necesito instalar algo?",
-    a: "No. Funciona en el navegador y hay app para iPhone y Android. Si cambias de computadora, tu información sigue ahí.",
-  },
-  {
-    id: "faq-1",
-    q: "Vengo de otra plataforma. ¿Puedo migrar mi agenda y mis pacientes?",
-    a: "Sí. Importamos desde Google Calendar, Outlook y CSV. Si vienes de Doctoralia, Cliniweb o algo más raro, agendamos una llamada de 30 minutos y lo hacemos contigo. Sin costo extra.",
-  },
-  {
-    id: "faq-2",
-    q: "¿Funciona para psiquiatría?",
-    a: "Sí. Plantillas para receta, control de medicamentos con folio, e historial farmacológico. Si tu colegio profesional pide algo específico para Perú, dinos y lo agregamos.",
-  },
-  {
-    id: "faq-3",
-    q: "¿Qué tan rápido contestan cuando algo no funciona?",
-    a: "Lunes a viernes en horario de consulta: máximo 2 horas. Fuera de eso, al día siguiente. Te contesta una persona de nuestro equipo, no un bot.",
-  },
-  {
-    id: "faq-4",
-    q: "¿Mis datos están seguros y son míos?",
-    a: "Sí, las dos cosas. Los expedientes están cifrados con tu llave (ni nuestro soporte puede leerlos sin tu permiso) y cumplimos la Ley 29733 del Perú. Si te vas, te llevas todo en PDF y CSV.",
-  },
-  {
-    id: "faq-5",
-    q: "¿Qué pasa si cancelo?",
-    a: "Cancelas desde tu cuenta y exportas tus datos. Sin contratos anuales, sin trámite de salida, sin llamadas de retención.",
-  },
-] as const satisfies readonly FaqItemData[];
+export function buildFaqItems(locale: Locale): readonly FaqItemData[] {
+  return [
+    {
+      id: "faq-0",
+      q: "¿Necesito instalar algo?",
+      a: "No. Funciona en el navegador y hay app para iPhone y Android. Si cambias de computadora, tu información sigue ahí.",
+    },
+    {
+      id: "faq-1",
+      q: "Vengo de otra plataforma. ¿Puedo migrar mi agenda y mis pacientes?",
+      a: "Sí. Importamos desde Google Calendar, Outlook y CSV. Si vienes de Doctoralia, Cliniweb o algo más raro, agendamos una llamada de 30 minutos y lo hacemos contigo. Sin costo extra.",
+    },
+    {
+      id: "faq-2",
+      q: "¿Funciona para psiquiatría?",
+      a: faqPsychiatryAnswer(locale),
+    },
+    {
+      id: "faq-3",
+      q: "¿Qué tan rápido contestan cuando algo no funciona?",
+      a: "Lunes a viernes en horario de consulta: máximo 2 horas. Fuera de eso, al día siguiente. Te contesta una persona de nuestro equipo, no un bot.",
+    },
+    {
+      id: "faq-4",
+      q: "¿Mis datos están seguros y son míos?",
+      a: faqDataProtectionAnswer(locale),
+    },
+    {
+      id: "faq-5",
+      q: "¿Qué pasa si cancelo?",
+      a: "Cancelas desde tu cuenta y exportas tus datos. Sin contratos anuales, sin trámite de salida, sin llamadas de retención.",
+    },
+  ];
+}

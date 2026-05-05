@@ -1,6 +1,15 @@
 ---
+// Locale-aware: the waitlist form submits `locale` to the API so confirmation
+// emails and the redirect target on /confirmado match the user's country.
 import WaitlistForm from "./waitlist/WaitlistForm";
-import { WAITLIST_COPY } from "./waitlist/copy";
+import { waitlistCopy } from "./waitlist/copy";
+import { pathToLocale, type LocalePath } from "@/lib/i18n";
+
+interface Props {
+  readonly locale: LocalePath;
+}
+const { locale }: Props = Astro.props;
+const copy = waitlistCopy(pathToLocale(locale));
 ---
 
 <section
@@ -11,21 +20,21 @@ import { WAITLIST_COPY } from "./waitlist/copy";
   <div class="mx-auto max-w-section px-8">
     <div class="mx-auto max-w-[520px]">
       <span class="inline-flex items-center rounded-full bg-brand-salvia-100 text-brand-salvia-600 text-label font-medium px-3 py-1 mb-5">
-        {WAITLIST_COPY.eyebrow}
+        {copy.eyebrow}
       </span>
 
       <h2
         id="waitlist-title"
         class="text-h2 font-bold text-text-primary mb-4"
       >
-        {WAITLIST_COPY.heading}
+        {copy.heading}
       </h2>
 
       <p class="text-body-lg text-text-secondary font-serif mb-8">
-        {WAITLIST_COPY.lede}
+        {copy.lede}
       </p>
 
-      <WaitlistForm action="/api/waitlist/signup" client:load />
+      <WaitlistForm action="/api/waitlist/signup" locale={locale} client:load />
     </div>
   </div>
 </section>

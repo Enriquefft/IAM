@@ -1,14 +1,15 @@
 ---
 // NavLinks.astro — desktop navigation link list (zero JS, SSR only).
-// section-nav.jsx:42 aria-label, section-nav.jsx:21-25 link text.
-import { NAV_LINKS } from "./links";
+// Locale-aware: links composed from `buildNavLinks(locale)`.
+import { buildNavLinks } from "./links";
+import type { LocalePath } from "@/lib/i18n";
 
 interface Props {
-  variant: "desktop";
+  readonly variant: "desktop";
+  readonly locale: LocalePath;
 }
-
-// variant is declared for future extensibility; consumed by type-check.
-const { variant: _variant }: Props = Astro.props;
+const { variant: _variant, locale }: Props = Astro.props;
+const links = buildNavLinks(locale);
 ---
 
 <!-- section-nav.jsx:42 aria-label="Navegación principal" -->
@@ -16,7 +17,7 @@ const { variant: _variant }: Props = Astro.props;
   aria-label="Navegación principal"
   class="hidden md:flex items-center gap-7"
 >
-  {NAV_LINKS.map(({ href, label }) => (
+  {links.map(({ href, label }) => (
     <a
       href={href}
       class="text-label text-ink-700 hover:text-ink-900 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page"

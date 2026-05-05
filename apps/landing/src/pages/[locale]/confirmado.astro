@@ -1,7 +1,19 @@
 ---
 import Base from "@/layouts/Base.astro";
 import Footer from "@/components/sections/Footer.astro";
-import { pages } from "@/lib/seo";
+import {
+  isLocalePath,
+  localeRoot,
+  localeAnchor,
+  pathToLocale,
+  type LocalePath,
+  type Locale,
+} from "@/lib/i18n";
+
+const param = Astro.params.locale;
+if (!isLocalePath(param)) return Astro.redirect("/", 302);
+const locale: LocalePath = param;
+const localeBcp: Locale = pathToLocale(locale);
 
 const error = Astro.url.searchParams.get("error");
 const already = Astro.url.searchParams.get("already");
@@ -18,40 +30,73 @@ function getState(): PageState {
 }
 
 const pageState = getState();
+const homeHref = localeRoot(locale);
+const waitlistAnchor = localeAnchor(locale, "waitlist");
 
-const content = {
+// Two registers: vos (AR) vs tú (PE/MX/CO/CL). Selected by `localeBcp`.
+const VOS: Record<PageState, { heading: string; body: string; ctaLabel: string }> = {
   success: {
     heading: "Lugar confirmado.",
-    body: "Estás en la lista. Te avisamos cuando haya cupo — mantente atento a tu bandeja de entrada.",
-    cta: { href: "/", label: "Volver al inicio" },
+    body: "Estás en la lista. Te avisamos cuando haya cupo — mantenete atento a tu bandeja de entrada.",
+    ctaLabel: "Volver al inicio",
   },
   pending: {
     heading: "Revisá tu correo.",
     body: "Te enviamos un enlace de confirmación. Hacé clic en el enlace para reservar tu lugar — vence en 7 días.",
-    cta: { href: "/", label: "Volver al inicio" },
+    ctaLabel: "Volver al inicio",
   },
   already: {
     heading: "Ya estás confirmado.",
     body: "Tu correo ya estaba en la lista. Te avisamos cuando abramos los primeros cupos.",
-    cta: { href: "/", label: "Volver al inicio" },
+    ctaLabel: "Volver al inicio",
   },
   expired: {
     heading: "El enlace venció.",
     body: "Los enlaces de confirmación tienen una vigencia de 7 días. Volvé a anotarte para recibir un nuevo enlace.",
-    cta: { href: "/#waitlist", label: "Volver a anotarme" },
+    ctaLabel: "Volver a anotarme",
   },
   invalid: {
     heading: "Enlace inválido.",
     body: "Este enlace no existe o ya fue usado. Volvé a anotarte si todavía querés reservar tu lugar.",
-    cta: { href: "/#waitlist", label: "Volver a anotarme" },
+    ctaLabel: "Volver a anotarme",
   },
-} satisfies Record<PageState, { heading: string; body: string; cta: { href: string; label: string } }>;
+};
 
-const page = content[pageState];
+const TU: Record<PageState, { heading: string; body: string; ctaLabel: string }> = {
+  success: {
+    heading: "Lugar confirmado.",
+    body: "Estás en la lista. Te avisamos cuando haya cupo — mantente atento a tu bandeja de entrada.",
+    ctaLabel: "Volver al inicio",
+  },
+  pending: {
+    heading: "Revisa tu correo.",
+    body: "Te enviamos un enlace de confirmación. Haz clic en el enlace para reservar tu lugar — vence en 7 días.",
+    ctaLabel: "Volver al inicio",
+  },
+  already: {
+    heading: "Ya estás confirmado.",
+    body: "Tu correo ya estaba en la lista. Te avisamos cuando abramos los primeros cupos.",
+    ctaLabel: "Volver al inicio",
+  },
+  expired: {
+    heading: "El enlace venció.",
+    body: "Los enlaces de confirmación tienen una vigencia de 7 días. Vuelve a registrarte para recibir un nuevo enlace.",
+    ctaLabel: "Volver a registrarme",
+  },
+  invalid: {
+    heading: "Enlace inválido.",
+    body: "Este enlace no existe o ya fue usado. Vuelve a registrarte si todavía quieres reservar tu lugar.",
+    ctaLabel: "Volver a registrarme",
+  },
+};
+
+const stateCopy = (localeBcp === "es-AR" ? VOS : TU)[pageState];
+const ctaHref =
+  pageState === "expired" || pageState === "invalid" ? waitlistAnchor : homeHref;
 const isError = pageState === "expired" || pageState === "invalid";
 ---
 
-<Base pageMeta={pages.confirmado}>
+<Base pageKey="confirmado" locale={locale}>
   <div class="min-h-[70vh] flex items-center justify-center px-8 py-24">
     <div class="mx-auto max-w-[480px] text-center">
       <div
@@ -92,17 +137,17 @@ const isError = pageState === "expired" || pageState === "invalid";
         )}
       </div>
 
-      <h1 class="text-h2 font-bold text-text-primary mb-4">{page.heading}</h1>
-      <p class="text-body-lg font-serif text-text-secondary mb-8">{page.body}</p>
+      <h1 class="text-h2 font-bold text-text-primary mb-4">{stateCopy.heading}</h1>
+      <p class="text-body-lg font-serif text-text-secondary mb-8">{stateCopy.body}</p>
 
       <a
-        href={page.cta.href}
+        href={ctaHref}
         class="inline-flex items-center rounded-base h-11 px-6 text-small font-semibold bg-primary text-primary-fg hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page transition-colors"
       >
-        {page.cta.label}
+        {stateCopy.ctaLabel}
       </a>
     </div>
   </div>
 
-  <Footer slot="footer" />
+  <Footer slot="footer" locale={locale} />
 </Base>

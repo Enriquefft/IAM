@@ -1,10 +1,33 @@
 ---
+// 404.astro — rendered for any path that doesn't match a route AND isn't
+// caught by middleware redirect. Locale is derived from URL when possible
+// (e.g. /pe/foo) else falls back to the iam:locale cookie or default.
 import Base from "@/layouts/Base.astro";
 import Footer from "@/components/sections/Footer.astro";
-import { pages } from "@/lib/seo";
+import {
+  parseLocaleFromPath,
+  localeToPath,
+  isLocalePath,
+  DEFAULT_LOCALE_PATH,
+  localeRoot,
+  localeAnchor,
+  type LocalePath,
+} from "@/lib/i18n";
+
+function pickLocale(): LocalePath {
+  const fromPath = parseLocaleFromPath(Astro.url.pathname);
+  if (fromPath !== null) return localeToPath(fromPath);
+  const cookie = Astro.cookies.get("iam:locale")?.value;
+  if (typeof cookie === "string" && isLocalePath(cookie)) return cookie;
+  return DEFAULT_LOCALE_PATH;
+}
+
+const locale = pickLocale();
+const homeUrl = localeRoot(locale);
+const waitlistUrl = localeAnchor(locale, "waitlist");
 ---
 
-<Base pageMeta={pages.notFound}>
+<Base pageKey="notFound" locale={locale}>
   <div class="min-h-[80vh] flex items-center justify-center px-8 py-24 bg-page">
     <div class="mx-auto max-w-[480px] text-center">
 
@@ -29,7 +52,7 @@ import { pages } from "@/lib/seo";
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
         <a
-          href="/"
+          href={homeUrl}
           class="inline-flex items-center gap-2 rounded-base h-11 px-6 text-small font-semibold bg-primary text-primary-fg hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page transition-colors"
         >
           <svg
@@ -49,7 +72,7 @@ import { pages } from "@/lib/seo";
         </a>
 
         <a
-          href="/#waitlist"
+          href={waitlistUrl}
           class="inline-flex items-center gap-2 rounded-base h-11 px-6 text-small font-semibold bg-surface text-text-primary border border-surface-border hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page transition-colors"
         >
           Unirme a la lista de espera
@@ -59,5 +82,5 @@ import { pages } from "@/lib/seo";
     </div>
   </div>
 
-  <Footer slot="footer" />
+  <Footer slot="footer" locale={locale} />
 </Base>

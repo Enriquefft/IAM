@@ -1,7 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /confirmado
+Disallow: /*/confirmado
+Disallow: /*/kitchen-sink
 
 # AI crawlers — explicitly allowed
 User-agent: GPTBot

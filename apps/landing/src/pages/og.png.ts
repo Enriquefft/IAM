@@ -2,8 +2,10 @@
  * /og.png — server-rendered Open Graph image (1200×630).
  *
  * Uses @vercel/og (Satori + resvg) to generate a branded PNG.
- * Cached for 1 year via Cache-Control: public, max-age=31536000, immutable
- * because the content is static (not per-page dynamic).
+ * Per-locale: tagline + bottom contact line read from `@/lib/i18n` so each
+ * country shares to social with its own locality.
+ *
+ * Cached for 1 year per unique `?locale=` query.
  *
  * Brand colors reference tailwind.config.ts tokens:
  *   bg: brand.cream.50       (#FDFAF5)
@@ -19,13 +21,26 @@
 import type { APIRoute } from "astro";
 import { ImageResponse } from "@vercel/og";
 import { createElement as h } from "react";
+import {
+  isLocalePath,
+  pathToLocale,
+  ogTagline,
+  ogContactLine,
+  DEFAULT_LOCALE_PATH,
+} from "@/lib/i18n";
 
 export const prerender = false;
 
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-export const GET: APIRoute = () => {
+export const GET: APIRoute = ({ url }) => {
+  const localeParam = url.searchParams.get("locale");
+  const localePath = isLocalePath(localeParam) ? localeParam : DEFAULT_LOCALE_PATH;
+  const locale = pathToLocale(localePath);
+  const tagline = ogTagline(locale);
+  const contactLine = ogContactLine(locale);
+
   const element = h(
     "div",
     {
@@ -42,7 +57,6 @@ export const GET: APIRoute = () => {
         position: "relative" as const,
       },
     },
-    // Domain eyebrow
     h(
       "div",
       {
@@ -57,7 +71,6 @@ export const GET: APIRoute = () => {
       },
       "i-am.clinic",
     ),
-    // Main headline
     h(
       "div",
       {
@@ -73,7 +86,6 @@ export const GET: APIRoute = () => {
       },
       "La consulta privada, sin papeleo.",
     ),
-    // Tagline
     h(
       "div",
       {
@@ -85,9 +97,8 @@ export const GET: APIRoute = () => {
           maxWidth: 800,
         },
       },
-      "Agenda, notas SOAP y cobros para psicólogos en LatAm.",
+      tagline,
     ),
-    // Bottom bar: contact + logo mark
     h(
       "div",
       {
@@ -109,9 +120,8 @@ export const GET: APIRoute = () => {
             color: "#6B5A4A", // ink.500 / text.muted
           },
         },
-        "hola@i-am.clinic · Lima, Perú",
+        contactLine,
       ),
-      // Brand mark placeholder
       h(
         "div",
         {
@@ -142,7 +152,7 @@ export const GET: APIRoute = () => {
     height: HEIGHT,
   });
 
-  // Cache for 1 year — content is static
+  // URL is unique per locale, so caching for 1 year is safe.
   response.headers.set(
     "Cache-Control",
     "public, max-age=31536000, immutable",

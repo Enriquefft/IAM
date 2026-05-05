@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SUPPORTED_LOCALES } from "@/lib/i18n/locales";
 
 export const SignupSchema = z.object({
   email: z
@@ -10,6 +11,10 @@ export const SignupSchema = z.object({
   role: z.enum(["terapista", "clinica", "familia", "otro"], {
     required_error: "Seleccioná tu perfil",
     invalid_type_error: "Perfil inválido",
+  }),
+  locale: z.enum(SUPPORTED_LOCALES, {
+    required_error: "Locale requerido",
+    invalid_type_error: "Locale inválido",
   }),
   consent: z.literal(true, {
     errorMap: () => ({ message: "Debés aceptar las condiciones" }),

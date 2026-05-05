@@ -1,5 +1,6 @@
 ---
 import Base from "@/layouts/Base.astro";
+import { isLocalePath, type LocalePath } from "@/lib/i18n";
 
 // Brand atoms
 import Logo from "@/components/brand/Logo.astro";
@@ -34,19 +35,22 @@ import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescri
 // Sections
 import Hero from "@/components/sections/Hero.astro";
 
-// Dev-only guard: redirect to root in production builds.
-// Guard is placed after imports so esbuild can parse the module correctly (esbuild 0.21.x
-// mis-parses a `return` that precedes static import declarations in the frontmatter).
-if (import.meta.env.PROD) return Astro.redirect('/', 301);
+// Param + dev guard. Guard is placed after imports so esbuild can parse the
+// module correctly (esbuild 0.21.x mis-parses a `return` that precedes static
+// import declarations in the frontmatter).
+const param = Astro.params.locale;
+if (!isLocalePath(param)) return Astro.redirect("/", 302);
+const locale: LocalePath = param;
+if (import.meta.env.PROD) return Astro.redirect(`/${locale}`, 301);
 ---
 
-<Base title="Kitchen sink — apps/landing">
+<Base title="Kitchen sink — apps/landing" locale={locale}>
   <!-- ── Section: Hero ─────────────────────────────────────── -->
   <section class="space-y-6 pt-0">
     <H2 class="px-8 pt-8">Hero — Phase-4.2</H2>
     <div class="border-t border-surface-border" />
   </section>
-  <Hero />
+  <Hero locale={locale} />
 
   <div class="min-h-screen bg-page p-8 space-y-16">
 
@@ -119,7 +123,7 @@ if (import.meta.env.PROD) return Astro.redirect('/', 301);
         <H3>H3: Creado por y para profesionales de la salud mental</H3>
         <Lede>Lede: Más de 200 psicólogos en LATAM ya reservaron su lugar. Sin compromiso, sin tarjeta.</Lede>
         <Body>Body: La práctica privada termina usando herramientas que no son para esto. WhatsApp para confirmar, Excel para cobrar, una libreta para las notas.</Body>
-        <Small>Small: © 2026 i-am.clinic · Lima, Perú</Small>
+        <Small>Small: © 2026 i-am.clinic</Small>
         <Label>Label: Correo electrónico</Label>
       </div>
 

@@ -1,10 +1,20 @@
 ---
 // Hero.astro — Phase-4.3 hero with live 12-second loop.
-// No props — all copy is hard-coded inline.
+// Locale-aware: demo + waitlist hrefs derive from `@/components/nav/links`.
 import Lede from "@/components/typography/Lede.astro";
 import Icon from "@/components/icons/Icon.astro";
 import { Button } from "@/components/ui/button";
 import HeroLoop from "@/components/hero/HeroLoop";
+import { demoHref, waitlistHref } from "@/components/nav/links";
+import type { LocalePath } from "@/lib/i18n";
+
+interface Props {
+  readonly locale: LocalePath;
+}
+const { locale }: Props = Astro.props;
+
+const demoUrl = demoHref(locale);
+const waitlistUrl = waitlistHref(locale);
 ---
 
 {/* section-hero.jsx:1 */}
@@ -48,7 +58,7 @@ import HeroLoop from "@/components/hero/HeroLoop";
         {/* Primary CTA — links to #waitlist (Phase-6 will mount the WaitlistDialog there) */}
         {/* section-hero.jsx:32 */}
         <Button asChild size="lg">
-          <a href="#waitlist">
+          <a href={waitlistUrl}>
             {/* section-hero.jsx:33 */}Unirme a la lista de espera
             <Icon name="arrowRight" class="ml-1 h-[18px] w-[18px]" aria-hidden="true" />
           </a>
@@ -57,7 +67,7 @@ import HeroLoop from "@/components/hero/HeroLoop";
         {/* Secondary CTA */}
         {/* section-hero.jsx:36 */}
         <Button asChild variant="outline" size="lg">
-          <a href="/demo">
+          <a href={demoUrl}>
             {/* section-hero.jsx:37 */}Ver el demo
           </a>
         </Button>
@@ -77,6 +87,7 @@ import HeroLoop from "@/components/hero/HeroLoop";
       {/* section-hero.jsx:76 */}
       <button
         data-tilt-target
+        data-demo-href={demoUrl}
         type="button"
         aria-label="Abrir el demo interactivo"
         class="group relative block w-full aspect-[1.05/1] rounded-hero overflow-visible bg-transparent border-0 p-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-salvia-400 focus-visible:ring-offset-[6px] focus-visible:ring-offset-page transition-transform duration-300 ease-spring motion-reduce:transition-none [transform-style:preserve-3d] [perspective:1200px]"
@@ -110,13 +121,13 @@ if (target) {
     const px = (e.clientX - r.left) / r.width - 0.5;
     const py = (e.clientY - r.top) / r.height - 0.5;
     writeHandoff(py * -3, px * 3);
-    requestAnimationFrame(() => { window.location.href = '/demo'; });
+    requestAnimationFrame(() => { window.location.href = target.dataset.demoHref || '/demo'; });
   });
   target.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     e.preventDefault();
     writeHandoff(0, 0);
-    requestAnimationFrame(() => { window.location.href = '/demo'; });
+    requestAnimationFrame(() => { window.location.href = target.dataset.demoHref || '/demo'; });
   });
 }
 </script>

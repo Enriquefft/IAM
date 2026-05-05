@@ -13,38 +13,40 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 import { palette } from "./palette";
+import { waitlistEmailCopy } from "@/lib/i18n/copy";
+import type { Locale } from "@/lib/i18n/locales";
 
 interface WaitlistConfirmProps {
   confirmUrl: string;
+  locale: Locale;
 }
 
-export default function WaitlistConfirm({ confirmUrl }: WaitlistConfirmProps) {
+export default function WaitlistConfirm({
+  confirmUrl,
+  locale,
+}: WaitlistConfirmProps) {
+  const copy = waitlistEmailCopy(locale);
   return (
-    <Html lang="es" dir="ltr">
+    <Html lang={locale} dir="ltr">
       <Head />
-      <Preview>Confirmá tu lugar en la lista de espera de i-am.clinic</Preview>
+      <Preview>{copy.preview}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={logoSection}>
             <Text style={logoText}>i-am.clinic</Text>
           </Section>
 
-          <Heading style={heading}>Un paso más</Heading>
+          <Heading style={heading}>{copy.heading}</Heading>
 
-          <Text style={paragraph}>
-            Gracias por anotarte. Solo falta confirmar tu correo para reservar
-            tu lugar en la lista de espera.
-          </Text>
+          <Text style={paragraph}>{copy.intro}</Text>
 
           <Section style={buttonSection}>
             <Button href={confirmUrl} style={button}>
-              Confirmar mi lugar
+              {copy.buttonLabel}
             </Button>
           </Section>
 
-          <Text style={paragraph}>
-            Si el botón no funciona, copiá y pegá este enlace en tu navegador:
-          </Text>
+          <Text style={paragraph}>{copy.fallbackHelper}</Text>
 
           <Link href={confirmUrl} style={link}>
             {confirmUrl}
@@ -52,15 +54,9 @@ export default function WaitlistConfirm({ confirmUrl }: WaitlistConfirmProps) {
 
           <Hr style={hr} />
 
-          <Text style={footer}>
-            Este enlace vence en 7 días. Si no te anotaste en i-am.clinic,
-            podés ignorar este correo.
-          </Text>
+          <Text style={footer}>{copy.footerExpiry}</Text>
 
-          <Text style={footer}>
-            i-am.clinic — herramienta clínica para profesionales de la salud
-            mental
-          </Text>
+          <Text style={footer}>{copy.brandTagline}</Text>
         </Container>
       </Body>
     </Html>

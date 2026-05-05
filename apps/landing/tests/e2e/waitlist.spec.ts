@@ -15,7 +15,8 @@ async function cleanup(email: string): Promise<void> {
 }
 
 async function waitForForm(page: import("@playwright/test").Page) {
-  await page.goto("/#waitlist");
+  // i18n: every page lives under a country prefix; test the default locale.
+  await page.goto("/pe/#waitlist");
   await page.waitForLoadState("networkidle");
   await page.waitForSelector("#waitlist", { timeout: 20_000 });
   await page.waitForSelector('[data-slot="select-trigger"]', { state: "visible", timeout: 20_000 });

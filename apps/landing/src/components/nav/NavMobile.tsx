@@ -13,19 +13,25 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import LocaleSwitcher from "./LocaleSwitcher";
+import type { LocalePath } from "@/lib/i18n/locales";
 
 interface Props {
   links: ReadonlyArray<{ href: string; label: string }>;
   ctaLabel: string;
+  ctaHref: string;
   demoHref: string;
   demoLabel: string;
+  currentPath: LocalePath;
 }
 
 export default function NavMobile({
   links,
   ctaLabel,
+  ctaHref,
   demoHref,
   demoLabel,
+  currentPath,
 }: Props): React.JSX.Element {
   const [open, setOpen] = React.useState(false);
 
@@ -111,11 +117,13 @@ export default function NavMobile({
           ))}
         </ul>
 
-        {/* Sheet footer — CTAs */}
+        {/* Sheet footer — locale picker + CTAs */}
         <div className="mt-auto flex flex-col gap-3 pt-6">
+          <LocaleSwitcher currentPath={currentPath} variant="block" />
+
           {/* Primary CTA — section-nav.jsx:100 */}
           <Button size="lg" className="w-full" asChild>
-            <a href="#waitlist">{ctaLabel}</a>
+            <a href={ctaHref}>{ctaLabel}</a>
           </Button>
 
           {/* Demo link — section-nav.jsx:105 */}

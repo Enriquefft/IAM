@@ -1,18 +1,25 @@
 ---
 // Features.astro — three-card features section.
 // section-features.jsx:53-87.
+// Locale-aware: payment copy varies per locale via `buildFeatures`.
 import Lede from "@/components/typography/Lede.astro";
 import FeatureCard from "./features/FeatureCard.astro";
 import AgendaPreview from "./features/AgendaPreview.astro";
 import NotesPreview from "./features/NotesPreview.astro";
 import CobrosPreview from "./features/CobrosPreview.astro";
-import { FEATURES } from "./features/data";
+import { buildFeatures } from "./features/data";
+import { pathToLocale, type LocalePath } from "@/lib/i18n";
 
-// Map feature index to preview component — 1:1 with FEATURES array order.
+interface Props {
+  readonly locale: LocalePath;
+}
+const { locale }: Props = Astro.props;
+
+const features = buildFeatures(pathToLocale(locale));
 const featureCards = [
-  { ...FEATURES[0], Preview: AgendaPreview },
-  { ...FEATURES[1], Preview: NotesPreview },
-  { ...FEATURES[2], Preview: CobrosPreview },
+  { ...features[0]!, Preview: AgendaPreview },
+  { ...features[1]!, Preview: NotesPreview },
+  { ...features[2]!, Preview: CobrosPreview },
 ] as const;
 ---
 
@@ -47,6 +54,7 @@ const featureCards = [
           body={card.body}
           bullets={card.bullets}
           PreviewComponent={card.Preview}
+          locale={locale}
         />
       ))}
     </div>

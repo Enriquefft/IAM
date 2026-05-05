@@ -5,6 +5,7 @@ describe("parseSignup", () => {
   const valid = {
     email: "Test@Example.com",
     role: "terapista",
+    locale: "es-PE",
     consent: true,
   };
 
@@ -23,10 +24,25 @@ describe("parseSignup", () => {
   });
 
   it("rejects missing email", () => {
-    const result = parseSignup({ role: "clinica", consent: true });
+    const result = parseSignup({ role: "clinica", locale: "es-PE", consent: true });
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.errors.some((e) => e.field === "email")).toBe(true);
+  });
+
+  it("rejects missing locale", () => {
+    const { locale: _omit, ...withoutLocale } = valid;
+    const result = parseSignup(withoutLocale);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors.some((e) => e.field === "locale")).toBe(true);
+  });
+
+  it("rejects unsupported locale", () => {
+    const result = parseSignup({ ...valid, locale: "es-ES" });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.errors.some((e) => e.field === "locale")).toBe(true);
   });
 
   it("rejects invalid role", () => {

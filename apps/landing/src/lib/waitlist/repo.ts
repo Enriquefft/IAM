@@ -2,11 +2,13 @@ import { eq, and, isNull } from "drizzle-orm";
 import type { Db } from "../../../db/client";
 import { waitlist, confirmations } from "../../../db/schema";
 import type { WaitlistRole } from "../../../db/schema";
+import type { Locale } from "@/lib/i18n/locales";
 
 export interface SignupPayload {
   email: string;
   name?: string;
   role: WaitlistRole;
+  locale: Locale;
   consentAt: Date;
 }
 
@@ -45,6 +47,7 @@ export async function signupWithToken(
       .set({
         name: payload.name,
         role: payload.role,
+        locale: payload.locale,
         updatedAt: new Date(),
       })
       .where(and(eq(waitlist.email, payload.email), isNull(waitlist.confirmedAt)));
@@ -56,6 +59,7 @@ export async function signupWithToken(
         email: payload.email,
         name: payload.name,
         role: payload.role,
+        locale: payload.locale,
         consentAt: payload.consentAt,
       })
       .returning({ id: waitlist.id });
@@ -91,6 +95,9 @@ export async function storeConfirmationToken(
 
 export interface ConfirmResult {
   status: "ok" | "expired" | "invalid";
+  /** Locale of the waitlist row (when found), so the caller can redirect to
+   *  the correct localized confirmation page. */
+  locale?: Locale;
 }
 
 export async function confirmToken(db: Db, tokenHash: Buffer): Promise<ConfirmResult> {
@@ -98,8 +105,10 @@ export async function confirmToken(db: Db, tokenHash: Buffer): Promise<ConfirmRe
     .select({
       waitlistId: confirmations.waitlistId,
       expiresAt: confirmations.expiresAt,
+      locale: waitlist.locale,
     })
     .from(confirmations)
+    .innerJoin(waitlist, eq(waitlist.id, confirmations.waitlistId))
     .where(eq(confirmations.tokenHash, tokenHash))
     .limit(1);
 
@@ -107,7 +116,7 @@ export async function confirmToken(db: Db, tokenHash: Buffer): Promise<ConfirmRe
   if (row === undefined) return { status: "invalid" };
   if (row.expiresAt < new Date()) {
     await db.delete(confirmations).where(eq(confirmations.tokenHash, tokenHash));
-    return { status: "expired" };
+    return { status: "expired", locale: row.locale };
   }
 
   await db
@@ -117,5 +126,5 @@ export async function confirmToken(db: Db, tokenHash: Buffer): Promise<ConfirmRe
 
   await db.delete(confirmations).where(eq(confirmations.tokenHash, tokenHash));
 
-  return { status: "ok" };
+  return { status: "ok", locale: row.locale };
 }

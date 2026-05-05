@@ -19,6 +19,7 @@ describe("sendConfirmEmail", () => {
       confirmUrl: "http://localhost:4321/api/waitlist/confirm?token=abc",
       fromAddress: "i-am.clinic <hola@i-am.clinic>",
       apiKey: "re_test_key",
+      locale: "es-AR",
     });
 
     const payload = captured as Record<string, unknown>;
@@ -48,6 +49,7 @@ describe("sendConfirmEmail", () => {
       confirmUrl: "http://localhost/confirm?token=xyz",
       fromAddress: "i-am.clinic <hola@i-am.clinic>",
       apiKey: "re_test_key",
+      locale: "es-PE",
     });
 
     const payload = captured as Record<string, unknown>;
@@ -74,6 +76,7 @@ describe("sendConfirmEmail", () => {
         confirmUrl: "http://localhost/confirm?token=fail",
         fromAddress: "bad@address",
         apiKey: "re_test_key",
+        locale: "es-PE",
       }),
     ).rejects.toThrow();
   });

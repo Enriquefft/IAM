@@ -8,6 +8,7 @@ import { hashIp, extractIp } from "../../../lib/waitlist/ip";
 import { checkRateLimit } from "../../../lib/waitlist/rate-limit";
 import { signupWithToken } from "../../../lib/waitlist/repo";
 import { sendConfirmEmail } from "../../../lib/waitlist/email";
+import { localeToPath, type Locale } from "@/lib/i18n/locales";
 
 function sha256Hex(value: string): string {
   return createHmac("sha256", "log-correlation").update(value).digest("hex");
@@ -26,13 +27,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   const parsed = parseSignup(rawBody);
   if (!parsed.ok) {
-    return jsonOrHtml(wantsJson, { ok: false, errors: parsed.errors }, 400);
+    return jsonOrHtml(wantsJson, "es-PE", { ok: false, errors: parsed.errors }, 400);
   }
 
-  const { email, name, role, consent: _consent, hp } = parsed.data;
+  const { email, name, role, locale, consent: _consent, hp } = parsed.data;
 
   if (hp) {
-    return jsonOrHtml(wantsJson, { ok: true }, 202);
+    return jsonOrHtml(wantsJson, locale, { ok: true }, 202);
   }
 
   const ip = extractIp(request);
@@ -58,6 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
   const payload = {
     email,
     role,
+    locale,
     consentAt: new Date(),
     ...(name !== undefined ? { name } : {}),
   };
@@ -68,11 +70,11 @@ export const POST: APIRoute = async ({ request }) => {
     const result = await signupWithToken(db, payload, tokenHash, expiresAt);
     alreadyConfirmed = result.alreadyConfirmed;
   } catch {
-    return jsonOrHtml(wantsJson, { ok: false, error: "internal_error" }, 500);
+    return jsonOrHtml(wantsJson, locale, { ok: false, error: "internal_error" }, 500);
   }
 
   if (alreadyConfirmed) {
-    return jsonOrHtml(wantsJson, { ok: true, alreadyConfirmed: true }, 200);
+    return jsonOrHtml(wantsJson, locale, { ok: true, alreadyConfirmed: true }, 200);
   }
 
   const confirmUrl = `${env.PUBLIC_SITE_URL}/api/waitlist/confirm?token=${rawToken}`;
@@ -83,6 +85,7 @@ export const POST: APIRoute = async ({ request }) => {
       confirmUrl,
       fromAddress: env.WAITLIST_FROM,
       apiKey: env.RESEND_API_KEY,
+      locale,
     });
   } catch (err) {
     const emailHash = sha256Hex(email);
@@ -91,11 +94,12 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  return jsonOrHtml(wantsJson, { ok: true }, 202);
+  return jsonOrHtml(wantsJson, locale, { ok: true }, 202);
 };
 
 function jsonOrHtml(
   wantsJson: boolean,
+  locale: Locale,
   body: Record<string, unknown>,
   status: number,
 ): Response {
@@ -106,12 +110,13 @@ function jsonOrHtml(
     });
   }
 
+  const prefix = `/${localeToPath(locale)}`;
   const isOk = body["ok"] === true;
   const redirectPath = isOk
     ? body["alreadyConfirmed"] === true
-      ? "/confirmado?already=1"
-      : "/confirmado?sent=1"
-    : "/";
+      ? `${prefix}/confirmado?already=1`
+      : `${prefix}/confirmado?sent=1`
+    : prefix;
 
   return new Response(null, {
     status: 302,

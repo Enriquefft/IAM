@@ -10,6 +10,7 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import { SUPPORTED_LOCALES } from "../src/lib/i18n/locales";
 
 export const waitlistRoleEnum = pgEnum("waitlist_role", [
   "terapista",
@@ -17,6 +18,10 @@ export const waitlistRoleEnum = pgEnum("waitlist_role", [
   "familia",
   "otro",
 ]);
+
+// Mirrors SUPPORTED_LOCALES — never duplicate the locale list. Adding a
+// locale upstream auto-extends the enum on next migration.
+export const waitlistLocaleEnum = pgEnum("waitlist_locale", SUPPORTED_LOCALES);
 
 const citext = customType<{ data: string }>({
   dataType() {
@@ -49,6 +54,7 @@ export const waitlist = pgTable(
     email: citext("email").unique().notNull(),
     name: text("name"),
     role: waitlistRoleEnum("role").notNull(),
+    locale: waitlistLocaleEnum("locale").notNull().default("es-PE"),
     consentAt: tstz("consent_at").notNull(),
     confirmedAt: tstz("confirmed_at"),
     createdAt: tstz("created_at").notNull().defaultNow(),

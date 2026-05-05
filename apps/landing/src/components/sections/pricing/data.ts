@@ -1,16 +1,21 @@
-// section-pricing.jsx:19-62
-// Waitlist CTA copy is canonicalised to "Unirme a la lista de espera" (see Nav).
-// Bundle copy is "Unirme a la lista"; canonical waitlist CTA across the site
-// is "Unirme a la lista de espera" — see section-nav.jsx:100 / section-hero.jsx:33.
+// Locale-invariant tier metadata. Price/period vary per locale and live in
+// `@/lib/i18n/pricing` — composed at render time in Pricing.astro.
+//
+// Waitlist CTA copy is canonicalised to "Unirme a la lista de espera"
+// (see Nav). Keep CTAs locale-invariant; locale-aware href is composed in
+// Pricing.astro from `waitlistHref(localePath)`.
 
-export interface PricingTierData {
-  readonly id: "esencial" | "consultorio" | "clinica";
+import type { PricingTierId } from "@/lib/i18n";
+
+export interface PricingTierMeta {
+  readonly id: PricingTierId;
   readonly name: string;
-  readonly price: string;
-  readonly period: string;
   readonly desc: string;
   readonly features: readonly string[];
-  readonly cta: { readonly label: string; readonly href: string };
+  readonly ctaLabel: string;
+  /** When set, CTA is a literal href (mailto:, etc). Otherwise the renderer
+   *  uses the locale-aware waitlist anchor. */
+  readonly ctaHref?: string;
   readonly highlighted: boolean;
 }
 
@@ -18,22 +23,18 @@ export const PRICING_TIERS = [
   {
     id: "esencial",
     name: "Esencial",
-    price: "$0",
-    period: "siempre",
     desc: "Para empezar. Hasta 5 pacientes activos.",
     features: [
       "Agenda con recordatorios",
       "10 notas al mes",
       "Cobros por transferencia",
     ],
-    cta: { label: "Unirme a la lista de espera", href: "#waitlist" },
+    ctaLabel: "Unirme a la lista de espera",
     highlighted: false,
   },
   {
     id: "consultorio",
     name: "Consultorio",
-    price: "$29",
-    period: "USD / mes",
     desc: "Para la práctica privada de tiempo completo.",
     features: [
       "Pacientes y notas ilimitadas",
@@ -42,14 +43,12 @@ export const PRICING_TIERS = [
       "Recordatorios por WhatsApp y correo",
       "Soporte en horario de consulta",
     ],
-    cta: { label: "Unirme a la lista de espera", href: "#waitlist" },
+    ctaLabel: "Unirme a la lista de espera",
     highlighted: true,
   },
   {
     id: "clinica",
     name: "Clínica",
-    price: "$69",
-    period: "USD / mes",
     desc: "Para equipos de hasta 6 profesionales.",
     features: [
       "Todo lo de Consultorio",
@@ -57,10 +56,8 @@ export const PRICING_TIERS = [
       "Reportes administrativos",
       "Onboarding 1:1 con tu equipo",
     ],
-    cta: {
-      label: "Hablar con ventas",
-      href: "mailto:ventas@i-am.clinic?subject=Plan%20Cl%C3%ADnica",
-    },
+    ctaLabel: "Hablar con ventas",
+    ctaHref: "mailto:ventas@i-am.clinic?subject=Plan%20Cl%C3%ADnica",
     highlighted: false,
   },
-] as const satisfies readonly PricingTierData[];
+] as const satisfies readonly PricingTierMeta[];

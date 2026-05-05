@@ -1,32 +1,30 @@
 /**
  * SEO metadata SSOT for i-am.clinic landing.
  *
- * All per-page meta lives here. Base.astro consumes SiteMeta at module load
- * and per-page PageMeta via the `pageMeta` prop.
+ * Site-level constants (siteName, siteUrl, theme color, OG defaults) live
+ * here. Country-varying truth (address, locality, jurisdiction, currency)
+ * lives in `@/lib/i18n` — this file imports it; nobody duplicates.
+ *
+ * Per-page meta is exposed via {@link buildPageMeta} which composes a
+ * `PageMeta` for a given locale + page key. Titles, descriptions, and
+ * privacy/terms law citations vary per locale.
  *
  * Raw hex exception: theme-color (#FDFAF5 = brand.cream.50) is documented in
  * apps/landing/CLAUDE.md §SSOT exceptions — HTML meta cannot import Tailwind config.
- *
- * i18n seam: today only DEFAULT_LOCALE is active. The i18n agent will extend
- * routing to use all SUPPORTED_LOCALES and swap Base.astro consumers to a
- * routing-derived locale. hreflang emitted by i18n layer once SUPPORTED_LOCALES
- * has multiple active routes.
  */
 
 import { z } from "zod";
+import { COUNTRIES, type Locale } from "@/lib/i18n";
+import { homePageTitle, privacyPageDescription } from "@/lib/i18n";
 
-// ---------------------------------------------------------------------------
-// Locale — i18n-ready shape (single active locale today)
-// ---------------------------------------------------------------------------
-
-export const SUPPORTED_LOCALES = ["es-PE", "es-MX", "es-AR", "es-CO"] as const;
-export type Locale = (typeof SUPPORTED_LOCALES)[number];
-export const DEFAULT_LOCALE: Locale = "es-PE";
-
-/** Converts a BCP 47 locale tag to OG locale format (underscore separator). */
-export function localeToOgLocale(locale: Locale): string {
-  return locale.replace("-", "_");
-}
+// Re-export locale primitives so callers that only need locale types can
+// import from `@/lib/seo`. Single source of truth still lives in `@/lib/i18n`.
+export {
+  SUPPORTED_LOCALES,
+  DEFAULT_LOCALE,
+  localeToOgLocale,
+} from "@/lib/i18n";
+export type { Locale } from "@/lib/i18n";
 
 // ---------------------------------------------------------------------------
 // Schemas
@@ -40,10 +38,6 @@ const SiteMetaSchema = z.object({
   themeColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
   defaultOgImage: z.string().url(),
   twitterCard: z.literal("summary_large_image"),
-  address: z.object({
-    locality: z.string(),
-    country: z.string(),
-  }),
 });
 
 export type SiteMeta = z.infer<typeof SiteMetaSchema>;
@@ -77,58 +71,70 @@ export const siteMeta: SiteMeta = SiteMetaSchema.parse({
   themeColor: "#FDFAF5",
   defaultOgImage: "https://i-am.clinic/og.png",
   twitterCard: "summary_large_image",
-  address: {
-    locality: "Lima",
-    country: "PE",
-  },
 });
 
+/** Per-locale postal address derived from the country SSOT. */
+export function siteAddress(locale: Locale): { locality: string; country: string } {
+  const country = COUNTRIES[locale];
+  return { locality: country.locality, country: country.isoCountry };
+}
+
 // ---------------------------------------------------------------------------
-// Per-page meta records
+// Per-page meta — locale-aware factory
 // ---------------------------------------------------------------------------
 
-export const pages = {
-  home: PageMetaSchema.parse({
-    title: "i-am.clinic — Software para terapeutas de autismo en LatAm",
-    description:
-      "Agenda, notas SOAP y cobros en un solo lugar. Para psicólogos y psiquiatras que quieren cerrar el día con sus pacientes, no con papeleo.",
-    noindex: false,
-    ogType: "website",
-  }),
+export type PageKey =
+  | "home"
+  | "demo"
+  | "confirmado"
+  | "privacidad"
+  | "terminos"
+  | "notFound";
 
-  demo: PageMetaSchema.parse({
-    title: "Demo interactivo · i-am.clinic",
-    description:
-      "Explora el flujo completo: agenda, transcripción de sesión y cobro en menos de 5 minutos. Sin registrarte.",
-    noindex: false,
-    ogType: "website",
-  }),
-
-  confirmado: PageMetaSchema.parse({
-    title: "Confirmación — i-am.clinic",
-    noindex: true,
-    ogType: "website",
-  }),
-
-  privacidad: PageMetaSchema.parse({
-    title: "Aviso de privacidad — i-am.clinic",
-    description:
-      "Cómo recolectamos, usamos y protegemos tu información en i-am.clinic. Cumplimiento con la Ley 29733 de Perú.",
-    noindex: false,
-    ogType: "article",
-  }),
-
-  terminos: PageMetaSchema.parse({
-    title: "Términos de servicio — i-am.clinic",
-    description:
-      "Condiciones de uso de i-am.clinic: pagos, datos, cancelación y ley aplicable.",
-    noindex: false,
-    ogType: "article",
-  }),
-
-  notFound: PageMetaSchema.parse({
-    title: "Página no encontrada — i-am.clinic",
-    noindex: true,
-    ogType: "website",
-  }),
-} as const satisfies Record<string, PageMeta>;
+export function buildPageMeta(key: PageKey, locale: Locale): PageMeta {
+  switch (key) {
+    case "home":
+      return PageMetaSchema.parse({
+        title: homePageTitle(locale),
+        description:
+          "Agenda, notas SOAP y cobros en un solo lugar. Para psicólogos y psiquiatras que quieren cerrar el día con sus pacientes, no con papeleo.",
+        noindex: false,
+        ogType: "website",
+      });
+    case "demo":
+      return PageMetaSchema.parse({
+        title: "Demo interactivo · i-am.clinic",
+        description:
+          "Explora el flujo completo: agenda, transcripción de sesión y cobro en menos de 5 minutos. Sin registrarte.",
+        noindex: false,
+        ogType: "website",
+      });
+    case "confirmado":
+      return PageMetaSchema.parse({
+        title: "Confirmación — i-am.clinic",
+        noindex: true,
+        ogType: "website",
+      });
+    case "privacidad":
+      return PageMetaSchema.parse({
+        title: "Aviso de privacidad — i-am.clinic",
+        description: privacyPageDescription(locale),
+        noindex: false,
+        ogType: "article",
+      });
+    case "terminos":
+      return PageMetaSchema.parse({
+        title: "Términos de servicio — i-am.clinic",
+        description:
+          "Condiciones de uso de i-am.clinic: pagos, datos, cancelación y ley aplicable.",
+        noindex: false,
+        ogType: "article",
+      });
+    case "notFound":
+      return PageMetaSchema.parse({
+        title: "Página no encontrada — i-am.clinic",
+        noindex: true,
+        ogType: "website",
+      });
+  }
+}

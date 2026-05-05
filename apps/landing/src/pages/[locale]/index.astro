@@ -9,17 +9,21 @@ import Faq from "@/components/sections/Faq.astro";
 import FinalCta from "@/components/sections/FinalCta.astro";
 import Waitlist from "@/components/sections/Waitlist.astro";
 import Footer from "@/components/sections/Footer.astro";
-import { pages } from "@/lib/seo";
+import { isLocalePath, type LocalePath } from "@/lib/i18n";
+
+const param = Astro.params.locale;
+if (!isLocalePath(param)) return Astro.redirect("/", 302);
+const locale: LocalePath = param;
 ---
 
-<Base pageMeta={pages.home}>
-  <Hero />
+<Base pageKey="home" locale={locale}>
+  <Hero locale={locale} />
   <Backers />
-  <Features />
-  <Pricing />
-  <Equipo />
-  <Faq />
-  <FinalCta />
-  <Waitlist />
-  <Footer slot="footer" />
+  <Features locale={locale} />
+  <Pricing locale={locale} />
+  <Equipo locale={locale} />
+  <Faq locale={locale} />
+  <FinalCta locale={locale} />
+  <Waitlist locale={locale} />
+  <Footer slot="footer" locale={locale} />
 </Base>

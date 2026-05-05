@@ -2,26 +2,35 @@ import { Resend } from "resend";
 import { render } from "@react-email/components";
 import { createElement } from "react";
 import WaitlistConfirm from "../../emails/WaitlistConfirm";
+import {
+  waitlistEmailCopy,
+  waitlistEmailPlainText,
+} from "@/lib/i18n/copy";
+import type { Locale } from "@/lib/i18n/locales";
 
 export interface SendConfirmEmailParams {
   to: string;
   confirmUrl: string;
   fromAddress: string;
   apiKey: string;
+  locale: Locale;
 }
 
 export async function sendConfirmEmail(params: SendConfirmEmailParams): Promise<void> {
-  const { to, confirmUrl, fromAddress, apiKey } = params;
+  const { to, confirmUrl, fromAddress, apiKey, locale } = params;
 
   const resend = new Resend(apiKey);
 
-  const html = await render(createElement(WaitlistConfirm, { confirmUrl }));
-  const text = `Confirmá tu lugar en la lista de espera de i-am.clinic.\n\nAbrí este enlace: ${confirmUrl}\n\nEste enlace vence en 7 días.`;
+  const copy = waitlistEmailCopy(locale);
+  const html = await render(
+    createElement(WaitlistConfirm, { confirmUrl, locale }),
+  );
+  const text = waitlistEmailPlainText(locale, confirmUrl);
 
   const { error } = await resend.emails.send({
     from: fromAddress,
     to,
-    subject: "Confirmá tu lugar en la lista de espera de i-am.clinic",
+    subject: copy.subject,
     html,
     text,
     headers: {

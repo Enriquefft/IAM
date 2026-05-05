@@ -1,9 +1,17 @@
 ---
 // Faq.astro — FAQ section with sticky aside and Radix accordion island.
 // section-faq.jsx:3-68.
+// Locale-aware: per-country answers come from `@/lib/i18n` via buildFaqItems.
 import Lede from "@/components/typography/Lede.astro";
 import { FaqList } from "./faq/FaqList";
-import { FAQ_ITEMS } from "./faq/data";
+import { buildFaqItems } from "./faq/data";
+import { pathToLocale, type LocalePath } from "@/lib/i18n";
+
+interface Props {
+  readonly locale: LocalePath;
+}
+const { locale }: Props = Astro.props;
+const items = buildFaqItems(pathToLocale(locale));
 ---
 
 {/* section-faq.jsx:31 — <Section id="preguntas" alt> */}
@@ -39,7 +47,7 @@ import { FAQ_ITEMS } from "./faq/data";
 
       {/* section-faq.jsx:45-47 — accordion island */}
       <div>
-        <FaqList client:visible items={FAQ_ITEMS} />
+        <FaqList client:visible items={items} />
       </div>
     </div>
   </div>

@@ -1,10 +1,31 @@
 ---
 // Pricing.astro — three-tier pricing section.
-// section-pricing.jsx:3-128.
+// Locale-aware: prices, payment list, and waitlist CTA href derive from
+// `@/lib/i18n` for the locale passed via props.
 import Lede from "@/components/typography/Lede.astro";
 import Small from "@/components/typography/Small.astro";
 import PricingTier from "./pricing/PricingTier.astro";
 import { PRICING_TIERS } from "./pricing/data";
+import {
+  PRICING_BY_LOCALE,
+  COUNTRIES,
+  formatPrice,
+  pricingFootnote,
+  pathToLocale,
+  type LocalePath,
+} from "@/lib/i18n";
+import { waitlistHref } from "@/components/nav/links";
+
+interface Props {
+  readonly locale: LocalePath;
+}
+const { locale }: Props = Astro.props;
+
+const bcp47 = pathToLocale(locale);
+const country = COUNTRIES[bcp47];
+const tierPrices = PRICING_BY_LOCALE[bcp47];
+const fallbackHref = waitlistHref(locale);
+const footnote = pricingFootnote(bcp47);
 ---
 
 {/* section-pricing.jsx:6 — default bg-page */}
@@ -33,25 +54,29 @@ import { PRICING_TIERS } from "./pricing/data";
     {/* section-pricing.jsx:19-62 — three tiers */}
     {/* md:[grid-template-columns:1fr_1.05fr_1fr] — asymmetric middle column, no token */}
     <div class="mx-auto grid max-w-section gap-6 grid-cols-1 md:[grid-template-columns:1fr_1.05fr_1fr] items-stretch"> {/* section-pricing.jsx:19 */}
-      {PRICING_TIERS.map((tier) => (
-        <PricingTier
-          id={tier.id}
-          name={tier.name}
-          price={tier.price}
-          period={tier.period}
-          desc={tier.desc}
-          features={tier.features}
-          cta={tier.cta}
-          highlighted={tier.highlighted}
-        />
-      ))}
+      {PRICING_TIERS.map((tier) => {
+        const tierPrice = tierPrices[tier.id];
+        const priceText = formatPrice(country, tierPrice);
+        const ctaHref = tier.ctaHref ?? fallbackHref;
+        return (
+          <PricingTier
+            id={tier.id}
+            name={tier.name}
+            priceText={priceText}
+            periodLabel={tierPrice.periodLabel}
+            desc={tier.desc}
+            features={tier.features}
+            cta={{ label: tier.ctaLabel, href: ctaHref }}
+            highlighted={tier.highlighted}
+          />
+        );
+      })}
     </div>
 
     {/* section-pricing.jsx:67-68 — trailing note */}
     <p class="mt-10 text-center">
       <Small class="text-text-muted">
-        {/* section-pricing.jsx:67-68 */}
-        Precios en USD. Aceptamos tarjeta internacional, transferencia, Yape y PLIN.
+        {footnote}
       </Small>
     </p>
   </div>

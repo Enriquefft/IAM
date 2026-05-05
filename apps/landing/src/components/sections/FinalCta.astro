@@ -1,7 +1,16 @@
 ---
 // FinalCta.astro — final call-to-action section on salvia-500 background.
-// section-cta-footer.jsx:3-65.
+// Locale-aware: hrefs derive from `@/components/nav/links`.
 import Icon from "@/components/icons/Icon.astro";
+import { demoHref, waitlistHref } from "@/components/nav/links";
+import type { LocalePath } from "@/lib/i18n";
+
+interface Props {
+  readonly locale: LocalePath;
+}
+const { locale }: Props = Astro.props;
+const waitlistUrl = waitlistHref(locale);
+const demoUrl = demoHref(locale);
 ---
 
 {/* section-cta-footer.jsx:6-12 */}
@@ -52,7 +61,7 @@ import Icon from "@/components/icons/Icon.astro";
     <div class="flex flex-wrap justify-center gap-3">
       {/* section-cta-footer.jsx:49 — primary CTA (waitlist) */}
       <a
-        href="/#waitlist"
+        href={waitlistUrl}
         class="inline-flex items-center gap-2 rounded-base h-11 px-6 text-small font-semibold bg-surface text-primary-active hover:bg-surface-alt shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-hover"
       >
         {/* section-cta-footer.jsx:49 */}
@@ -63,7 +72,7 @@ import Icon from "@/components/icons/Icon.astro";
       {/* section-cta-footer.jsx:51-60 — secondary CTA (demo) */}
       {/* Remapped from Demo.html → /demo per Astro routing. section-cta-footer.jsx:51 */}
       <a
-        href="/demo"
+        href={demoUrl}
         class="inline-flex items-center rounded-base h-11 px-6 text-small font-medium bg-transparent text-text-inverse border border-text-inverse/45 hover:bg-text-inverse/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-hover"
       >
         {/* section-cta-footer.jsx:59 */}

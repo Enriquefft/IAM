@@ -11,7 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/cn";
-import { WAITLIST_COPY } from "./copy";
+import { waitlistCopy } from "./copy";
+import { pathToLocale, type LocalePath } from "@/lib/i18n";
 
 type FormState =
   | { type: "idle" }
@@ -20,11 +21,19 @@ type FormState =
   | { type: "error"; errors: Record<string, string> }
   | { type: "fatal"; message: string };
 
-export default function WaitlistForm({ action }: { action: string }) {
+export default function WaitlistForm({
+  action,
+  locale,
+}: {
+  action: string;
+  locale: LocalePath;
+}) {
   const [state, setState] = React.useState<FormState>({ type: "idle" });
   const [role, setRole] = React.useState<string>("");
   const [consent, setConsent] = React.useState(false);
   const successRef = React.useRef<HTMLDivElement>(null);
+  const localeBcp = React.useMemo(() => pathToLocale(locale), [locale]);
+  const COPY = React.useMemo(() => waitlistCopy(localeBcp), [localeBcp]);
 
   React.useEffect(() => {
     if (state.type === "success" || state.type === "fatal") {
@@ -45,6 +54,7 @@ export default function WaitlistForm({ action }: { action: string }) {
       role,
       consent: consent ? true : undefined,
       hp: String(data.get("hp") ?? "") || undefined,
+      locale: localeBcp,
     };
 
     try {
@@ -101,13 +111,13 @@ export default function WaitlistForm({ action }: { action: string }) {
       >
         <p className="text-h5 font-semibold text-brand-salvia-600 mb-2">
           {alreadyConfirmed
-            ? WAITLIST_COPY.alreadyConfirmedHeading
-            : WAITLIST_COPY.successHeading}
+            ? COPY.alreadyConfirmedHeading
+            : COPY.successHeading}
         </p>
         <p className="text-body-sm text-text-secondary">
           {alreadyConfirmed
-            ? WAITLIST_COPY.alreadyConfirmedBody
-            : WAITLIST_COPY.successBody}
+            ? COPY.alreadyConfirmedBody
+            : COPY.successBody}
         </p>
       </div>
     );
@@ -136,20 +146,20 @@ export default function WaitlistForm({ action }: { action: string }) {
 
       <div className="space-y-4">
         <div>
-          <Label htmlFor="wl-name">{WAITLIST_COPY.nameLabel}</Label>
+          <Label htmlFor="wl-name">{COPY.nameLabel}</Label>
           <Input
             id="wl-name"
             name="name"
             type="text"
             autoComplete="name"
-            placeholder={WAITLIST_COPY.namePlaceholder}
+            placeholder={COPY.namePlaceholder}
             className="mt-1.5"
           />
         </div>
 
         <div>
           <Label htmlFor="wl-email">
-            {WAITLIST_COPY.emailLabel}
+            {COPY.emailLabel}
             <span className="text-status-errorText ml-0.5" aria-hidden="true">*</span>
           </Label>
           <Input
@@ -158,7 +168,7 @@ export default function WaitlistForm({ action }: { action: string }) {
             type="email"
             autoComplete="email"
             required
-            placeholder={WAITLIST_COPY.emailPlaceholder}
+            placeholder={COPY.emailPlaceholder}
             aria-describedby={errors["email"] ? "wl-email-err" : undefined}
             aria-invalid={errors["email"] ? true : undefined}
             className={cn("mt-1.5", errors["email"] && "border-status-error")}
@@ -176,7 +186,7 @@ export default function WaitlistForm({ action }: { action: string }) {
 
         <div>
           <Label htmlFor="wl-role">
-            {WAITLIST_COPY.roleLabel}
+            {COPY.roleLabel}
             <span className="text-status-errorText ml-0.5" aria-hidden="true">*</span>
           </Label>
           <Select value={role} onValueChange={setRole} required>
@@ -186,10 +196,10 @@ export default function WaitlistForm({ action }: { action: string }) {
               aria-invalid={errors["role"] ? true : undefined}
               className={cn("mt-1.5", errors["role"] && "border-status-error")}
             >
-              <SelectValue placeholder={WAITLIST_COPY.rolePlaceholder} />
+              <SelectValue placeholder={COPY.rolePlaceholder} />
             </SelectTrigger>
             <SelectContent>
-              {WAITLIST_COPY.roleOptions.map((opt) => (
+              {COPY.roleOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </SelectItem>
@@ -219,7 +229,7 @@ export default function WaitlistForm({ action }: { action: string }) {
           />
           <div>
             <Label id="wl-consent-label" htmlFor="wl-consent" className="cursor-pointer leading-snug">
-              {WAITLIST_COPY.consentLabel}
+              {COPY.consentLabel}
               <span className="text-status-errorText ml-0.5" aria-hidden="true">*</span>
             </Label>
             {errors["consent"] && (
@@ -251,12 +261,12 @@ export default function WaitlistForm({ action }: { action: string }) {
         className="mt-6 w-full"
       >
         {state.type === "submitting"
-          ? WAITLIST_COPY.submittingLabel
-          : WAITLIST_COPY.submitLabel}
+          ? COPY.submittingLabel
+          : COPY.submitLabel}
       </Button>
 
       <p className="mt-3 text-center text-small text-text-muted">
-        {WAITLIST_COPY.trustLine}
+        {COPY.trustLine}
       </p>
     </form>
   );

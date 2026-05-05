@@ -5,15 +5,17 @@ import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import Body from "@/components/typography/Body.astro";
 import Small from "@/components/typography/Small.astro";
 import Icon from "@/components/icons/Icon.astro";
+import type { LocalePath } from "@/lib/i18n";
 
 interface Props {
   readonly title: string;
   readonly body: string;
   readonly bullets: readonly string[];
   readonly PreviewComponent: AstroComponentFactory;
+  readonly locale: LocalePath;
 }
 
-const { title, body, bullets, PreviewComponent }: Props = Astro.props;
+const { title, body, bullets, PreviewComponent, locale }: Props = Astro.props;
 ---
 
 {/* section-features.jsx:90-97 */}
@@ -23,7 +25,7 @@ const { title, body, bullets, PreviewComponent }: Props = Astro.props;
     class="relative aspect-[5/3] overflow-hidden rounded-base bg-surface-alt border border-surface-border"
     aria-hidden="true"
   >
-    <PreviewComponent />
+    <PreviewComponent locale={locale} />
   </div>
 
   <div>
