@@ -4,8 +4,9 @@
 // Hero WRITER: apps/landing/src/components/sections/Hero.astro lines 102-122.
 import Base from "@/layouts/Base.astro";
 import DemoApp from "@/components/demo/DemoApp";
+import { pages } from "@/lib/seo";
 ---
 
-<Base title="Demo interactivo · i-am.clinic — La tarde de Ana">
+<Base pageMeta={pages.demo}>
   <DemoApp client:visible />
 </Base>

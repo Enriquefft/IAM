@@ -1,9 +1,10 @@
 ---
 import Base from "@/layouts/Base.astro";
 import Footer from "@/components/sections/Footer.astro";
+import { pages } from "@/lib/seo";
 ---
 
-<Base title="Aviso de privacidad — i-am.clinic">
+<Base pageMeta={pages.privacidad}>
   <article class="mx-auto max-w-[720px] px-8 pt-16 pb-24">
 
     {/* Back link — mirrors topbar in canonical bundle */}

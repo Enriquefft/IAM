@@ -9,9 +9,10 @@ import Faq from "@/components/sections/Faq.astro";
 import FinalCta from "@/components/sections/FinalCta.astro";
 import Waitlist from "@/components/sections/Waitlist.astro";
 import Footer from "@/components/sections/Footer.astro";
+import { pages } from "@/lib/seo";
 ---
 
-<Base title="Inicio — i-am.clinic">
+<Base pageMeta={pages.home}>
   <Hero />
   <Backers />
   <Features />
