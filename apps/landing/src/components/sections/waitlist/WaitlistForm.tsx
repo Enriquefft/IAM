@@ -74,10 +74,7 @@ export default function WaitlistForm({
       }
 
       if (res.status === 429) {
-        setState({
-          type: "fatal",
-          message: "Demasiados intentos. Esperá un minuto y volvé a intentar.",
-        });
+        setState({ type: "fatal", message: COPY.fatal.rateLimited });
         return;
       }
 
@@ -93,9 +90,9 @@ export default function WaitlistForm({
         return;
       }
 
-      setState({ type: "fatal", message: "Algo salió mal. Intentá de nuevo en un momento." });
+      setState({ type: "fatal", message: COPY.fatal.generic });
     } catch {
-      setState({ type: "fatal", message: "Sin conexión. Verificá tu red y volvé a intentar." });
+      setState({ type: "fatal", message: COPY.fatal.offline });
     }
   }
 

@@ -161,7 +161,7 @@ const breadcrumbLd =
           {
             "@type": "ListItem",
             position: 2,
-            name: effectiveTitle.split(" — ")[0] ?? effectiveTitle,
+            name: resolvedPageMeta?.breadcrumbLabel ?? effectiveTitle,
             item: canonical,
           },
         ],
@@ -200,7 +200,12 @@ if (localeProp !== undefined && PATH_TO_LOCALE[localeProp] === undefined) {
     }
     <link rel="canonical" href={canonical} />
 
-    <!-- hreflang alternates: one per supported locale + x-default → /pe -->
+    <!--
+      hreflang alternates: one per supported locale + x-default → /pe.
+      Note: no neutral `hreflang="es"` is emitted — every URL is country-prefixed,
+      and there is no neutral landing page to point to. Google treats the
+      x-default → /pe as the language fallback.
+    -->
     {hreflangAlternates.map((alt) => (
       <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
     ))}

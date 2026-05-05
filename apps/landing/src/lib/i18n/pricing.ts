@@ -12,7 +12,7 @@
 
 import { z } from "zod";
 import { COUNTRIES, type Country } from "./countries";
-import { SUPPORTED_LOCALES, type Locale } from "./locales";
+import { type Locale } from "./locales";
 
 export const PRICING_TIER_IDS = ["esencial", "consultorio", "clinica"] as const;
 export type PricingTierId = (typeof PRICING_TIER_IDS)[number];
@@ -65,14 +65,25 @@ const RAW: Record<Locale, LocalePricing> = {
   },
 };
 
-export const PRICING_BY_LOCALE: Readonly<Record<Locale, LocalePricing>> = Object.freeze(
-  Object.fromEntries(
-    SUPPORTED_LOCALES.map((locale) => [
-      locale,
-      Object.freeze(LocalePricingSchema.parse(RAW[locale])),
-    ] as const),
-  ) as Record<Locale, LocalePricing>,
-);
+// Zod-parse the full record so `z.infer` gives us the exact Record<Locale, …>
+// type — no `as` cast needed.
+const PricingByLocaleSchema = z.object({
+  "es-PE": LocalePricingSchema,
+  "es-MX": LocalePricingSchema,
+  "es-AR": LocalePricingSchema,
+  "es-CO": LocalePricingSchema,
+  "es-CL": LocalePricingSchema,
+});
+
+const PARSED_PRICING = PricingByLocaleSchema.parse(RAW);
+
+export const PRICING_BY_LOCALE: Readonly<Record<Locale, LocalePricing>> = Object.freeze({
+  "es-PE": Object.freeze(PARSED_PRICING["es-PE"]),
+  "es-MX": Object.freeze(PARSED_PRICING["es-MX"]),
+  "es-AR": Object.freeze(PARSED_PRICING["es-AR"]),
+  "es-CO": Object.freeze(PARSED_PRICING["es-CO"]),
+  "es-CL": Object.freeze(PARSED_PRICING["es-CL"]),
+});
 
 /**
  * Format a price for display. Returns the localized currency string for paid

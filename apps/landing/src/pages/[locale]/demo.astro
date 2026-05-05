@@ -6,9 +6,9 @@ import Base from "@/layouts/Base.astro";
 import DemoApp from "@/components/demo/DemoApp";
 import { isLocalePath, type LocalePath } from "@/lib/i18n";
 
-const param = Astro.params.locale;
-if (!isLocalePath(param)) return Astro.redirect("/", 302);
-const locale: LocalePath = param;
+const current = Astro.currentLocale;
+if (!isLocalePath(current)) return Astro.redirect("/", 302);
+const locale: LocalePath = current;
 ---
 
 <Base pageKey="demo" locale={locale}>

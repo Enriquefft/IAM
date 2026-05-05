@@ -14,8 +14,12 @@
  */
 
 import { z } from "zod";
-import { COUNTRIES, type Locale } from "@/lib/i18n";
-import { homePageTitle, privacyPageDescription } from "@/lib/i18n";
+import {
+  COUNTRIES,
+  homePageTitle,
+  privacyPageDescription,
+  type Locale,
+} from "@/lib/i18n";
 
 // Re-export locale primitives so callers that only need locale types can
 // import from `@/lib/seo`. Single source of truth still lives in `@/lib/i18n`.
@@ -52,6 +56,8 @@ const PageMetaSchema = z.object({
   ogType: OgTypeSchema.default("website"),
   /** Override canonical path; defaults to the page's own URL */
   canonicalPath: z.string().optional(),
+  /** Breadcrumb leaf label — distinct from `title` so it doesn't carry brand suffix. */
+  breadcrumbLabel: z.string().min(1),
 });
 
 export type PageMeta = z.infer<typeof PageMetaSchema>;
@@ -100,6 +106,7 @@ export function buildPageMeta(key: PageKey, locale: Locale): PageMeta {
           "Agenda, notas SOAP y cobros en un solo lugar. Para psicólogos y psiquiatras que quieren cerrar el día con sus pacientes, no con papeleo.",
         noindex: false,
         ogType: "website",
+        breadcrumbLabel: "Inicio",
       });
     case "demo":
       return PageMetaSchema.parse({
@@ -108,12 +115,14 @@ export function buildPageMeta(key: PageKey, locale: Locale): PageMeta {
           "Explora el flujo completo: agenda, transcripción de sesión y cobro en menos de 5 minutos. Sin registrarte.",
         noindex: false,
         ogType: "website",
+        breadcrumbLabel: "Demo",
       });
     case "confirmado":
       return PageMetaSchema.parse({
         title: "Confirmación — i-am.clinic",
         noindex: true,
         ogType: "website",
+        breadcrumbLabel: "Confirmación",
       });
     case "privacidad":
       return PageMetaSchema.parse({
@@ -121,6 +130,7 @@ export function buildPageMeta(key: PageKey, locale: Locale): PageMeta {
         description: privacyPageDescription(locale),
         noindex: false,
         ogType: "article",
+        breadcrumbLabel: "Privacidad",
       });
     case "terminos":
       return PageMetaSchema.parse({
@@ -129,12 +139,14 @@ export function buildPageMeta(key: PageKey, locale: Locale): PageMeta {
           "Condiciones de uso de i-am.clinic: pagos, datos, cancelación y ley aplicable.",
         noindex: false,
         ogType: "article",
+        breadcrumbLabel: "Términos",
       });
     case "notFound":
       return PageMetaSchema.parse({
         title: "Página no encontrada — i-am.clinic",
         noindex: true,
         ogType: "website",
+        breadcrumbLabel: "404",
       });
   }
 }

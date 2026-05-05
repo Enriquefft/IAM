@@ -1,6 +1,8 @@
 ---
 import Base from "@/layouts/Base.astro";
-import { isLocalePath, type LocalePath } from "@/lib/i18n";
+import { isLocalePath, pathToLocale, type LocalePath } from "@/lib/i18n";
+import { COUNTRIES } from "@/lib/i18n/countries";
+import { formatTierPrice } from "@/lib/i18n/pricing";
 
 // Brand atoms
 import Logo from "@/components/brand/Logo.astro";
@@ -38,10 +40,14 @@ import Hero from "@/components/sections/Hero.astro";
 // Param + dev guard. Guard is placed after imports so esbuild can parse the
 // module correctly (esbuild 0.21.x mis-parses a `return` that precedes static
 // import declarations in the frontmatter).
-const param = Astro.params.locale;
-if (!isLocalePath(param)) return Astro.redirect("/", 302);
-const locale: LocalePath = param;
+const current = Astro.currentLocale;
+if (!isLocalePath(current)) return Astro.redirect("/", 302);
+const locale: LocalePath = current;
 if (import.meta.env.PROD) return Astro.redirect(`/${locale}`, 301);
+
+const bcp = pathToLocale(locale);
+const country = COUNTRIES[bcp];
+const consultorioPrice = formatTierPrice(bcp, "consultorio");
 ---
 
 <Base title="Kitchen sink — apps/landing" locale={locale}>
@@ -121,7 +127,7 @@ if (import.meta.env.PROD) return Astro.redirect(`/${locale}`, 301);
         <H1>H1: Agenda, notas y cobros en un solo lugar</H1>
         <H2>H2: Recupera una tarde esta semana</H2>
         <H3>H3: Creado por y para profesionales de la salud mental</H3>
-        <Lede>Lede: Más de 200 psicólogos en LATAM ya reservaron su lugar. Sin compromiso, sin tarjeta.</Lede>
+        <Lede>Lede: Más de 200 psicólogos en {country.displayName} ya reservaron su lugar. Sin compromiso, sin tarjeta.</Lede>
         <Body>Body: La práctica privada termina usando herramientas que no son para esto. WhatsApp para confirmar, Excel para cobrar, una libreta para las notas.</Body>
         <Small>Small: © 2026 i-am.clinic</Small>
         <Label>Label: Correo electrónico</Label>
@@ -347,7 +353,7 @@ if (import.meta.env.PROD) return Astro.redirect(`/${locale}`, 301);
         <AccordionItem value="q1">
           <AccordionTrigger>¿Cuánto cuesta i-am.clinic?</AccordionTrigger>
           <AccordionContent>
-            El plan base cuesta USD 29/mes. Incluye hasta 80 pacientes activos, agenda, notas y cobros.
+            El plan base cuesta {consultorioPrice}. Incluye hasta 80 pacientes activos, agenda, notas y cobros.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="q2">
@@ -359,7 +365,7 @@ if (import.meta.env.PROD) return Astro.redirect(`/${locale}`, 301);
         <AccordionItem value="q3">
           <AccordionTrigger>¿Mis datos están seguros?</AccordionTrigger>
           <AccordionContent>
-            Sí. Todos los datos se encriptan en tránsito y en reposo. Cumplimos con las regulaciones de salud digital en Perú, México y Colombia.
+            Sí. Todos los datos se encriptan en tránsito y en reposo. Cumplimos la {country.privacyLaw.citation} {country.privacyLaw.jurisdictionLabel}.
           </AccordionContent>
         </AccordionItem>
       </Accordion>

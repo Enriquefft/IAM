@@ -204,25 +204,40 @@ const RAW: Record<Locale, Country> = {
   },
 };
 
-// Validate every entry at module load. Failure = build/start error.
-export const COUNTRIES: Readonly<Record<Locale, Country>> = Object.freeze(
-  Object.fromEntries(
-    SUPPORTED_LOCALES.map((locale) => {
-      const parsed = CountrySchema.parse(RAW[locale]);
-      if (parsed.locale !== locale) {
-        throw new Error(
-          `COUNTRIES["${locale}"].locale mismatch: ${parsed.locale}`,
-        );
-      }
-      if (parsed.pathSegment !== localeToPath(locale)) {
-        throw new Error(
-          `COUNTRIES["${locale}"].pathSegment mismatch with LOCALE_TO_PATH`,
-        );
-      }
-      return [locale, Object.freeze(parsed)] as const;
-    }),
-  ) as Record<Locale, Country>,
-);
+// Validate every entry at module load. Zod schema below parses the entire
+// record so there's no `as` cast — `z.infer<typeof CountriesSchema>` is exactly
+// `Record<Locale, Country>`. Failure = build/start error.
+const CountriesSchema = z.object({
+  "es-PE": CountrySchema,
+  "es-MX": CountrySchema,
+  "es-AR": CountrySchema,
+  "es-CO": CountrySchema,
+  "es-CL": CountrySchema,
+});
+
+const PARSED = CountriesSchema.parse(RAW);
+
+for (const locale of SUPPORTED_LOCALES) {
+  const entry = PARSED[locale];
+  if (entry.locale !== locale) {
+    throw new Error(
+      `COUNTRIES["${locale}"].locale mismatch: ${entry.locale}`,
+    );
+  }
+  if (entry.pathSegment !== localeToPath(locale)) {
+    throw new Error(
+      `COUNTRIES["${locale}"].pathSegment mismatch with LOCALE_TO_PATH`,
+    );
+  }
+}
+
+export const COUNTRIES: Readonly<Record<Locale, Country>> = Object.freeze({
+  "es-PE": Object.freeze(PARSED["es-PE"]),
+  "es-MX": Object.freeze(PARSED["es-MX"]),
+  "es-AR": Object.freeze(PARSED["es-AR"]),
+  "es-CO": Object.freeze(PARSED["es-CO"]),
+  "es-CL": Object.freeze(PARSED["es-CL"]),
+});
 
 export function getCountry(locale: Locale): Country {
   return COUNTRIES[locale];

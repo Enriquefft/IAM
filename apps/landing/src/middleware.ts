@@ -13,14 +13,13 @@
  * Bypassed: `/api/*`, `/og.png`, `/favicon*`, `/apple-touch-icon*`, `/robots.txt`,
  * `/sitemap*`, `/_astro/*`, `/_image`, anything with a file extension.
  *
- * Astro composes this middleware with `@kindspells/astro-shield` (registered
- * via the integration with `enableMiddleware: true`); both run per request.
+ * CSP is shipped as a static header via `vercel.json` (see apps/landing/CLAUDE.md).
+ * No other middleware composes with this one.
  */
 
 import { defineMiddleware } from "astro:middleware";
 import {
   DEFAULT_LOCALE_PATH,
-  SUPPORTED_LOCALE_PATHS,
   acceptLanguageToLocale,
   countryCodeToLocale,
   isLocalePath,
@@ -106,10 +105,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const segment = firstSegment(pathname);
 
   // Path already starts with a supported locale: pass through, ensure cookie.
-  if (segment !== null && SUPPORTED_LOCALE_PATHS.includes(segment as LocalePath)) {
+  if (segment !== null && isLocalePath(segment)) {
     const response = await next();
     if (cookieLocale !== segment) {
-      setLocaleCookie(response.headers, segment as LocalePath);
+      setLocaleCookie(response.headers, segment);
     }
     return response;
   }

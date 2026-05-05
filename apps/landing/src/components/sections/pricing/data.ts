@@ -19,7 +19,7 @@ export interface PricingTierMeta {
   readonly highlighted: boolean;
 }
 
-export const PRICING_TIERS = [
+export const PRICING_TIERS: readonly PricingTierMeta[] = [
   {
     id: "esencial",
     name: "Esencial",
@@ -60,4 +60,4 @@ export const PRICING_TIERS = [
     ctaHref: "mailto:ventas@i-am.clinic?subject=Plan%20Cl%C3%ADnica",
     highlighted: false,
   },
-] as const satisfies readonly PricingTierMeta[];
+];

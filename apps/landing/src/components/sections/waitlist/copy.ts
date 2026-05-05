@@ -25,6 +25,11 @@ export interface WaitlistCopy {
   readonly alreadyConfirmedHeading: string;
   readonly alreadyConfirmedBody: string;
   readonly trustLine: string;
+  readonly fatal: {
+    readonly rateLimited: string;
+    readonly generic: string;
+    readonly offline: string;
+  };
 }
 
 const ROLE_OPTIONS = [
@@ -56,6 +61,11 @@ const VOS: WaitlistCopy = {
   alreadyConfirmedBody:
     "Tu correo ya está confirmado. Te avisamos cuando abramos los primeros cupos.",
   trustLine: "Sin spam. Podés darte de baja en cualquier momento.",
+  fatal: {
+    rateLimited: "Demasiados intentos. Esperá un minuto y volvé a intentar.",
+    generic: "Algo salió mal. Intentá de nuevo en un momento.",
+    offline: "Sin conexión. Verificá tu red y volvé a intentar.",
+  },
 };
 
 const TU: WaitlistCopy = {
@@ -80,6 +90,11 @@ const TU: WaitlistCopy = {
   alreadyConfirmedBody:
     "Tu correo ya está confirmado. Te avisamos cuando abramos los primeros cupos.",
   trustLine: "Sin spam. Puedes darte de baja en cualquier momento.",
+  fatal: {
+    rateLimited: "Demasiados intentos. Espera un minuto y vuelve a intentar.",
+    generic: "Algo salió mal. Intenta de nuevo en un momento.",
+    offline: "Sin conexión. Verifica tu red y vuelve a intentar.",
+  },
 };
 
 export function waitlistCopy(locale: Locale): WaitlistCopy {

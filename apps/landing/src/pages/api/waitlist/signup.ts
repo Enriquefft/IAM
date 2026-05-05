@@ -8,7 +8,7 @@ import { hashIp, extractIp } from "../../../lib/waitlist/ip";
 import { checkRateLimit } from "../../../lib/waitlist/rate-limit";
 import { signupWithToken } from "../../../lib/waitlist/repo";
 import { sendConfirmEmail } from "../../../lib/waitlist/email";
-import { localeToPath, type Locale } from "@/lib/i18n/locales";
+import { DEFAULT_LOCALE, localeToPath, type Locale } from "@/lib/i18n/locales";
 
 function sha256Hex(value: string): string {
   return createHmac("sha256", "log-correlation").update(value).digest("hex");
@@ -22,12 +22,12 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     rawBody = await request.json();
   } catch {
-    return jsonOrHtml(wantsJson, { ok: false, error: "invalid_json" }, 400);
+    return jsonOrHtml(wantsJson, DEFAULT_LOCALE, { ok: false, error: "invalid_json" }, 400);
   }
 
   const parsed = parseSignup(rawBody);
   if (!parsed.ok) {
-    return jsonOrHtml(wantsJson, "es-PE", { ok: false, errors: parsed.errors }, 400);
+    return jsonOrHtml(wantsJson, DEFAULT_LOCALE, { ok: false, errors: parsed.errors }, 400);
   }
 
   const { email, name, role, locale, consent: _consent, hp } = parsed.data;

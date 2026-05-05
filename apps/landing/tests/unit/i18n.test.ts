@@ -6,6 +6,10 @@ import {
   DEFAULT_LOCALE_PATH,
   LOCALE_TO_PATH,
   PATH_TO_LOCALE,
+  localeToPath,
+  pathToLocale,
+  isLocale,
+  isLocalePath,
   COUNTRIES,
   PRICING_BY_LOCALE,
   PRICING_TIER_IDS,
@@ -33,9 +37,37 @@ describe("locales", () => {
     expect(LOCALE_TO_PATH[DEFAULT_LOCALE]).toBe(DEFAULT_LOCALE_PATH);
   });
 
-  it("localeToOgLocale formats with underscore", () => {
-    expect(localeToOgLocale("es-PE")).toBe("es_PE");
-    expect(localeToOgLocale("es-MX")).toBe("es_MX");
+  it("localeToOgLocale is total over SUPPORTED_LOCALES", () => {
+    for (const locale of SUPPORTED_LOCALES) {
+      expect(localeToOgLocale(locale)).toMatch(/^es_[A-Z]{2}$/);
+      expect(localeToOgLocale(locale)).toBe(locale.replace("-", "_"));
+    }
+  });
+
+  it("localeToPath ↔ pathToLocale round-trip", () => {
+    for (const locale of SUPPORTED_LOCALES) {
+      expect(pathToLocale(localeToPath(locale))).toBe(locale);
+    }
+    for (const path of SUPPORTED_LOCALE_PATHS) {
+      expect(localeToPath(pathToLocale(path))).toBe(path);
+    }
+  });
+
+  it("parseLocaleFromPath ↔ localeToPath round-trip", () => {
+    for (const locale of SUPPORTED_LOCALES) {
+      const path = localeToPath(locale);
+      expect(parseLocaleFromPath(`/${path}`)).toBe(locale);
+      expect(parseLocaleFromPath(`/${path}/demo`)).toBe(locale);
+    }
+  });
+
+  it("isLocale / isLocalePath are total over their tables", () => {
+    for (const locale of SUPPORTED_LOCALES) expect(isLocale(locale)).toBe(true);
+    for (const path of SUPPORTED_LOCALE_PATHS) expect(isLocalePath(path)).toBe(true);
+    expect(isLocale("en-US")).toBe(false);
+    expect(isLocalePath("us")).toBe(false);
+    expect(isLocale(undefined)).toBe(false);
+    expect(isLocalePath(undefined)).toBe(false);
   });
 });
 
@@ -185,6 +217,19 @@ describe("formatTierPrice", () => {
   it("CL formats as CLP", () => {
     const text = formatTierPrice("es-CL", "consultorio");
     expect(text).toMatch(/29[\.,]?000/);
+  });
+
+  it("emits a currency token for every supported locale", () => {
+    const tokens: Record<string, string> = {
+      "es-PE": "S/",
+      "es-MX": "$",
+      "es-AR": "$",
+      "es-CO": "$",
+      "es-CL": "$",
+    };
+    for (const locale of SUPPORTED_LOCALES) {
+      expect(formatTierPrice(locale, "consultorio")).toContain(tokens[locale]);
+    }
   });
 });
 
