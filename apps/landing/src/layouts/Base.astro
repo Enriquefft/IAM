@@ -1,7 +1,7 @@
 ---
 import "@/styles/globals.css";
 import Nav from "@/components/nav/Nav.astro";
-import { siteMeta } from "@/lib/seo";
+import { siteMeta, DEFAULT_LOCALE, localeToOgLocale } from "@/lib/seo";
 import type { PageMeta } from "@/lib/seo";
 
 interface Props {
@@ -26,6 +26,11 @@ const canonical =
     : Astro.url.href.replace(/\/$/, "") || siteMeta.siteUrl);
 
 const ogImage = siteMeta.defaultOgImage;
+// i18n seam: today uses DEFAULT_LOCALE. The i18n agent will derive this from routing.
+const activeLocale = DEFAULT_LOCALE;
+const ogLocale = localeToOgLocale(activeLocale);
+// html lang uses BCP 47 subtag (es-PE → es). The i18n agent will make this locale-aware.
+const htmlLang = activeLocale.split("-")[0] ?? "es";
 
 // ---------------------------------------------------------------------------
 // JSON-LD structured data
@@ -51,7 +56,8 @@ const websiteLd = {
   "@type": "WebSite",
   url: siteMeta.siteUrl,
   name: siteMeta.siteName,
-  inLanguage: "es",
+  // i18n seam: the i18n agent will make this locale-aware per-page
+  inLanguage: activeLocale,
 };
 
 const softwareAppLd = {
@@ -99,7 +105,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -118,7 +124,7 @@ const jsonLd = {
 
     <!-- Open Graph -->
     <meta property="og:site_name" content={siteMeta.siteName} />
-    <meta property="og:locale" content={siteMeta.locale} />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:type" content={effectiveOgType} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={effectiveTitle} />

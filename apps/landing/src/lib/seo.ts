@@ -6,9 +6,27 @@
  *
  * Raw hex exception: theme-color (#FDFAF5 = brand.cream.50) is documented in
  * apps/landing/CLAUDE.md §SSOT exceptions — HTML meta cannot import Tailwind config.
+ *
+ * i18n seam: today only DEFAULT_LOCALE is active. The i18n agent will extend
+ * routing to use all SUPPORTED_LOCALES and swap Base.astro consumers to a
+ * routing-derived locale. hreflang emitted by i18n layer once SUPPORTED_LOCALES
+ * has multiple active routes.
  */
 
 import { z } from "zod";
+
+// ---------------------------------------------------------------------------
+// Locale — i18n-ready shape (single active locale today)
+// ---------------------------------------------------------------------------
+
+export const SUPPORTED_LOCALES = ["es-PE", "es-MX", "es-AR", "es-CO"] as const;
+export type Locale = (typeof SUPPORTED_LOCALES)[number];
+export const DEFAULT_LOCALE: Locale = "es-PE";
+
+/** Converts a BCP 47 locale tag to OG locale format (underscore separator). */
+export function localeToOgLocale(locale: Locale): string {
+  return locale.replace("-", "_");
+}
 
 // ---------------------------------------------------------------------------
 // Schemas
@@ -17,7 +35,6 @@ import { z } from "zod";
 const SiteMetaSchema = z.object({
   siteName: z.string(),
   siteUrl: z.string().url(),
-  locale: z.string(),
   email: z.string().email(),
   /** brand.cream.50 — SSOT exception: static HTML meta cannot import tailwind.config.ts */
   themeColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
@@ -52,7 +69,6 @@ export type PageMeta = z.infer<typeof PageMetaSchema>;
 export const siteMeta: SiteMeta = SiteMetaSchema.parse({
   siteName: "i-am.clinic",
   siteUrl: "https://i-am.clinic",
-  locale: "es_PE",
   email: "hola@i-am.clinic",
   // brand.cream.50 — SSOT exception: HTML <meta name="theme-color"> is a
   // static string that cannot reference a CSS variable or Tailwind token.
