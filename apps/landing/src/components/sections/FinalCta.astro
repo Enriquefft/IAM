@@ -1,0 +1,74 @@
+---
+// FinalCta.astro — final call-to-action section on salvia-500 background.
+// section-cta-footer.jsx:3-65.
+import Icon from "@/components/icons/Icon.astro";
+---
+
+{/* section-cta-footer.jsx:6-12 */}
+<section
+  aria-labelledby="final-cta-title"
+  class="relative overflow-hidden bg-primary-hover text-text-inverse py-24 tablet:py-16"
+>
+  {/* section-cta-footer.jsx:14-18 — top-right radial wash */}
+  {/*
+    bg-[radial-gradient(closest-side,theme(colors.text.inverse/0.10),transparent_70%)]
+    Uses theme() token with /opacity syntax. section-cta-footer.jsx:17
+  */}
+  <div
+    aria-hidden="true"
+    class="absolute right-[-160px] top-[-120px] h-[480px] w-[480px] rounded-full bg-[radial-gradient(closest-side,theme(colors.text.inverse/0.10),transparent_70%)] pointer-events-none"
+  ></div> {/* section-cta-footer.jsx:15-18 */}
+
+  {/* section-cta-footer.jsx:19-23 — bottom-left radial wash */}
+  <div
+    aria-hidden="true"
+    class="absolute left-[-120px] bottom-[-160px] h-[360px] w-[360px] rounded-full bg-[radial-gradient(closest-side,theme(colors.text.inverse/0.08),transparent_70%)] pointer-events-none"
+  ></div> {/* section-cta-footer.jsx:19-23 */}
+
+  <div class="relative mx-auto max-w-section px-8 text-center">
+    {/* section-cta-footer.jsx:26-31 — heading */}
+    {/*
+      text-[clamp(2rem,4vw,2.75rem)] — fluid headline, bundle uses clamp().
+      section-cta-footer.jsx:29. Closest token text-h1 (2.75rem) is not fluid.
+    */}
+    <h2
+      id="final-cta-title"
+      class="font-sans font-bold text-text-inverse text-[clamp(2rem,4vw,2.75rem)] mb-5 tracking-tight"
+    > {/* section-cta-footer.jsx:29 */}
+      {/* section-cta-footer.jsx:31 */}
+      Recupera una tarde.<br />Esta semana.
+    </h2>
+
+    {/* section-cta-footer.jsx:33-35 — lede */}
+    {/*
+      max-w-[560px] — bundle uses maxWidth:560. section-cta-footer.jsx:33.
+    */}
+    <p class="font-serif text-body-lg text-brand-salvia-100 max-w-[560px] mx-auto mb-8"> {/* section-cta-footer.jsx:33-34 */}
+      {/* section-cta-footer.jsx:33-35 */}
+      Únete a la lista. Te avisamos en cuanto haya cupo, sin compromiso.
+    </p>
+
+    {/* section-cta-footer.jsx:36-61 — CTA buttons */}
+    <div class="flex flex-wrap justify-center gap-3">
+      {/* section-cta-footer.jsx:49 — primary CTA (waitlist) */}
+      <a
+        href="#waitlist"
+        class="inline-flex items-center gap-2 rounded-base h-11 px-6 text-small font-semibold bg-surface text-primary-active hover:bg-surface-alt shadow-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-hover"
+      >
+        {/* section-cta-footer.jsx:49 */}
+        Unirme a la lista de espera
+        <Icon name="arrowRight" size={18} class="shrink-0" />
+      </a>
+
+      {/* section-cta-footer.jsx:51-60 — secondary CTA (demo) */}
+      {/* Remapped from Demo.html → /demo per Astro routing. section-cta-footer.jsx:51 */}
+      <a
+        href="/demo"
+        class="inline-flex items-center rounded-base h-11 px-6 text-small font-medium bg-transparent text-text-inverse border border-text-inverse/45 hover:bg-text-inverse/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-primary-hover"
+      >
+        {/* section-cta-footer.jsx:59 */}
+        Ver el demo
+      </a>
+    </div>
+  </div>
+</section>

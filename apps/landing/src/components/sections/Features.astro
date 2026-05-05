@@ -1,0 +1,54 @@
+---
+// Features.astro — three-card features section.
+// section-features.jsx:53-87.
+import Lede from "@/components/typography/Lede.astro";
+import FeatureCard from "./features/FeatureCard.astro";
+import AgendaPreview from "./features/AgendaPreview.astro";
+import NotesPreview from "./features/NotesPreview.astro";
+import CobrosPreview from "./features/CobrosPreview.astro";
+import { FEATURES } from "./features/data";
+
+// Map feature index to preview component — 1:1 with FEATURES array order.
+const featureCards = [
+  { ...FEATURES[0], Preview: AgendaPreview },
+  { ...FEATURES[1], Preview: NotesPreview },
+  { ...FEATURES[2], Preview: CobrosPreview },
+] as const;
+---
+
+{/* section-features.jsx:54 — <Section alt id="funciones"> */}
+<section id="funciones" aria-labelledby="features-title" class="bg-surface-alt py-24 tablet:py-16">
+  <div class="mx-auto max-w-page px-8">
+    {/* section-features.jsx:55 — max-w-[720px] bundle width, no token covers 720px */}
+    <div class="mx-auto max-w-[720px] text-center mb-14"> {/* section-features.jsx:55 */}
+      {/* section-features.jsx:56 — eyebrow badge tone="green" */}
+      <span class="inline-flex items-center rounded-sm bg-status-successSurface text-primary-active px-2.5 py-0.5 text-label font-medium">
+        {/* section-features.jsx:56 */}
+        Lo que sí necesitas
+      </span>
+
+      {/* section-features.jsx:57-60 */}
+      <h2 id="features-title" class="font-sans text-h2 text-text-primary mt-4 mb-4">
+        Tres cosas conectadas.<br />
+        Bien hechas.
+      </h2>
+
+      {/* section-features.jsx:61-64 */}
+      <Lede class="text-text-secondary">
+        Agenda, notas y cobros que hablan entre ellos. Sin cambiar de pestaña cada vez que entra un paciente.
+      </Lede>
+    </div>
+
+    {/* section-features.jsx:66 — features-grid */}
+    <div class="mt-14 grid gap-6 grid-cols-1 md:grid-cols-3">
+      {featureCards.map((card) => (
+        <FeatureCard
+          title={card.title}
+          body={card.body}
+          bullets={card.bullets}
+          PreviewComponent={card.Preview}
+        />
+      ))}
+    </div>
+  </div>
+</section>

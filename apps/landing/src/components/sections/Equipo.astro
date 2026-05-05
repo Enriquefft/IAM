@@ -1,0 +1,71 @@
+---
+// Equipo.astro — team section with placeholder figure.
+// section-equipo.jsx:3-53.
+// Bundle ships a placeholder figure; replace asset under public/equipo/ before launch.
+import Lede from "@/components/typography/Lede.astro";
+import Body from "@/components/typography/Body.astro";
+import Small from "@/components/typography/Small.astro";
+---
+
+{/* section-equipo.jsx:4 — id="equipo" default bg-page */}
+<section id="equipo" aria-labelledby="equipo-title" class="py-24 tablet:py-16">
+  <div class="mx-auto max-w-page px-8">
+    {/* section-equipo.jsx:5 — two-col layout */}
+    <div class="grid items-center gap-12 lg:gap-20 lg:[grid-template-columns:0.9fr_1.1fr] grid-cols-1"> {/* layout.css:62-66 */}
+      <div>
+        {/* section-equipo.jsx:7 — tone="warm" eyebrow */}
+        <span class="inline-flex items-center rounded-sm bg-status-warningSurface text-status-errorText px-2.5 py-0.5 text-label font-medium">
+          {/* section-equipo.jsx:7 */}
+          Quiénes somos
+        </span>
+
+        {/* section-equipo.jsx:8-11 */}
+        <h2 id="equipo-title" class="font-sans text-h2 text-text-primary mt-4 mb-5">
+          Un equipo pequeño,<br />
+          en consulta y en código.
+        </h2>
+
+        {/* section-equipo.jsx:12-16 */}
+        <Lede class="mb-4">
+          Somos psicólogos, ingenieros y diseñadores en Lima. Algunos del equipo atendemos pacientes los miércoles, así que sabemos qué se siente cerrar el último expediente del día.
+        </Lede>
+
+        {/* section-equipo.jsx:17-19 */}
+        <Body class="text-text-secondary mt-4 mb-6">
+          Si quieres conocernos antes de probar, escríbenos. Contestamos rápido.
+        </Body>
+
+        {/* section-equipo.jsx:20-22 */}
+        <a
+          href="mailto:hola@i-am.clinic"
+          class="inline-flex items-center justify-center rounded-base border border-surface-border bg-surface text-text-primary hover:bg-surface-alt h-10 px-4 text-small font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page"
+        >
+          {/* section-equipo.jsx:21 */}
+          hola@i-am.clinic
+        </a>
+      </div>
+
+      {/* section-equipo.jsx:25-50 — placeholder figure */}
+      {/*
+        bg-[image:repeating-linear-gradient(135deg,theme(colors.brand.cream.100)_0,theme(colors.brand.cream.100)_14px,theme(colors.brand.cream.200)_14px,theme(colors.brand.cream.200)_15px)]
+        Uses theme() tokens, not hex. section-equipo.jsx:32 — bundle uses CSS vars for same pattern.
+      */}
+      <figure
+        class="relative aspect-[5/4] rounded-xl overflow-hidden bg-surface-alt border border-surface-border grid place-items-center bg-[image:repeating-linear-gradient(135deg,theme(colors.brand.cream.100)_0,theme(colors.brand.cream.100)_14px,theme(colors.brand.cream.200)_14px,theme(colors.brand.cream.200)_15px)]"
+        aria-label="Foto del equipo (placeholder)"
+        style="margin:0;"
+      >
+        <figcaption class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center p-6">
+          {/* section-equipo.jsx:40-45 */}
+          <span class="inline-block rounded-base bg-surface border border-surface-border px-3 py-1.5 font-mono text-micro text-text-muted tracking-wide">
+            foto del equipo · 1200×960
+          </span>
+          {/* section-equipo.jsx:46-48 */}
+          <Small class="text-text-muted max-w-[280px]"> {/* max-w-[280px] section-equipo.jsx:38, no exact token */}
+            (placeholder — reemplazar antes de presentar)
+          </Small>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

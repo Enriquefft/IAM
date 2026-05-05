@@ -1,0 +1,48 @@
+---
+// NotesPreview.astro — schematic SOAP note preview for Notes feature card.
+// section-features.jsx:166-201. Static, zero JS.
+// "grabando" badge uses the custom `animate-pulse` keyframe (tailwind.config.ts).
+---
+
+<div class="absolute inset-0 p-3.5 flex flex-col gap-1.5">
+  {/* section-features.jsx:169-177 — template tabs */}
+  <div class="flex gap-1.5 mb-1">
+    <span class="font-sans text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-primary-hover text-text-inverse">
+      SOAP
+    </span>
+    <span class="font-sans text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-surface text-text-secondary border border-surface-border">
+      DAP
+    </span>
+    <span class="font-sans text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-surface text-text-secondary border border-surface-border">
+      Libre
+    </span>
+  </div>
+
+  {/* section-features.jsx:179-189 — SOAP content rows */}
+  <div>
+    <div class="font-sans text-[9px] font-semibold text-primary-active mb-0.5">S — Subjetivo</div>
+    <div class="h-1.5 w-[82%] rounded-sm bg-surface-border"></div>
+  </div>
+  <div>
+    <div class="h-1.5 w-[70%] rounded-sm bg-surface-border"></div>
+  </div>
+  <div>
+    <div class="font-sans text-[9px] font-semibold text-primary-active mb-0.5">O — Objetivo</div>
+    <div class="h-1.5 w-[88%] rounded-sm bg-surface-border"></div>
+  </div>
+  <div>
+    <div class="h-1.5 w-[62%] rounded-sm bg-surface-border"></div>
+  </div>
+  <div>
+    <div class="font-sans text-[9px] font-semibold text-primary-active mb-0.5">A — Análisis</div>
+    <div class="h-1.5 w-[76%] rounded-sm bg-surface-border"></div>
+  </div>
+
+  {/* section-features.jsx:191-199 — "grabando" badge */}
+  <div class="mt-auto inline-flex self-start items-center gap-1.5 px-2 py-1 rounded-full bg-status-warningSurface text-status-errorText font-sans text-[9px] font-medium">
+    {/* section-features.jsx:197 — pulsing dot, motion-reduce safe */}
+    <span class="w-1.5 h-1.5 rounded-full bg-accent-deep animate-pulse motion-reduce:animate-none" aria-hidden="true"></span>
+    {/* section-features.jsx:198 */}
+    grabando
+  </div>
+</div>

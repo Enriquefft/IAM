@@ -266,9 +266,28 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateY(8px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        // layout.css:12-15 — decorative pulse for NotesPreview "grabando" badge
+        pulse: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
+        // accordion.tsx:66 — Radix accordion open/close animations
+        "accordion-down": {
+          from: { height: "0", opacity: "0" },
+          to: { height: "var(--radix-accordion-content-height)", opacity: "1" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)", opacity: "1" },
+          to: { height: "0", opacity: "0" },
+        },
       },
       animation: {
         floatIn: "floatIn 0.5s cubic-bezier(0.32,0.72,0,1) both",
+        // layout.css:12-15
+        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        // accordion.tsx:66
+        "accordion-down": "accordion-down 200ms cubic-bezier(0,0,0.2,1)",
+        "accordion-up": "accordion-up 200ms cubic-bezier(0,0,0.2,1)",
       },
     },
   },

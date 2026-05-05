@@ -1,0 +1,41 @@
+---
+// CobrosPreview.astro — schematic revenue preview for Cobros feature card.
+// section-features.jsx:203-228. Static, zero JS.
+---
+
+<div class="absolute inset-0 p-3.5 flex flex-col gap-2">
+  {/* section-features.jsx:205 */}
+  <div class="font-sans text-[11px] font-semibold text-text-primary">Mayo · cobrado</div>
+
+  {/* section-features.jsx:206-208 — total amount */}
+  <div class="font-sans text-[22px] font-bold text-text-primary tracking-tight leading-none">
+    $4,820
+    <span class="text-[11px] font-medium text-text-muted ml-1">USD</span>
+  </div>
+
+  {/* section-features.jsx:209-213 — segmented bar */}
+  <div class="flex h-1.5 rounded-sm overflow-hidden bg-surface-border">
+    <span class="w-[62%] bg-primary-hover"></span>
+    <span class="w-[24%] bg-brand-salvia-200"></span>
+    <span class="w-[14%] bg-brand-terra-300"></span>
+  </div>
+
+  {/* section-features.jsx:214-225 — payment rows */}
+  <div class="flex flex-col gap-1 mt-1">
+    <div class="flex items-center gap-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-primary-hover shrink-0"></span>
+      <span class="flex-1 font-sans text-[10px] text-text-secondary">Tarjeta</span>
+      <span class="font-sans text-[10px] font-semibold text-text-primary">$2,990</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-brand-salvia-200 shrink-0"></span>
+      <span class="flex-1 font-sans text-[10px] text-text-secondary">Transferencia</span>
+      <span class="font-sans text-[10px] font-semibold text-text-primary">$1,160</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-brand-terra-300 shrink-0"></span>
+      <span class="flex-1 font-sans text-[10px] text-text-secondary">Yape / PLIN</span>
+      <span class="font-sans text-[10px] font-semibold text-text-primary">$670</span>
+    </div>
+  </div>
+</div>
