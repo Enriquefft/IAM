@@ -1,7 +1,11 @@
 ---
+// demo.astro — /demo page shell. Mounts the DemoApp React island.
+// Tilt handoff is read by DemoApp on mount (sessionStorage key iam:tilt:handoff).
+// Hero WRITER: apps/landing/src/components/sections/Hero.astro lines 102-122.
 import Base from "@/layouts/Base.astro";
+import DemoApp from "@/components/demo/DemoApp";
 ---
 
-<Base title="Demo">
-  <h1>Demo</h1>
+<Base title="Demo interactivo · i-am.clinic — La tarde de Ana">
+  <DemoApp client:visible />
 </Base>

@@ -8,27 +8,12 @@ import {
   MessageSquareIcon,
   CheckIcon,
 } from "lucide-react";
+import { SOAP_FIELDS, SOAP_LABELS, SOAP_DEFAULTS as SOAP_CONTENT } from "@/components/demo/demo-content";
+import type { SoapKey } from "@/components/demo/demo-content";
 
 interface Props {
   readonly progress: number;
 }
-
-const SOAP_CONTENT = {
-  S: "Mateo llega tranquilo. Trajo su agenda visual. Arrancamos con la rutina de saludo que practicamos.",
-  O: "Atendió a la tarea de categorías por seis minutos seguidos. Pidió un descanso con su tarjeta. Volvió por su cuenta.",
-  A: "Logró sostener atención más tiempo que la semana pasada. La tarjeta de descanso le funciona como apoyo.",
-  P: "Vamos a practicar pedir descanso en grupo. Cita el miércoles 17:00.",
-} as const satisfies Record<string, string>;
-
-const SOAP_LABELS = {
-  S: "Subjetivo",
-  O: "Objetivo",
-  A: "Análisis",
-  P: "Plan",
-} as const satisfies Record<string, string>;
-
-const SOAP_FIELDS = ["S", "O", "A", "P"] as const;
-type SoapKey = (typeof SOAP_FIELDS)[number];
 
 function sliceProgress(text: string, progress: number): string {
   return text.slice(0, Math.floor(text.length * progress));
