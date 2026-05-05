@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { neon } from "@neondatabase/serverless";
@@ -72,10 +72,10 @@ function splitStatements(ddl: string): string[] {
   return statements.filter((s) => s.length > 0);
 }
 
-const migrations = [
-  "0001_init.sql",
-  "0002_indexes.sql",
-];
+const migrationsDir = resolve(__dirname, "../db/migrations");
+const migrations = readdirSync(migrationsDir)
+  .filter((f) => f.endsWith(".sql"))
+  .sort();
 
 for (const filename of migrations) {
   const alreadyApplied = await sql`
@@ -87,7 +87,7 @@ for (const filename of migrations) {
     continue;
   }
 
-  const filePath = resolve(__dirname, "../db/migrations", filename);
+  const filePath = resolve(migrationsDir, filename);
   const ddl = readFileSync(filePath, "utf-8");
   const statements = splitStatements(ddl);
 
