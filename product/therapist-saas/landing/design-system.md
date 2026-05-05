@@ -11,7 +11,7 @@ depends_on: brand.md, competitor-audit.md
 
 # Design System — i-am.clinic landing page
 
-Implementation target: Astro 5 + Tailwind CSS v3 + shadcn/ui + React islands. Hand-built by one engineer from this spec. Every decision below is final — no options, no "consider X or Y". The guiding metaphor throughout is *el consultorio bien iluminado a las cinco de la tarde*: warm, calm, legible, trustworthy without being corporate.
+Implementation target: Astro 4 + Tailwind CSS v3 + shadcn/ui + React islands. Hand-built by one engineer from this spec. Every decision below is final — no options, no "consider X or Y". The guiding metaphor throughout is *el consultorio bien iluminado a las cinco de la tarde*: warm, calm, legible, trustworthy without being corporate.
 
 ---
 
