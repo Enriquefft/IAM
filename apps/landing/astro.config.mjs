@@ -17,8 +17,9 @@ export default defineConfig({
     }),
     react(),
     sitemap({
-      // /confirmado is transactional — exclude from sitemap
-      filter: (page) => !page.includes("/confirmado"),
+      // /confirmado is transactional; /kitchen-sink is a dev-only preview
+      filter: (page) =>
+        !page.includes("/confirmado") && !page.includes("/kitchen-sink"),
     }),
   ],
 });
