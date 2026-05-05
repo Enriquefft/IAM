@@ -1,0 +1,100 @@
+---
+import Base from "@/layouts/Base.astro";
+import Footer from "@/components/sections/Footer.astro";
+
+const error = Astro.url.searchParams.get("error");
+const already = Astro.url.searchParams.get("already");
+
+type PageState = "success" | "already" | "expired" | "invalid";
+
+function getState(): PageState {
+  if (error === "expired") return "expired";
+  if (error === "invalid") return "invalid";
+  if (already === "1") return "already";
+  return "success";
+}
+
+const pageState = getState();
+
+const content = {
+  success: {
+    heading: "Lugar confirmado.",
+    body: "Estás en la lista. Te avisamos cuando haya cupo — mantente atento a tu bandeja de entrada.",
+    cta: { href: "/", label: "Volver al inicio" },
+  },
+  already: {
+    heading: "Ya estás confirmado.",
+    body: "Tu correo ya estaba en la lista. Te avisamos cuando abramos los primeros cupos.",
+    cta: { href: "/", label: "Volver al inicio" },
+  },
+  expired: {
+    heading: "El enlace venció.",
+    body: "Los enlaces de confirmación tienen una vigencia de 7 días. Volvé a anotarte para recibir un nuevo enlace.",
+    cta: { href: "/#waitlist", label: "Volver a anotarme" },
+  },
+  invalid: {
+    heading: "Enlace inválido.",
+    body: "Este enlace no existe o ya fue usado. Volvé a anotarte si todavía querés reservar tu lugar.",
+    cta: { href: "/#waitlist", label: "Volver a anotarme" },
+  },
+} satisfies Record<PageState, { heading: string; body: string; cta: { href: string; label: string } }>;
+
+const page = content[pageState];
+const isError = pageState === "expired" || pageState === "invalid";
+---
+
+<Base title="Confirmación — i-am.clinic">
+  <div class="min-h-[70vh] flex items-center justify-center px-8 py-24">
+    <div class="mx-auto max-w-[480px] text-center">
+      <div
+        class:list={[
+          "inline-flex h-16 w-16 items-center justify-center rounded-full mb-6",
+          isError ? "bg-status-errorSurface" : "bg-status-successSurface",
+        ]}
+        aria-hidden="true"
+      >
+        {isError ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-8 w-8 text-status-error"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-8 w-8 text-status-success"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        )}
+      </div>
+
+      <h1 class="text-h2 font-bold text-text-primary mb-4">{page.heading}</h1>
+      <p class="text-body-lg font-serif text-text-secondary mb-8">{page.body}</p>
+
+      <a
+        href={page.cta.href}
+        class="inline-flex items-center rounded-base h-11 px-6 text-small font-semibold bg-primary text-primary-fg hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-page transition-colors"
+      >
+        {page.cta.label}
+      </a>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</Base>
